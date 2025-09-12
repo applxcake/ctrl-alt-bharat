@@ -31,9 +31,9 @@
     </div>
     
     <a-scene embedded arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' renderer='antialias: true; alpha: true'>
-        <!-- Preload assets -->
+        <!-- Preload assets with CORS proxy -->
         <a-assets>
-            <a-asset-item id="taj-mahal" src="/assets/models/taj_mahal/scene.gltf"></a-asset-item>
+            <a-asset-item id="taj-mahal" src="https://cors-anywhere.herokuapp.com/https://ctrl-alt-bharat.vercel.app/assets/models/taj_mahal/scene.gltf"></a-asset-item>
         </a-assets>
         
         <!-- Main marker with Taj Mahal model -->
