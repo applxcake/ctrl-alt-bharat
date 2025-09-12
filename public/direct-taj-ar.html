@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Direct Taj Mahal AR</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        .arjs-loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            margin-top: 1em;
+        }
+        #model-status {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="arjs-loader">
+        <div>Loading AR, please wait...</div>
+    </div>
+    <div id="model-status">Initializing AR...</div>
+    
+    <a-scene embedded arjs>
+        <!-- Main marker with Taj Mahal model -->
+        <a-marker preset="hiro">
+            <!-- Direct GLTF model reference -->
+            <a-entity id="taj-model" 
+                     gltf-model="url(/assets/models/taj_mahal/scene.gltf)"
+                     scale="0.5 0.5 0.5"
+                     position="0 0 0">
+            </a-entity>
+            
+            <!-- Text label -->
+            <a-text value="TAJ MAHAL" 
+                   color="white" 
+                   align="center" 
+                   position="0 1.5 0" 
+                   scale="1.5 1.5 1.5">
+            </a-text>
+        </a-marker>
+        
+        <!-- Camera and lighting -->
+        <a-entity camera></a-entity>
+        <a-entity light="type: ambient; color: #888; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 1" position="-1 1 0.5"></a-entity>
+    </a-scene>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusEl = document.querySelector('#model-status');
+            const model = document.querySelector('#taj-model');
+            
+            // When scene loads
+            document.querySelector('a-scene').addEventListener('loaded', function() {
+                console.log('AR scene loaded');
+                statusEl.textContent = 'AR ready! Point camera at Hiro marker';
+                
+                // Hide loader
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Hide status after 5 seconds
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 5000);
+            });
+            
+            // Model loaded event
+            model.addEventListener('model-loaded', () => {
+                console.log('Taj Mahal model loaded successfully');
+                statusEl.textContent = 'Taj Mahal loaded! Point camera at Hiro marker';
+            });
+            
+            // Model error event
+            model.addEventListener('error', (e) => {
+                console.error('Error loading model:', e.detail);
+                statusEl.textContent = 'Error loading model. Check console for details.';
+            });
+        });
+    </script>
+</body>
+</html>
