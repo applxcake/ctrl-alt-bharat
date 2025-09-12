@@ -31,17 +31,12 @@
     </div>
     
     <a-scene embedded arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' renderer='antialias: true; alpha: true'>
-        <!-- Preload assets -->
-        <a-assets>
-            <a-asset-item id="taj-mahal" src="models/taj_mahal/scene.gltf"></a-asset-item>
-        </a-assets>
-        
         <!-- Main marker with Taj Mahal model -->
         <a-marker preset="hiro">
-            <!-- Taj Mahal 3D Model -->
-            <a-entity gltf-model="#taj-mahal" 
+            <!-- Using GLB format directly for better compatibility -->
+            <a-entity gltf-model="url(models/taj_mahal/Box.glb)" 
                      scale="0.1 0.1 0.1" 
-                     position="0 0 0">
+                     position="0 0.5 0">
             </a-entity>
             
             <!-- Text label -->
