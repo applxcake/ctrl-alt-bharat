@@ -1,0 +1,8 @@
+{
+    "api_token": "f539a9f8b30a424b99f8991afc6877f1",
+    "models": {
+        "taj_mahal": "https://sketchfab.com/3d-models/taj-mahal-3d-model-1eb09052f6cd421caeaa6cb3204cb15d",
+        "hampi": "https://sketchfab.com/3d-models/hampi-chariot-momento-of-honor-1e8e9212dc874323af8d21c14d553f85",
+        "konark": "https://sketchfab.com/3d-models/sun-temple-konark-6cc905be2ae34e8091eb1eaa84a17738"
+    }
+}

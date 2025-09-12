@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Test</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            z-index: 100;
+            font-family: Arial, sans-serif;
+        }
+        .model-container {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            border: 1px solid #ccc;
+        }
+        #taj-container { top: 0; left: 0; }
+        #hampi-container { top: 0; right: 0; }
+        #konark-container { bottom: 0; left: 0; }
+    </style>
+</head>
+<body>
+    <div id="info">Testing Model Loading - Check console for errors</div>
+
+    <div id="taj-container" class="model-container">
+        <a-scene embedded>
+            <a-assets>
+                <a-asset-item id="taj-model" src="models/taj_mahal.glb"></a-asset-item>
+            </a-assets>
+            <a-entity gltf-model="#taj-model" scale="1 1 1" position="0 0 -3" rotation="0 180 0"></a-entity>
+            <a-entity camera look-controls></a-entity>
+        </a-scene>
+    </div>
+
+    <div id="hampi-container" class="model-container">
+        <a-scene embedded>
+            <a-assets>
+                <a-asset-item id="hampi-model" src="models/hampi.glb"></a-asset-item>
+            </a-assets>
+            <a-entity gltf-model="#hampi-model" scale="1 1 1" position="0 0 -3"></a-entity>
+            <a-entity camera look-controls></a-entity>
+        </a-scene>
+    </div>
+
+    <div id="konark-container" class="model-container">
+        <a-scene embedded>
+            <a-assets>
+                <a-asset-item id="konark-model" src="models/konark.glb"></a-asset-item>
+            </a-assets>
+            <a-entity gltf-model="#konark-model" scale="1 1 1" position="0 0 -3"></a-entity>
+            <a-entity camera look-controls></a-entity>
+        </a-scene>
+    </div>
+
+    <script>
+        // Log any errors
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e);
+        });
+
+        // Log WebGL support
+        console.log('WebGL supported:', !!document.createElement('canvas').getContext('webgl'));
+    </script>
+</body>
+</html>

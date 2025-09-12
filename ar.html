@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Indian Heritage AR Experience</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 100;
+            display: none;
+        }
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+        }
+        #model-selector {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 100;
+            flex-wrap: wrap;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .model-btn {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .model-btn:hover {
+            background: rgba(0, 150, 255, 0.8);
+        }
+        .model-btn.active {
+            background: #007bff;
+        }
+        #arjsDebugUIContainer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">Point your camera around to detect surfaces, then tap to place the model</div>
+    <div id="loading">
+        <h2>Loading AR Experience...</h2>
+        <p>Please wait while we set up the AR environment</p>
+    </div>
+    <div id="model-selector">
+        <button class="model-btn" data-model="taj_mahal">Taj Mahal</button>
+        <button class="model-btn" data-model="hampi">Hampi</button>
+        <button class="model-btn" data-model="khajuraho">Khajuraho</button>
+        <button class="model-btn" data-model="konark">Konark</button>
+    </div>
+
+    <!-- Include A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hide loading screen when everything is ready
+            const loadingScreen = document.getElementById('loading');
+            const info = document.getElementById('info');
+            let currentModel = null;
+            let placedModel = null;
+            let hitTestSource = null;
+            let xrSession = null;
+            
+            // Check if WebXR is supported
+            if (!navigator.xr) {
+                loadingScreen.innerHTML = '<h2>WebXR not supported</h2><p>Your browser does not support WebXR. Please try using Chrome on Android or iOS Safari.</p>';
+                return;
+            }
+
+            // Initialize the scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('renderer', 'colorManagement: true;');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false;');
+            
+            // Add camera
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', '');
+            camera.setAttribute('position', '0 1.6 0');
+            scene.appendChild(camera);
+            
+            // Add lighting
+            const light1 = document.createElement('a-light');
+            light1.setAttribute('type', 'ambient');
+            light1.setAttribute('color', '#fff');
+            light1.setAttribute('intensity', '0.5');
+            scene.appendChild(light1);
+            
+            const light2 = document.createElement('a-light');
+            light2.setAttribute('type', 'directional');
+            light2.setAttribute('color', '#fff');
+            light2.setAttribute('intensity', '0.8');
+            light2.setAttribute('position', '1 1 0.5');
+            scene.appendChild(light2);
+            
+            // Add the scene to the body
+            document.body.appendChild(scene);
+            
+            // Model data
+            const models = {
+                'taj_mahal': {
+                    name: 'Taj Mahal',
+                    path: 'models/taj_mahal/scene.glb',
+                    scale: '0.1 0.1 0.1',
+                    rotation: '0 0 0',
+                    description: 'An ivory-white marble mausoleum in Agra, India.'
+                },
+                'hampi': {
+                    name: 'Hampi',
+                    path: 'models/hampi/scene.glb',
+                    scale: '0.1 0.1 0.1',
+                    rotation: '0 0 0',
+                    description: 'Ruins of the medieval Hindu kingdom of Vijayanagara.'
+                },
+                'khajuraho': {
+                    name: 'Khajuraho',
+                    path: 'models/khajuraho/scene.glb',
+                    scale: '0.1 0.1 0.1',
+                    rotation: '0 0 0',
+                    description: 'Group of Hindu and Jain temples known for their erotic sculptures.'
+                },
+                'konark': {
+                    name: 'Konark',
+                    path: 'models/konark/scene.glb',
+                    scale: '0.1 0.1 0.1',
+                    rotation: '0 0 0',
+                    description: '13th-century Sun Temple designed as a giant chariot.'
+                }
+            };
+            
+            // Handle model selection
+            document.querySelectorAll('.model-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modelId = btn.getAttribute('data-model');
+                    currentModel = modelId;
+                    
+                    // Update active button
+                    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Show info
+                    info.textContent = `Selected: ${models[modelId].name}. Tap on a surface to place the model.`;
+                    info.style.display = 'block';
+                    setTimeout(() => { info.style.display = 'none'; }, 3000);
+                });
+            });
+            
+            // Handle tap to place
+            scene.addEventListener('click', (evt) => {
+                if (!currentModel || !evt.detail.intersection) return;
+                
+                const modelData = models[currentModel];
+                const hitPoint = evt.detail.intersection.point;
+                
+                // Remove previous model if exists
+                if (placedModel) {
+                    scene.removeChild(placedModel);
+                }
+                
+                // Create new model
+                const model = document.createElement('a-entity');
+                model.setAttribute('gltf-model', `url(${modelData.path})`);
+                model.setAttribute('scale', modelData.scale);
+                model.setAttribute('rotation', modelData.rotation);
+                model.setAttribute('position', `${hitPoint.x} ${hitPoint.y} ${hitPoint.z}`);
+                model.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 20000');
+                model.setAttribute('shadow', 'receive: true');
+                
+                scene.appendChild(model);
+                placedModel = model;
+                
+                // Show info
+                info.textContent = `Placed ${modelData.name}. Select another model or move around to view from different angles.`;
+                info.style.display = 'block';
+                setTimeout(() => { info.style.display = 'none'; }, 3000);
+            });
+            
+            // Handle scene loaded
+            scene.addEventListener('loaded', () => {
+                loadingScreen.style.display = 'none';
+                info.textContent = 'Select a model from the bottom, then tap on a surface to place it.';
+                info.style.display = 'block';
+                setTimeout(() => { info.style.display = 'none'; }, 5000);
+            });
+            
+            // Handle errors
+            scene.addEventListener('error', (evt) => {
+                console.error('AR error:', evt.detail);
+                loadingScreen.innerHTML = `
+                    <h2>Error loading AR</h2>
+                    <p>${evt.detail}</p>
+                    <p>Please check the console for more details.</p>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "incredible-india-ar",
+  "version": "1.0.0",
+  "description": "Incredible India AR Experience - SIH Project",
+  "scripts": {
+    "build": "echo 'Build script completed'",
+    "start": "serve -s public"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
+  }
+}

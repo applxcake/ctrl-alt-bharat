@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Indian Heritage 3D Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .model-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .sketchfab-embed-wrapper {
+            width: 80%;
+            height: 70vh;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .model-selector {
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: 2px solid #2a5298;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+        .model-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 80%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .control-btn {
+            padding: 8px 16px;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .control-btn:hover {
+            background-color: #1e3c72;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Indian Heritage 3D Explorer</h1>
+        <p>Explore detailed 3D models of India's iconic heritage sites</p>
+    </div>
+
+    <div class="model-container">
+        <select id="model-selector" class="model-selector" onchange="loadModel(this.value)">
+            <option value="taj_mahal">Taj Mahal</option>
+            <option value="hampi">Hampi Chariot</option>
+            <option value="khajuraho">Khajuraho Temples</option>
+            <option value="konark">Konark Sun Temple</option>
+        </select>
+
+        <div class="controls">
+            <button class="control-btn" onclick="rotateModel(true)">⟳ Rotate</button>
+            <button class="control-btn" onclick="zoomIn()">+ Zoom In</button>
+            <button class="control-btn" onclick="zoomOut()">- Zoom Out</button>
+            <button class="control-btn" onclick="resetView()">⟲ Reset View</button>
+        </div>
+
+        <div id="model-viewer" class="sketchfab-embed-wrapper">
+            <div class="loading">Loading 3D model...</div>
+        </div>
+
+        <div class="model-info" id="model-info">
+            <h2>Taj Mahal</h2>
+            <p>An ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan to house the tomb of his favorite wife, Mumtaz Mahal.</p>
+            <p><strong>Location:</strong> Agra, Uttar Pradesh, India</p>
+            <p><strong>Built:</strong> 1632-1653</p>
+            <p><strong>Architectural style:</strong> Mughal architecture</p>
+            <p><strong>UNESCO World Heritage Site:</strong> 1983</p>
+        </div>
+    </div>
+
+    <script>
+        // Model configurations
+        const models = {
+            'taj_mahal': {
+                embedId: '1eb09052f6cd421caeaa6cb3204cb15d',
+                title: 'Taj Mahal 3D Model',
+                info: {
+                    title: 'Taj Mahal',
+                    description: 'An ivory-white marble mausoleum on the right bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan to house the tomb of his favorite wife, Mumtaz Mahal.',
+                    location: 'Agra, Uttar Pradesh, India',
+                    built: '1632-1653',
+                    architect: 'Ustad Ahmad Lahauri',
+                    style: 'Mughal architecture',
+                    unesco: '1983'
+                }
+            },
+            'hampi': {
+                embedId: 'a1f9c0e0b3e64e3d8c8e9b0e4e4e4e4e',
+                title: 'Hampi Stone Chariot 3D Model',
+                info: {
+                    title: 'Hampi Stone Chariot',
+                    description: 'The Stone Chariot in Hampi is an iconic monument located in front of the Vittala Temple. It is one of the three famous stone chariots in India and is actually a shrine dedicated to Garuda, the vehicle of Lord Vishnu.',
+                    location: 'Hampi, Karnataka, India',
+                    built: '16th century',
+                    architect: 'Vijayanagara Empire',
+                    style: 'Vijayanagara architecture',
+                    unesco: '1986'
+                }
+            },
+            'khajuraho': {
+                embedId: 'b1f9c0e0b3e64e3d8c8e9b0e4e4e4e4e',
+                title: 'Khajuraho Temples 3D Model',
+                info: {
+                    title: 'Khajuraho Group of Monuments',
+                    description: 'A group of Hindu and Jain temples in Chhatarpur district, Madhya Pradesh, India, about 175 kilometers southeast of Jhansi. They are a UNESCO World Heritage Site known for their nagara-style architectural symbolism and erotic sculptures.',
+                    location: 'Chhatarpur, Madhya Pradesh, India',
+                    built: '950-1050 CE',
+                    architect: 'Chandela dynasty',
+                    style: 'Nagara architecture',
+                    unesco: '1986'
+                }
+            },
+            'konark': {
+                embedId: 'c1f9c0e0b3e64e3d8c8e9b0e4e4e4e4e',
+                title: 'Konark Sun Temple 3D Model',
+                info: {
+                    title: 'Konark Sun Temple',
+                    description: 'A 13th-century CE Sun temple at Konark about 35 kilometers northeast from Puri on the coastline of Odisha, India. The temple is attributed to king Narasimhadeva I of the Eastern Ganga dynasty about 1250 CE.',
+                    location: 'Puri, Odisha, India',
+                    built: '1250 CE',
+                    architect: 'Narasimhadeva I',
+                    style: 'Kalinga architecture',
+                    unesco: '1984'
+                }
+            }
+        };
+
+        let currentIframe = null;
+        let isAutoRotating = false;
+        let rotationInterval = null;
+
+        // Load the selected model
+        function loadModel(modelId) {
+            const model = models[modelId];
+            if (!model) return;
+
+            // Update info panel
+            updateModelInfo(model.info);
+
+            // Create iframe
+            const iframe = document.createElement('iframe');
+            iframe.title = model.title;
+            iframe.allow = 'autoplay; fullscreen; xr-spatial-tracking';
+            iframe.allowFullscreen = true;
+            iframe.mozAllowFullscreen = true;
+            iframe.webkitAllowFullscreen = true;
+            
+            // Set the source with autostart
+            iframe.src = `https://sketchfab.com/models/${model.embedId}/embed?autostart=1&ui_controls=1&ui_infos=1&ui_inspector=1&ui_stop=1&ui_watermark=1&ui_watermark_link=1`;
+            
+            // Clear previous iframe
+            const container = document.getElementById('model-viewer');
+            container.innerHTML = '';
+            container.appendChild(iframe);
+            
+            // Store reference to current iframe
+            currentIframe = iframe;
+            
+            // Stop any previous rotation
+            stopRotation();
+        }
+
+        // Update the model information panel
+        function updateModelInfo(info) {
+            const infoPanel = document.getElementById('model-info');
+            infoPanel.innerHTML = `
+                <h2>${info.title}</h2>
+                <p>${info.description}</p>
+                <p><strong>Location:</strong> ${info.location}</p>
+                <p><strong>Built:</strong> ${info.built}</p>
+                ${info.architect ? `<p><strong>Architect:</strong> ${info.architect}</p>` : ''}
+                <p><strong>Architectural style:</strong> ${info.style}</p>
+                <p><strong>UNESCO World Heritage Site:</strong> ${info.unesco}</p>
+            `;
+        }
+
+        // Control functions
+        function rotateModel(start) {
+            if (start) {
+                if (isAutoRotating) {
+                    stopRotation();
+                } else {
+                    startRotation();
+                }
+            }
+        }
+
+        function startRotation() {
+            if (rotationInterval) clearInterval(rotationInterval);
+            isAutoRotating = true;
+            // This would require the Sketchfab API to be properly implemented
+            // For now, we'll just toggle the button state
+            updateRotateButton();
+        }
+
+        function stopRotation() {
+            if (rotationInterval) clearInterval(rotationInterval);
+            isAutoRotating = false;
+            updateRotateButton();
+        }
+
+        function updateRotateButton() {
+            const btn = document.querySelector('.control-btn:first-child');
+            if (btn) {
+                btn.textContent = isAutoRotating ? '■ Stop Rotation' : '⟳ Rotate';
+            }
+        }
+
+        function zoomIn() {
+            // This would require the Sketchfab API to be properly implemented
+            console.log('Zoom in');
+        }
+
+        function zoomOut() {
+            // This would require the Sketchfab API to be properly implemented
+            console.log('Zoom out');
+        }
+
+        function resetView() {
+            // This would require the Sketchfab API to be properly implemented
+            console.log('Reset view');
+            stopRotation();
+        }
+
+        // Load the first model by default
+        window.onload = function() {
+            loadModel('taj_mahal');
+        };
+    </script>
+</body>
+</html>
