@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple AR Test</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        .arjs-loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="arjs-loader">
+        <div>Loading AR, please wait...</div>
+    </div>
+    
+    <a-scene embedded arjs>
+        <!-- Use a simple marker for testing -->
+        <a-marker preset="hiro">
+            <a-box position="0 0.5 0" material="color: red;"></a-box>
+            <a-text value="HELLO" color="white" align="center" position="0 1 0" scale="2 2 2"></a-text>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+    
+    <script>
+        // Hide loader when AR is ready
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            document.querySelector('.arjs-loader').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
