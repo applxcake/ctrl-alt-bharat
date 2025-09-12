@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+    <title>AR Experience - Ctrl Alt Bharat</title>
+    
+    <!-- Clear any existing A-Frame components to prevent conflicts -->
+    <script>
+        if (window.AFRAME) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor'].Component;
+            delete AFRAME.components['arjs-anchor'].System;
+        }
+    </script>
+    
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        #ar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #info {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <h2>Loading AR Experience</h2>
+        <p>Please wait while we set up the AR environment</p>
+    </div>
+    
+    <div id="ar-container">
+        <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: true;'>
+            <a-marker preset='hiro'>
+                <a-box position='0 0.5 0' material='color: #e74c3c;'></a-box>
+                <a-text value="TAJ MAHAL" color="white" align="center" position="0 1.2 0" scale="1.5 1.5 1.5"></a-text>
+            </a-marker>
+            <a-entity camera></a-entity>
+            <a-entity light='type: ambient; color: #888;'></a-entity>
+            <a-entity light='type: directional; color: #fff; intensity: 0.5' position='-1 1 0.5'></a-entity>
+        </a-scene>
+    </div>
+    
+    <div id="info">
+        Point your camera at the Hiro marker to see the 3D model
+    </div>
+    
+    <script>
+        // Wait for A-Frame to be ready
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            // Hide loading screen after a short delay
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 2000);
+        });
+        
+        // Add mobile warning if needed
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (!isMobile) {
+            const info = document.getElementById('info');
+            const warning = document.createElement('div');
+            warning.style.background = '#e74c3c';
+            warning.style.padding = '10px';
+            warning.style.marginTop = '10px';
+            warning.style.borderRadius = '5px';
+            warning.textContent = 'For best results, use a mobile device';
+            info.appendChild(warning);
+        }
+    </script>
+</body>
+</html>
