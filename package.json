@@ -3,12 +3,7 @@
   "version": "1.0.0",
   "description": "Incredible India AR Experience - SIH Project",
   "scripts": {
-    "build": "echo 'No build step required for static files'",
-    "start": "serve public -p $PORT",
-    "dev": "serve public"
-  },
-  "dependencies": {
-    "serve": "^14.0.0"
+    "build": "echo 'No build step required for static files'"
   },
   "engines": {
     "node": ">=14.x"
