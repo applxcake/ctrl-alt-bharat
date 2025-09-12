@@ -35,7 +35,10 @@
         <a-marker preset="hiro">
             <!-- Taj Mahal Model -->
             <a-entity position="0 0 0" scale="0.1 0.1 0.1">
-                <a-entity gltf-model="url(models/taj_mahal/Box.glb)"></a-entity>
+                <a-entity id="taj-model" gltf-model="url(/models/taj_mahal/scene.gltf)">
+                    <!-- Fallback in case model doesn't load -->
+                    <a-box color="#e74c3c" visible="false" class="fallback"></a-box>
+                </a-entity>
             </a-entity>
             
             <!-- Text label -->
@@ -54,10 +57,24 @@
     </a-scene>
     
     <script>
-        // Hide loader when AR is ready
+        // Handle scene loading
         document.querySelector('a-scene').addEventListener('loaded', function() {
-            document.querySelector('.arjs-loader').style.display = 'none';
             console.log('AR scene loaded');
+            document.querySelector('.arjs-loader').style.display = 'none';
+            
+            // Log model loading status
+            const model = document.querySelector('#taj-model');
+            model.addEventListener('model-loaded', () => {
+                console.log('Taj Mahal model loaded successfully');
+                // Hide fallback if model loads
+                document.querySelector('.fallback').setAttribute('visible', 'false');
+            });
+            
+            model.addEventListener('error', (e) => {
+                console.error('Error loading model:', e.detail);
+                // Show fallback if model fails to load
+                document.querySelector('.fallback').setAttribute('visible', 'true');
+            });
         });
     </script>
 </body>
