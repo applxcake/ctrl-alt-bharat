@@ -30,15 +30,19 @@
         <div>Loading AR, please wait...</div>
     </div>
     
-    <a-scene embedded arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;'>
-        <!-- Main marker with 3D model -->
+    <a-scene embedded arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' renderer='antialias: true; alpha: true'>
+        <!-- Preload assets -->
+        <a-assets>
+            <a-asset-item id="taj-mahal" src="models/taj_mahal/scene.gltf"></a-asset-item>
+        </a-assets>
+        
+        <!-- Main marker with Taj Mahal model -->
         <a-marker preset="hiro">
-            <!-- Simple white box model -->
-            <a-box position="0 0.5 0" 
-                  width="1" height="1" depth="1"
-                  material="color: white; metalness: 0.2; roughness: 0.8"
-                  scale="0.5 0.5 0.5">
-            </a-box>
+            <!-- Taj Mahal 3D Model -->
+            <a-entity gltf-model="#taj-mahal" 
+                     scale="0.1 0.1 0.1" 
+                     position="0 0 0">
+            </a-entity>
             
             <!-- Text label -->
             <a-text value="TAJ MAHAL" 
@@ -54,9 +58,14 @@
         <a-entity camera="fov: 80"></a-entity>
         
         <!-- Improved lighting -->
-        <a-entity light="type: ambient; color: #888; intensity: 0.8"></a-entity>
-        <a-entity light="type: directional; color: #fff; intensity: 1" position="-1 1 0.5"></a-entity>
-        <a-entity light="type: hemisphere; color: #fff; groundColor: #444; intensity: 0.6"></a-entity>
+        <a-entity light="type: ambient; color: #888; intensity: 1.0"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 1.5" position="-1 1 0.5"></a-entity>
+        <a-entity light="type: hemisphere; color: #fff; groundColor: #444; intensity: 1.0"></a-entity>
+        
+        <!-- Add a ground plane for better shadows -->
+        <a-entity position="0 0 0">
+            <a-plane position="0 -0.5 0" rotation="-90 0 0" width="10" height="10" color="#333" opacity="0.5" shadow></a-plane>
+        </a-entity>
     </a-scene>
     
     <script>
