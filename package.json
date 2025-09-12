@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Incredible India AR Experience - SIH Project",
   "scripts": {
+    "dev": "serve public",
     "build": "echo 'No build step required for static files'"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
   },
   "engines": {
     "node": ">=14.x"

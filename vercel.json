@@ -7,9 +7,9 @@
     }
   ],
   "routes": [
-    { "src": "/ar", "dest": "/ar-embedded.html" },
-    { "src": "/about", "dest": "/about.html" },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/ar", "dest": "/public/ar-embedded.html" },
+    { "src": "/about", "dest": "/public/about.html" },
+    { "src": "/", "dest": "/public/index.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
