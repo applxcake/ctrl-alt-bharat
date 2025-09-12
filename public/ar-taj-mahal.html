@@ -31,24 +31,27 @@
     </div>
     
     <a-scene embedded arjs>
-        <!-- Using a simple 3D model from CDN for reliability -->
+        <!-- Simple box with color and animation -->
         <a-marker preset="hiro">
-            <a-entity gltf-model="https://cdn.aframe.io/test-models/models/glTF-2.0/box/Box.gltf"
-                     scale="0.5 0.5 0.5"
-                     position="0 0.5 0">
-                <a-animation attribute="rotation" to="0 360 0" dur="10000" repeat="indefinite"></a-animation>
-            </a-entity>
+            <a-box position="0 0.5 0" 
+                  width="1" height="1" depth="1"
+                  color="#e74c3c"
+                  shadow>
+                <a-animation attribute="rotation" to="0 360 0" dur="5000" repeat="indefinite"></a-animation>
+            </a-box>
             
             <a-text value="INDIAN HERITAGE" 
                    color="white" 
                    align="center" 
                    position="0 1.5 0" 
-                   scale="1.5 1.5 1.5"
-                   width="4">
+                   scale="1.5 1.5 1.5">
             </a-text>
         </a-marker>
         
+        <!-- Camera and lighting -->
         <a-entity camera></a-entity>
+        <a-entity light="type: ambient; color: #888"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 0.8" position="-1 1 0.5"></a-entity>
     </a-scene>
     
     <script>
