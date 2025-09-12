@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+    <title>AR Experience - Ctrl Alt Bharat</title>
+    
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    
+    <!-- UI Styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* AR Container */
+        #ar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading/Instruction Screen -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <h2>AR Experience</h2>
+        <p>Point your camera at a flat surface</p>
+        <p>You'll need to allow camera access</p>
+        <button id="start-ar" class="btn">Start AR</button>
+    </div>
+    
+    <!-- AR Container -->
+    <div id="ar-container"></div>
+    
+    <script>
+        // DOM Elements
+        const loadingScreen = document.getElementById('loading-screen');
+        const startButton = document.getElementById('start-ar');
+        const arContainer = document.getElementById('ar-container');
+        
+        // Check if mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Initialize AR
+        function initializeAR() {
+            // Create A-Frame scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false;');
+            
+            // Add marker
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('preset', 'hiro');
+            
+            // Add 3D model (using a simple box for now)
+            const box = document.createElement('a-box');
+            box.setAttribute('position', '0 0.5 0');
+            box.setAttribute('material', 'color: #e74c3c');
+            box.setAttribute('rotation', '0 45 0');
+            
+            // Add text
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'Indian Heritage');
+            text.setAttribute('position', '0 1.5 0');
+            text.setAttribute('color', 'white');
+            text.setAttribute('align', 'center');
+            
+            // Assemble the scene
+            marker.appendChild(box);
+            marker.appendChild(text);
+            scene.appendChild(marker);
+            
+            // Add camera
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', '');
+            scene.appendChild(camera);
+            
+            // Add lighting
+            const ambientLight = document.createElement('a-entity');
+            ambientLight.setAttribute('light', 'type: ambient; color: #888;');
+            scene.appendChild(ambientLight);
+            
+            const directionalLight = document.createElement('a-entity');
+            directionalLight.setAttribute('light', 'type: directional; color: #fff; intensity: 0.5; position: -1 1 0.5;');
+            scene.appendChild(directionalLight);
+            
+            // Add to container
+            arContainer.appendChild(scene);
+            
+            // Hide loading screen when scene is loaded
+            scene.addEventListener('loaded', () => {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 1000);
+            });
+        }
+        
+        // Start AR Experience
+        function startAR() {
+            // Request camera permission
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(() => {
+                    // Camera permission granted
+                    loadingScreen.innerHTML = `
+                        <div class="spinner"></div>
+                        <p>Loading AR experience...</p>
+                    `;
+                    
+                    // Initialize AR after a short delay
+                    setTimeout(initializeAR, 500);
+                })
+                .catch((error) => {
+                    // Camera permission denied or error
+                    console.error('Error accessing camera:', error);
+                    loadingScreen.innerHTML = `
+                        <i class="fas fa-video-slash" style="font-size: 3em; margin-bottom: 20px;"></i>
+                        <h2>Camera Access Required</h2>
+                        <p>Please allow camera access to use AR features.</p>
+                        <button onclick="window.location.reload()" class="btn">Try Again</button>
+                    `;
+                });
+        }
+        
+        // Event Listeners
+        startButton.addEventListener('click', startAR);
+        
+        // Show mobile warning if not on mobile
+        if (!isMobile) {
+            loadingScreen.innerHTML = `
+                <i class="fas fa-mobile-alt" style="font-size: 3em; margin-bottom: 20px;"></i>
+                <h2>Mobile Recommended</h2>
+                <p>For the best experience, please use a mobile device.</p>
+                <p>You can continue on desktop, but the experience may be limited.</p>
+                <button id="continue-desktop" class="btn">Continue on Desktop</button>
+            `;
+            
+            document.getElementById('continue-desktop').addEventListener('click', startAR);
+        }
+    </script>
+</body>
+</html>
