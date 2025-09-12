@@ -2,14 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "public/**",
+      "src": "*.{html,js,css}",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/public/$1" },
-    { "src": "/ar", "dest": "/public/ar.html" },
-    { "src": "/about", "dest": "/public/about.html" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+    { "src": "/ar", "dest": "/ar-embedded.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
