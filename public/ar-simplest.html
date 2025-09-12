@@ -31,12 +31,44 @@
     </div>
     
     <a-scene embedded arjs>
-        <!-- Use a simple marker for testing -->
+        <!-- Preload assets -->
+        <a-assets>
+            <a-asset-item id="taj-mahal" src="models/taj_mahal/Box.glb"></a-asset-item>
+        </a-assets>
+        
+        <!-- Main marker with Taj Mahal model -->
         <a-marker preset="hiro">
-            <a-box position="0 0.5 0" material="color: red;"></a-box>
-            <a-text value="HELLO" color="white" align="center" position="0 1 0" scale="2 2 2"></a-text>
+            <!-- Taj Mahal 3D Model -->
+            <a-entity gltf-model="#taj-mahal" 
+                     scale="0.1 0.1 0.1" 
+                     position="0 0 0"
+                     animation="property: rotation; to: 0 360 0; dur: 20000; loop: true; easing: linear">
+            </a-entity>
+            
+            <!-- Fallback box in case model doesn't load -->
+            <a-box position="0 0.5 0" 
+                  material="color: #e74c3c" 
+                  scale="0.5 0.5 0.5"
+                  visible="false"
+                  class="fallback">
+                <a-animation attribute="rotation" to="0 360 0" dur="10000" repeat="indefinite"></a-animation>
+            </a-box>
+            
+            <!-- Text label -->
+            <a-text value="TAJ MAHAL" 
+                   color="white" 
+                   align="center" 
+                   position="0 2 0" 
+                   scale="2 2 2">
+            </a-text>
         </a-marker>
+        
+        <!-- Camera -->
         <a-entity camera></a-entity>
+        
+        <!-- Lighting -->
+        <a-entity light="type: ambient; color: #888;"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 0.6" position="-1 1 0.5"></a-entity>
     </a-scene>
     
     <script>
