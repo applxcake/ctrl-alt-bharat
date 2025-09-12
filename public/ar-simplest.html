@@ -30,41 +30,33 @@
         <div>Loading AR, please wait...</div>
     </div>
     
-    <a-scene embedded arjs>
+    <a-scene embedded arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;'>
         <!-- Main marker with 3D model -->
         <a-marker preset="hiro">
-            <!-- Using a simple box with texture for reliability -->
+            <!-- Simple white box model -->
             <a-box position="0 0.5 0" 
                   width="1" height="1" depth="1"
-                  src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-01.jpg"
-                  scale="0.5 0.5 0.5"
-                  animation="property: rotation; to: 0 360 0; dur: 10000; loop: true; easing: linear">
-            </a-box>
-            
-            <!-- Fallback box in case model doesn't load -->
-            <a-box position="0 0.5 0" 
-                  material="color: #e74c3c" 
-                  scale="0.5 0.5 0.5"
-                  visible="false"
-                  class="fallback">
-                <a-animation attribute="rotation" to="0 360 0" dur="10000" repeat="indefinite"></a-animation>
+                  material="color: white; metalness: 0.2; roughness: 0.8"
+                  scale="0.5 0.5 0.5">
             </a-box>
             
             <!-- Text label -->
             <a-text value="TAJ MAHAL" 
                    color="white" 
                    align="center" 
-                   position="0 2 0" 
-                   scale="2 2 2">
+                   position="0 1.5 0" 
+                   scale="1.5 1.5 1.5"
+                   width="4">
             </a-text>
         </a-marker>
         
-        <!-- Camera -->
-        <a-entity camera></a-entity>
+        <!-- Camera with adjusted FOV -->
+        <a-entity camera="fov: 80"></a-entity>
         
-        <!-- Lighting -->
-        <a-entity light="type: ambient; color: #888;"></a-entity>
-        <a-entity light="type: directional; color: #fff; intensity: 0.6" position="-1 1 0.5"></a-entity>
+        <!-- Improved lighting -->
+        <a-entity light="type: ambient; color: #888; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; color: #fff; intensity: 1" position="-1 1 0.5"></a-entity>
+        <a-entity light="type: hemisphere; color: #fff; groundColor: #444; intensity: 0.6"></a-entity>
     </a-scene>
     
     <script>
