@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Experience - Ctrl Alt Bharat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: white;
+        }
+        
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        #permission-screen {
+            text-align: center;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .permission-icon {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        #ar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #info-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        #marker-help {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 100;
+        }
+        
+        #back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #back-button:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div id="permission-screen">
+            <div class="permission-icon">
+                <i class="fas fa-camera"></i>
+            </div>
+            <h2>Camera Access Required</h2>
+            <p>To experience our AR features, we need access to your device's camera. Please allow camera permissions when prompted.</p>
+            <button id="start-ar" class="btn">Start AR Experience</button>
+        </div>
+    </div>
+    
+    <!-- AR Container -->
+    <div id="ar-container">
+        <!-- A-Frame will be injected here -->
+    </div>
+    
+    <!-- UI Elements -->
+    <button id="back-button" title="Back to Home">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    
+    <div id="marker-help">
+        <h3>How to use:</h3>
+        <p>1. Print the marker or display it on another device</p>
+        <p>2. Point your camera at the marker</p>
+        <p>3. The 3D model will appear on the marker</p>
+    </div>
+    
+    <div id="info-panel">
+        Point your camera at the marker to see the 3D model
+    </div>
+    
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
+    
+    <script>
+        // DOM Elements
+        const loadingScreen = document.getElementById('loading-screen');
+        const permissionScreen = document.getElementById('permission-screen');
+        const startButton = document.getElementById('start-ar');
+        const backButton = document.getElementById('back-button');
+        const arContainer = document.getElementById('ar-container');
+        
+        // Check for mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        // Handle back button click
+        backButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+        
+        // Start AR Experience
+        startButton.addEventListener('click', () => {
+            startARExperience();
+        });
+        
+        // Start AR Experience function
+        function startARExperience() {
+            // Check if browser supports WebXR
+            if (!navigator.xr) {
+                showError('WebXR not supported in your browser. Please try Chrome for Android or Safari for iOS.');
+                return;
+            }
+            
+            // Request camera permissions
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        // Permission granted, initialize AR
+                        initializeAR();
+                        // Stop the stream as A-Frame will handle it
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        console.error('Error accessing camera:', err);
+                        showError('Could not access camera. Please ensure you have granted camera permissions.');
+                    });
+            } else {
+                showError('getUserMedia is not supported in your browser.');
+            }
+        }
+        
+        // Initialize AR with A-Frame
+        function initializeAR() {
+            // Hide permission screen, show loading
+            permissionScreen.innerHTML = `
+                <div class="spinner"></div>
+                <h2>Loading AR Experience</h2>
+                <p>Please wait while we set up the AR environment</p>
+            `;
+            
+            // Create A-Frame scene
+            const sceneHTML = `
+                <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+                    <!-- Marker-based AR -->
+                    <a-marker type='pattern' url='markers/pattern-marker.patt' smooth='true' smoothCount='10' smoothTolerance='0.01' smoothThreshold='5'>
+                        <a-entity position='0 0 0' scale='0.05 0.05 0.05' gltf-model='url(models/taj_mahal/scene.gltf)'></a-entity>
+                    </a-marker>
+                    
+                    <!-- Camera -->
+                    <a-entity camera></a-entity>
+                </a-scene>
+            `;
+            
+            // Inject A-Frame scene
+            arContainer.innerHTML = sceneHTML;
+            
+            // Hide loading screen when A-Frame is ready
+            document.querySelector('a-scene').addEventListener('loaded', () => {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 2000);
+            });
+        }
+        
+        // Show error message
+        function showError(message) {
+            permissionScreen.innerHTML = `
+                <div class="permission-icon" style="color: #e74c3c;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>Error</h2>
+                <p>${message}</p>
+                <button onclick="window.location.reload()" class="btn">Try Again</button>
+            `;
+        }
+        
+        // On page load, check for mobile device
+        window.addEventListener('load', () => {
+            if (!isMobile) {
+                permissionScreen.innerHTML = `
+                    <div class="permission-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h2>Mobile Experience Recommended</h2>
+                    <p>For the best AR experience, please open this page on a mobile device.</p>
+                    <p>You can continue on desktop, but the experience may be limited.</p>
+                    <button id="continue-desktop" class="btn">Continue on Desktop</button>
+                `;
+                
+                document.getElementById('continue-desktop').addEventListener('click', () => {
+                    startARExperience();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
