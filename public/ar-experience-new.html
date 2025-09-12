@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <title>Indian Heritage AR - Ctrl Alt Bharat</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script>
+        // Prevent double initialization
+        delete AFRAME.components['arjs-anchor'];
+    </script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -106,21 +110,29 @@
     </a-scene>
     
     <script>
-        // Show mobile warning for non-mobile devices
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (!isMobile) {
-            const infoDiv = document.getElementById('info');
-            const warning = document.createElement('div');
-            warning.className = 'mobile-warning';
-            warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> For best results, use a mobile device';
-            infoDiv.appendChild(warning);
-        }
-        
-        // Add click handler for the back button
-        document.querySelector('.btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'index.html';
+        // Wait for A-Frame to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show mobile warning for non-mobile devices
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (!isMobile) {
+                const infoDiv = document.getElementById('info');
+                if (infoDiv) {
+                    const warning = document.createElement('div');
+                    warning.className = 'mobile-warning';
+                    warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> For best results, use a mobile device';
+                    infoDiv.appendChild(warning);
+                }
+            }
+            
+            // Add click handler for the back button
+            const backButton = document.querySelector('.btn');
+            if (backButton) {
+                backButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+            }
         });
     </script>
 </body>
