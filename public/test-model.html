@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Test</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene>
+        <a-assets>
+            <a-asset-item id="taj-mahal" src="/assets/models/taj_mahal/scene.gltf"></a-asset-item>
+        </a-assets>
+        
+        <a-entity position="0 1.6 -2">
+            <a-entity gltf-model="#taj-mahal" scale="0.1 0.1 0.1"></a-entity>
+        </a-entity>
+        
+        <a-sky color="#ECECEC"></a-sky>
+        <a-entity light="type: ambient; color: #888"></a-entity>
+        <a-entity light="type: directional; intensity: 1" position="-1 1 0.5"></a-entity>
+        <a-entity camera look-controls></a-entity>
+    </a-scene>
+    
+    <script>
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            console.log('Scene loaded');
+            const model = document.querySelector('a-entity[gltf-model]');
+            
+            model.addEventListener('model-loaded', () => {
+                console.log('Model loaded successfully!');
+                document.body.innerHTML += '<div style="position: fixed; top: 10px; left: 10px; background: white; padding: 10px; z-index: 1000;">Model loaded successfully!</div>';
+            });
+            
+            model.addEventListener('error', (e) => {
+                console.error('Error loading model:', e.detail);
+                document.body.innerHTML += `<div style="position: fixed; top: 10px; left: 10px; background: red; color: white; padding: 10px; z-index: 1000;">Error loading model: ${e.detail}</div>`;
+            });
+        });
+    </script>
+</body>
+</html>
