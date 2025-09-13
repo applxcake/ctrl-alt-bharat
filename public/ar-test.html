@@ -44,13 +44,14 @@
         }
     </script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
     <script>
         // Wait for A-Frame to load
         window.addEventListener('load', function() {
             // Load AR.js after a small delay to ensure A-Frame is ready
             setTimeout(function() {
                 const script = document.createElement('script');
-                script.src = 'https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js';
+                script.src = 'https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js';
                 script.onload = function() {
                     console.log('AR.js loaded');
                     initAR();
@@ -70,7 +71,7 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // Add AR.js configuration with explicit marker settings
+            // Simplified AR.js configuration
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
@@ -81,21 +82,8 @@
                     'debugUIEnabled: true',
                     'detectionMode: mono',
                     'matrixCodeType: 3x3',
-                    'cameraParametersUrl: https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/camera_para.dat',
-                    'markerPatterns: https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro',
-                    'patternRatio: 0.85',
                     'trackingMethod: best',
-                    'maxDetectionRate: 30',
-                    'sourceType: webcam',
-                    'sourceWidth: 1280',
-                    'sourceHeight: 720',
-                    'displayWidth: 1280',
-                    'displayHeight: 720',
-                    'cameraNear: 0.01',
-                    'cameraFar: 10000',
-                    'rendererLog: false',
-                    'bufferColor: 32',
-                    'dithering: true'
+                    'maxDetectionRate: 30'
                 ].join('; ')
             };
             
@@ -125,23 +113,19 @@
             camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with explicit pattern
+            // Add marker with default hiro preset
             const marker = document.createElement('a-marker');
-            marker.setAttribute('type', 'pattern');
-            marker.setAttribute('url', 'https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro');
+            marker.setAttribute('preset', 'hiro');
             marker.setAttribute('emitevents', 'true');
             marker.setAttribute('cursor', 'rayOrigin: mouse');
-            marker.setAttribute('material', 'opacity: 0.0; transparent: true');
             
             // Add Taj Mahal model with optimized settings
             const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', {
-                src: 'url(./models/taj-mahal/taj_mahal_3d_model.glb)',
-                cache: true,
-                'premultiplied-vertex-colors': 'true',
-                'shadow': 'receive: false; cast: false',
-                'animation': 'enabled: false'
-            });
+            model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
+            model.setAttribute('scale', isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02');
+            model.setAttribute('position', '0 0 0');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('shadow', 'receive: false; cast: false');
             
             // Position and scale model for better visibility
             model.setAttribute('position', '0 0 0');
@@ -163,46 +147,14 @@
             
             scene.appendChild(marker);
             
-            // Enhanced lighting for better visibility
+            // Simple lighting setup
             const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', {
-                type: 'ambient',
-                color: '#FFFFFF',
-                intensity: '1.0',
-                'shadow-map-enabled': 'false'
-            });
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFFFFF; intensity: 0.8');
             scene.appendChild(ambientLight);
             
-            // Add multiple lights for better model visibility
-            const directionalLight1 = document.createElement('a-entity');
-            directionalLight1.setAttribute('light', {
-                type: 'directional',
-                color: '#FFFFFF',
-                intensity: '0.8',
-                position: '1 1 1'
-            });
-            scene.appendChild(directionalLight1);
-            
-            const directionalLight2 = document.createElement('a-entity');
-            directionalLight2.setAttribute('light', {
-                type: 'directional',
-                color: '#FFFFFF',
-                intensity: '0.5',
-                position: '-1 1 -1'
-            });
-            scene.appendChild(directionalLight2);
-            
-            // Add a point light near the model
-            const pointLight = document.createElement('a-entity');
-            pointLight.setAttribute('light', {
-                type: 'point',
-                color: '#FFFFFF',
-                intensity: '0.6',
-                position: '0 2 1',
-                distance: '10',
-                decay: '1'
-            });
-            scene.appendChild(pointLight);
+            const directionalLight = document.createElement('a-entity');
+            directionalLight.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.8; position: 1 1 1');
+            scene.appendChild(directionalLight);
             
             // Add scene to body
             document.body.appendChild(scene);
