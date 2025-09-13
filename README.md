@@ -41,6 +41,16 @@ An interactive Augmented Reality experience showcasing India's rich cultural her
 3. Point your camera at a marker to see the 3D model
 4. Tap on the model to see detailed information
 
+## Team
+
+### Team Name: Ctrl+Alt+Bharat
+
+#### Team Members:
+- **Aditya** - Project Lead & Full Stack Developer
+  - GitHub: [@applxcake](https://github.com/applxcake)
+  
+*Additional team members can be added here with their roles and contact information*
+
 ## How It Works
 
 This application uses:
