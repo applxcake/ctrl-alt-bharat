@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Test</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+        }
+        .arjs-loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="arjs-loader">
+        <div>Loading AR, please wait...</div>
+    </div>
+
+    <!-- A-Frame and AR.js -->
+    <script>
+        // Clean up any existing A-Frame components
+        if (window.AFRAME) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
+        }
+    </script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script>
+        // Wait for A-Frame to load
+        window.addEventListener('load', function() {
+            // Load AR.js after a small delay to ensure A-Frame is ready
+            setTimeout(function() {
+                const script = document.createElement('script');
+                script.src = 'https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js';
+                script.onload = function() {
+                    console.log('AR.js loaded');
+                    initAR();
+                };
+                script.onerror = function() {
+                    console.error('Failed to load AR.js');
+                };
+                document.head.appendChild(script);
+            }, 100);
+        });
+
+        function initAR() {
+            // Create a new scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('loading-screen', 'enabled: false');
+            
+            // Add AR.js configuration
+            scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true');
+            
+            // Add camera
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', '');
+            scene.appendChild(camera);
+            
+            // Add marker
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('preset', 'hiro');
+            
+            // Add a simple box
+            const box = document.createElement('a-box');
+            box.setAttribute('position', '0 0.5 0');
+            box.setAttribute('scale', '0.5 0.5 0.5');
+            box.setAttribute('color', '#4CC3D9');
+            box.setAttribute('rotation', '0 45 0');
+            marker.appendChild(box);
+            
+            // Add text label
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'AR Test');
+            text.setAttribute('color', 'white');
+            text.setAttribute('align', 'center');
+            text.setAttribute('position', '0 1 0');
+            text.setAttribute('scale', '2 2 2');
+            marker.appendChild(text);
+            
+            scene.appendChild(marker);
+            
+            // Add lighting
+            const ambientLight = document.createElement('a-entity');
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 0.8');
+            scene.appendChild(ambientLight);
+            
+            const directionalLight = document.createElement('a-entity');
+            directionalLight.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.8');
+            directionalLight.setAttribute('position', '1 1 1');
+            scene.appendChild(directionalLight);
+            
+            // Add scene to body
+            document.body.appendChild(scene);
+            
+            // Hide loader when scene is loaded
+            scene.addEventListener('loaded', function() {
+                console.log('Scene loaded');
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Check camera access
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        console.log('Camera access granted');
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
+                    });
+            });
+            
+            // Handle marker events
+            marker.addEventListener('markerFound', function() {
+                console.log('Marker found');
+            });
+            
+            marker.addEventListener('markerLost', function() {
+                console.log('Marker lost');
+            });
+        }
+    </script>
+</body>
+</html>
