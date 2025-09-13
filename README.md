@@ -46,10 +46,14 @@ An interactive Augmented Reality experience showcasing India's rich cultural her
 ### Team Name: Ctrl+Alt+Bharat
 
 #### Team Members:
-- **Aditya** - Project Lead & Full Stack Developer
-  - GitHub: [@applxcake](https://github.com/applxcake)
-  
-*Additional team members can be added here with their roles and contact information*
+- **Aditya**
+- **Ritik**
+- **Ansh**
+- **Aditi**
+- **Riya**
+- **Abhay**
+
+*Working together to bring Indian heritage to life through augmented reality*
 
 ## How It Works
 
