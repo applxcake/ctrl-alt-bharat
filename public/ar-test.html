@@ -82,22 +82,27 @@
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             
-            // Add Sankranti Cow model
+            // Add Sankranti Cow model with mobile-optimized scale
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
             model.setAttribute('position', '0 0 0');
-            model.setAttribute('scale', '0.5 0.5 0.5');
+            
+            // Adjust scale based on device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const scale = isMobile ? '0.2 0.2 0.2' : '0.5 0.5 0.5';
+            model.setAttribute('scale', scale);
+            
             model.setAttribute('rotation', '0 180 0');
             model.setAttribute('animation-mixer', 'clip: *; loop: repeat');
             marker.appendChild(model);
             
-            // Add text label
+            // Add text label with mobile-optimized size
             const text = document.createElement('a-text');
             text.setAttribute('value', 'Sankranti Cow');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 1.5 0');
-            text.setAttribute('scale', '2 2 2');
+            text.setAttribute('position', isMobile ? '0 0.8 0' : '0 1.5 0');
+            text.setAttribute('scale', isMobile ? '1 1 1' : '2 2 2');
             marker.appendChild(text);
             
             scene.appendChild(marker);
