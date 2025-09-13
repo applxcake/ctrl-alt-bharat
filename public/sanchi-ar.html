@@ -79,25 +79,25 @@
         
         <!-- Preload assets -->
         <a-assets timeout="10000">
-            <a-asset-item id="sanchi-model" src="./models/sanchi/fixed-scene.gltf"></a-asset-item>
+            <a-asset-item id="taj-mahal" src="./models/taj_mahal/scene.gltf"></a-asset-item>
         </a-assets>
         
         <!-- Marker-based AR -->
         <a-marker preset="hiro">
-            <!-- Great Stupa of Sanchi 3D Model -->
+            <!-- Taj Mahal 3D Model -->
             <a-entity 
-                gltf-model="#sanchi-model"
-                scale="0.1 0.1 0.1"
-                position="0 0.5 0"
+                gltf-model="#taj-mahal"
+                scale="0.05 0.05 0.05"
+                position="0 0 0"
                 rotation="0 0 0">
             </a-entity>
             
             <!-- Text label -->
             <a-text 
-                value="GREAT STUPA OF SANCHI" 
+                value="TAJ MAHAL" 
                 color="white" 
                 align="center"
-                position="0 1.5 0"
+                position="0 2 0"
                 scale="2 2 2">
             </a-text>
         </a-marker>
