@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download 3D Models - Ctrl+Alt+Bharat</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a252f);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .model-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .model-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .model-card:hover .model-image img {
+            transform: scale(1.05);
+        }
+        
+        .model-info {
+            padding: 1.5rem;
+        }
+        
+        .model-info h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .model-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            margin: 0.5rem 0 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-download {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .btn-download:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-download i {
+            margin-right: 8px;
+        }
+        
+        .btn-disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .btn-disabled:hover {
+            transform: none;
+            background: #95a5a6;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .models-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">Ctrl+Alt+Bharat</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#team">Team</a></li>
+                <li><a href="downloads.html" class="active">Downloads</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>3D Model Downloads</h1>
+            <p>Download high-quality 3D models of Indian heritage sites for your AR/VR projects, 3D printing, or educational purposes.</p>
+        </div>
+    </section>
+
+    <!-- Models Grid -->
+    <div class="container">
+        <div class="models-grid">
+            <!-- Taj Mahal -->
+            <div class="model-card">
+                <div class="model-image">
+                    <img src="https://images.unsplash.com/photo-1564507592331-d622afc0f2f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Taj Mahal">
+                </div>
+                <div class="model-info">
+                    <h3>Taj Mahal</h3>
+                    <div class="model-meta">
+                        <span>File: taj_mahal_3d_model.glb</span>
+                        <span>~5.2 MB</span>
+                    </div>
+                    <p>Iconic white marble mausoleum in Agra, India. A UNESCO World Heritage Site and one of the New Seven Wonders of the World.</p>
+                    <a href="/models/taj-mahal/taj_mahal_3d_model.glb" download class="btn-download">
+                        <i class="fas fa-download"></i> Download GLB
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ellora Caves -->
+            <div class="model-card">
+                <div class="model-image">
+                    <img src="https://images.unsplash.com/photo-1585506942-246b9d5eac6a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Ellora Caves">
+                </div>
+                <div class="model-info">
+                    <h3>Ellora Caves</h3>
+                    <div class="model-meta">
+                        <span>File: ellora_caves__india.glb</span>
+                        <span>~7.8 MB</span>
+                    </div>
+                    <p>Rock-cut cave temples and monasteries representing Buddhist, Hindu, and Jain religious art from the 6th to 10th centuries.</p>
+                    <a href="/models/ellora/ellora_caves__india.glb" download class="btn-download">
+                        <i class="fas fa-download"></i> Download GLB
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sanchi Stupa -->
+            <div class="model-card">
+                <div class="model-image">
+                    <img src="https://images.unsplash.com/photo-1585506942818-6f0a36f8e3e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Sanchi Stupa">
+                </div>
+                <div class="model-info">
+                    <h3>Sanchi Stupa</h3>
+                    <div class="model-meta">
+                        <span>File: Coming Soon</span>
+                        <span>~0 MB</span>
+                    </div>
+                    <p>Ancient Buddhist monument in Madhya Pradesh, India, containing some of the oldest stone structures in India.</p>
+                    <a href="#" class="btn-download btn-disabled" disabled>
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sankranti Cow -->
+            <div class="model-card">
+                <div class="model-image">
+                    <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Sankranti Cow">
+                </div>
+                <div class="model-info">
+                    <h3>Sankranti Cow</h3>
+                    <div class="model-meta">
+                        <span>File: sankranti_cow.glb</span>
+                        <span>~1.2 MB</span>
+                    </div>
+                    <p>Traditional South Indian festival cow decoration for Pongal/Sankranti celebrations, featuring colorful patterns and ornaments.</p>
+                    <a href="/models/sankranti/sankranti_cow_-_low_poly_-_south_indian_festival.glb" download class="btn-download">
+                        <i class="fas fa-download"></i> Download GLB
+                    </a>
+                    <a href="sankranti-ar.html" class="btn-download" style="margin-top: 10px; background: #e67e22;">
+                        <i class="fas fa-mobile-alt"></i> View in AR
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ctrl+Alt+Bharat. All rights reserved.</p>
+            <p>3D models are provided for educational and non-commercial use only.</p>
+        </div>
+    </footer>
+</body>
+</html>
