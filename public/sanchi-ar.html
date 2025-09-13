@@ -70,7 +70,7 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // AR.js configuration
+            // Simplified AR.js configuration
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
@@ -82,9 +82,7 @@
                     'detectionMode: mono',
                     'matrixCodeType: 3x3',
                     'trackingMethod: best',
-                    'maxDetectionRate: 30',
-                    'cameraParametersUrl: ./data/camera_para.dat',
-                    'markerPatternUrl: ./data/patt.hiro'
+                    'maxDetectionRate: 30'
                 ].join('; ')
             };
             
