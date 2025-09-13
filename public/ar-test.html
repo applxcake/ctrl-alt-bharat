@@ -113,28 +113,59 @@
             camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with default hiro preset
+            // Add marker with hiro preset (simplest option)
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             marker.setAttribute('emitevents', 'true');
             marker.setAttribute('cursor', 'rayOrigin: mouse');
+            marker.setAttribute('raycaster', 'objects: .clickable');
             
             // Add Taj Mahal model with optimized settings
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
             model.setAttribute('scale', isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02');
-            model.setAttribute('position', '0 0 0');
-            model.setAttribute('rotation', '0 180 0');
-            model.setAttribute('shadow', 'receive: false; cast: false');
-            
-            // Position and scale model for better visibility
-            model.setAttribute('position', '0 0 0');
-            const scale = isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02';
-            model.setAttribute('scale', scale);
             
             // Rotate and position for better viewing angle
             model.setAttribute('rotation', '0 180 0');
             marker.appendChild(model);
+            
+            // Create a container for the model with smaller scale
+            const modelContainer = document.createElement('a-entity');
+            modelContainer.setAttribute('position', '0 0.1 0');
+            modelContainer.setAttribute('scale', '0.3 0.3 0.3'); // Reduced size
+            
+            // Add a simple box with better materials and shadow
+            const box = document.createElement('a-box');
+            box.setAttribute('color', '#4CC3D9');
+            box.setAttribute('position', '0 0.25 0');
+            box.setAttribute('shadow', 'cast: true; receive: true');
+            box.setAttribute('material', 'roughness: 0.5; metalness: 0.5');
+            box.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 4000');
+            
+            // Add a ground plane for shadows
+            const ground = document.createElement('a-plane');
+            ground.setAttribute('position', '0 0 0');
+            ground.setAttribute('rotation', '-90 0 0');
+            ground.setAttribute('width', '4');
+            ground.setAttribute('height', '4');
+            ground.setAttribute('color', '#DDD');
+            ground.setAttribute('shadow', 'receive: true');
+            ground.setAttribute('material', 'shader: standard');
+            
+            // Add a smaller box on top
+            const smallBox = document.createElement('a-box');
+            smallBox.setAttribute('color', '#FF6B6B');
+            smallBox.setAttribute('position', '0 0.5 0');
+            smallBox.setAttribute('scale', '0.5 0.5 0.5');
+            smallBox.setAttribute('shadow', 'cast: true; receive: true');
+            smallBox.setAttribute('material', 'roughness: 0.2; metalness: 0.8');
+            smallBox.setAttribute('animation', 'property: position; to: 0 0.8 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine');
+            
+            // Assemble the model
+            modelContainer.appendChild(ground);
+            modelContainer.appendChild(box);
+            modelContainer.appendChild(smallBox);
+            marker.appendChild(modelContainer);
             
             // Add text label with mobile-optimized size
             const text = document.createElement('a-text');
@@ -147,14 +178,33 @@
             
             scene.appendChild(marker);
             
-            // Simple lighting setup
-            const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', 'type: ambient; color: #FFFFFF; intensity: 0.8');
+            // Add lighting with shadows
+            // Ambient light for general illumination
+            const ambientLight = document.createElement('a-light');
+            ambientLight.setAttribute('type', 'ambient');
+            ambientLight.setAttribute('color', '#FFF');
+            ambientLight.setAttribute('intensity', '0.3');
             scene.appendChild(ambientLight);
             
-            const directionalLight = document.createElement('a-entity');
-            directionalLight.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.8; position: 1 1 1');
-            scene.appendChild(directionalLight);
+            // Directional light for main shadows
+            const dirLight = document.createElement('a-light');
+            dirLight.setAttribute('type', 'directional');
+            dirLight.setAttribute('color', '#FFF');
+            dirLight.setAttribute('intensity', '0.8');
+            dirLight.setAttribute('position', '-1 2 1');
+            dirLight.setAttribute('shadow', 'cast: true; shadowMapHeight: 1024; shadowMapWidth: 1024');
+            scene.appendChild(dirLight);
+            
+            // Additional fill light
+            const fillLight = document.createElement('a-light');
+            fillLight.setAttribute('type', 'directional');
+            fillLight.setAttribute('color', '#88C0D0');
+            fillLight.setAttribute('intensity', '0.4');
+            fillLight.setAttribute('position', '1 1 0.5');
+            scene.appendChild(fillLight);
+            
+            // Enable shadow map on renderer
+            scene.setAttribute('renderer', 'antialias: true; alpha: true; shadow: true; shadowMapEnabled: true;');
             
             // Add scene to body
             document.body.appendChild(scene);
