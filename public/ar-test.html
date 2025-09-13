@@ -119,7 +119,7 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // AR.js configuration with optimized settings
+            // AR.js configuration with debug mode enabled
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
@@ -127,14 +127,12 @@
                     'sourceHeight: 720',
                     'displayWidth: 100%',
                     'displayHeight: 100%',
-                    'debugUIEnabled: false',
+                    'debugUIEnabled: true',
                     'detectionMode: mono',
                     'matrixCodeType: 3x3',
                     'trackingMethod: best',
                     'maxDetectionRate: 30',
-                    'patternRatio: 0.85',
-                    'cameraParametersUrl: data/camera_para.dat',
-                    'markerPatternUrl: data/patt.hiro'
+                    'patternRatio: 0.85'
                 ].join('; ')
             };
             
@@ -164,15 +162,17 @@
             camera.setAttribute('position', isMobile ? '0 1.6 2.5' : '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with hiro preset (simplest and most reliable)
+            // Add marker with simple configuration
             const marker = document.createElement('a-marker');
-            marker.setAttribute('preset', 'hiro');
+            marker.setAttribute('type', 'pattern');
+            marker.setAttribute('url', 'https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/patt.hiro');
             marker.setAttribute('emitevents', 'true');
             marker.setAttribute('cursor', 'rayOrigin: mouse');
-            marker.setAttribute('smooth', 'true');
-            marker.setAttribute('smoothCount', '10');
-            marker.setAttribute('smoothTolerance', '0.01');
             marker.setAttribute('raycaster', 'objects: .clickable');
+            
+            // Add debug events
+            marker.addEventListener('markerFound', () => console.log('Marker found!'));
+            marker.addEventListener('markerLost', () => console.log('Marker lost!'));
             
             // Create model container
             const modelContainer = document.createElement('a-entity');
