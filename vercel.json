@@ -12,22 +12,21 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
-    { "source": "/model-viewer", "destination": "/public/model-viewer.html" },
-    { "source": "/model-viewer/:id", "destination": "/public/model-viewer.html?id=:id" },
-    { "source": "/ar/:model", "destination": "/public/ar.html?model=:model" },
-    { "source": "/sanchi", "destination": "/public/sanchi-ar.html" },
-    { "source": "/sankranti", "destination": "/public/sankranti-ar.html" },
-    { "source": "/kaaba", "destination": "/public/kaaba-ar.html" },
-    { "source": "/ellora", "destination": "/public/ellora-ar.html" },
-    { "source": "/about", "destination": "/public/about.html" },
-    { "source": "/team", "destination": "/public/team.html" },
-    { "source": "/downloads", "destination": "/public/downloads.html" },
-    { "source": "/", "destination": "/public/index.html" },
+  "routes": [
+    { "src": "/model-viewer", "dest": "/model-viewer.html" },
+    { "src": "/model-viewer/(?<id>[^/]+)", "dest": "/model-viewer.html?id=$id" },
+    { "src": "/ar/(?<model>[^/]+)", "dest": "/ar.html?model=$model" },
+    { "src": "/sanchi", "dest": "/sanchi-ar.html" },
+    { "src": "/sankranti", "dest": "/sankranti-ar.html" },
+    { "src": "/kaaba", "dest": "/kaaba-ar.html" },
+    { "src": "/ellora", "dest": "/ellora-ar.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/team", "dest": "/team.html" },
+    { "src": "/downloads", "dest": "/downloads.html" },
+    { "src": "/", "dest": "/index.html" },
     { 
-      "source": "/(.*)", 
-      "destination": "/public/404.html",
-      "statusCode": 404
+      "src": "/(.*)", 
+      "dest": "/404.html"
     }
   ]
 }
