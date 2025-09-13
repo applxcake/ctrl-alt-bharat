@@ -76,15 +76,18 @@
 
     <a-scene 
         embedded 
-        arjs='sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;'
-        renderer='antialias: true; alpha: true;'>
+        arjs='sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true;'
+        renderer='antialias: true; alpha: true; antialias: true;'>
+        
+        <!-- Camera -->
+        <a-entity camera></a-entity>
         
         <a-assets>
             <!-- No assets needed for the box -->
         </a-assets>
         
         <!-- Simple box for testing -->
-        <a-marker preset="hiro" type='pattern' url='https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-pattern/trex.pt'>
+        <a-marker preset="hiro">
             <!-- Simple box with texture -->
             <a-box 
                 color="#4CC3D9"
@@ -121,11 +124,40 @@
     </a-scene>
     
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
     <script>
         // Hide loader when scene is loaded
-        window.addEventListener('arjs-nft-loaded', function() {
-            document.querySelector('.arjs-loader').style.display = 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            const scene = document.querySelector('a-scene');
+            
+            scene.addEventListener('loaded', () => {
+                console.log('A-Frame scene loaded');
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Check if we have camera access
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        console.log('Camera access granted');
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
+                    });
+            });
+            
+            // Handle marker found/lost events
+            const marker = document.querySelector('a-marker');
+            if (marker) {
+                marker.addEventListener('markerFound', () => {
+                    console.log('Marker found');
+                    document.querySelector('.marker-not-found').setAttribute('visible', 'false');
+                });
+                marker.addEventListener('markerLost', () => {
+                    console.log('Marker lost');
+                    document.querySelector('.marker-not-found').setAttribute('visible', 'true');
+                });
+            }
         });
     </script>
     
