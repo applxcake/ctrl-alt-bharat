@@ -83,15 +83,15 @@
             marker.setAttribute('cursor', 'rayOrigin: mouse');
             marker.setAttribute('raycaster', 'objects: .clickable');
             
-            // Create model container with scale
+            // Create model container with increased scale (150% larger)
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.1 0.1 0.1');
+            modelContainer.setAttribute('scale', '0.15 0.15 0.15'); // Increased container scale by 150%
             
             // Copy the model to a local directory first
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/sankranti/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
-            model.setAttribute('scale', '4 4 4');
+            model.setAttribute('scale', '6 6 6'); // Increased model scale by 150%
             model.setAttribute('position', '0 -1 0');
             model.setAttribute('rotation', '0 180 0');
             modelContainer.appendChild(model);

@@ -98,6 +98,317 @@
             text-decoration: none;
         }
         
+        /* AI Chat Section Styles */
+        .ai-section {
+            padding: 6rem 0;
+            background-color: #f8f9fa;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .ai-chat-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Suggested Questions */
+        .suggested-questions {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .suggested-questions p {
+            color: #555;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .question-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .suggested-question {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .suggested-question:hover {
+            background-color: #f0f4f8;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Chat Interface */
+        .ai-chat-interface {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .ai-chat-header {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #4a6fa5, #3a5a80);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ai-chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .ai-minimize-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            line-height: 1;
+        }
+        
+        .ai-chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .ai-message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: #4a6fa5;
+            color: white;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+        
+        .assistant-message {
+            align-self: flex-start;
+            background-color: #f0f4f8;
+            color: #2c3e50;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            background-color: #f0f4f8 !important;
+            width: fit-content;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        .ai-chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
+        }
+        
+        .ai-user-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            resize: none;
+            max-height: 120px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .ai-user-input:focus {
+            outline: none;
+            border-color: #4a6fa5;
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+        
+        .ai-send-btn {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            margin-left: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        
+        .ai-send-btn:hover {
+            background-color: #3a5a80;
+            transform: translateY(-2px);
+        }
+        
+        .ai-send-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Toggle Chat Button (Mobile) */
+        .ai-toggle-chat {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #4a6fa5, #3a5a80);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 100;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-toggle-chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        .ai-toggle-chat i {
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .ai-chat-interface {
+                position: fixed;
+                bottom: 5.5rem;
+                right: 1.5rem;
+                width: calc(100% - 3rem);
+                height: 70vh;
+                max-height: 600px;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(20px);
+                transition: all 0.3s ease;
+                z-index: 99;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            }
+            
+            .ai-chat-interface.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+            
+            .ai-toggle-chat {
+                display: flex;
+            }
+            
+            .suggested-questions {
+                margin-bottom: 1rem;
+            }
+            
+            .question-chips {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .suggested-question {
+                white-space: nowrap;
+                font-size: 0.85rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .ai-message {
+                max-width: 90%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .ai-section {
+                padding: 4rem 0;
+            }
+            
+            .section-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .ai-chat-interface {
+                right: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            .ai-toggle-chat {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .ai-toggle-chat span {
+                display: none;
+            }
+        }
+        
         .nav-links {
             display: flex;
             list-style: none;
@@ -414,9 +725,7 @@
                 <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
                 <li><a href="#team"><i class="fas fa-users"></i> Our Team</a></li>
-                <li><a href="#" id="featureRequestBtn" class="btn btn-secondary">
-                    <i class="fas fa-lightbulb"></i> Request Feature
-                </a></li>
+                <li><a href="mailto:test@gmail.com?subject=Feedback%20for%20Ctrl%2BAlt%2BBharat&body=%0A%0A---%0ASent%20from%20Ctrl%2BAlt%2BBharat%20website" id="featureRequestBtn"><i class="fas fa-comment-alt"></i> Feedback</a></li>
                 <li><a href="taj-placeholder-ar.html" class="btn btn-primary">
                     <i class="fas fa-vr-cardboard"></i> Try AR Experience
                 </a></li>
@@ -424,18 +733,57 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.thepalaceonwheels.org/storage/blog/taj-mahal-with-deccan-odyssey.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white;">
+    <!-- Hero Section with Dynamic Background -->
+    <section class="hero" id="home" style="background-size: cover; background-position: center; background-repeat: no-repeat; color: white;">
         <div class="container">
             <h1>Experience Indian Heritage in AR</h1>
             <p>Discover the rich cultural heritage of India through immersive augmented reality experiences.</p>
             <a href="#heritage" class="btn btn-primary">Explore Now</a>
         </div>
     </section>
+    
+    <script>
+    // Array of high-quality Indian cultural heritage images from Unsplash
+    const heritageImages = [
+        'https://plus.unsplash.com/premium_photo-1661919589683-f11880119fb7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1496372412473-e8548ffd82bc?q=80&w=2214&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1515091943-9d5c0ad475af?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1561359313-0639aad49ca6?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1486548730767-5c679e8eda6b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1461603950871-cd64bcf7acf0?q=80&w=2166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://plus.unsplash.com/premium_photo-1661963646501-7c2818380948?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    ];
+    
+    // Function to change background image with fade effect
+    function changeBackground() {
+        const hero = document.querySelector('.hero');
+        let currentIndex = 0;
+        
+        // Set initial background
+        hero.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${heritageImages[0]}')`;
+        
+        // Change image every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % heritageImages.length;
+            
+            // Fade out
+            hero.style.opacity = '0.5';
+            
+            // Change image after fade out
+            setTimeout(() => {
+                hero.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${heritageImages[currentIndex]}')`;
+                // Fade in
+                hero.style.opacity = '1';
+            }, 500);
+            
+        }, 5000);
+    }
+    
+    // Start the slideshow when the page loads
+    window.addEventListener('load', changeBackground);
+    </script>
 
     <!-- Features Section -->
     <section id="features" class="section">
@@ -578,12 +926,15 @@
                     <img src="https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=2352&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Taj Mahal" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Taj Mahal</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Experience the beauty of the iconic white marble mausoleum in Agra, India.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="taj-mahal-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="taj-mahal-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/taj-mahal/taj_mahal_3d_model.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=taj-mahal" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/taj-mahal/taj_mahal_3d_model.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
@@ -592,12 +943,15 @@
                     <img src="https://plus.unsplash.com/premium_photo-1697729588485-6c238cf3ab2f?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ellora Caves" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Ellora Caves</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Explore the magnificent rock-cut cave temples and monasteries in Maharashtra.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="ellora-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="ellora-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/ellora/ellora_caves__india.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=ellora" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/ellora/ellora_caves__india.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
@@ -606,12 +960,15 @@
                     <img src="https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kaaba in Mecca" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Kaaba in Mecca</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Experience the spiritual center of Islam, the most sacred site in the Muslim world.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="kaaba-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="kaaba-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/kaaba/kaaba_in_mecca.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=kaaba" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/kaaba/kaaba_in_mecca.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
@@ -620,12 +977,15 @@
                     <img src="https://images.unsplash.com/photo-1522448746354-da4936934201?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Christmas Tree" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Christmas Tree</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Celebrate the holiday season with this beautiful 3D Christmas tree model.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="christmas-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="christmas-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/christmas/christmas_tree.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=christmas" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/christmas/christmas_tree_set.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
@@ -634,12 +994,15 @@
                     <img src="https://images.unsplash.com/photo-1585744944048-846da0c3054c?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Sanchi Stupa" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Sanchi Stupa</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Discover the ancient Buddhist monument located in Madhya Pradesh.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="sanchi-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="sanchi-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/sanchi/great_stupa_in_sanchi.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=sanchi" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/sanchi/great_stupa_in_sanchi.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
@@ -648,15 +1011,65 @@
                     <img src="https://images.unsplash.com/photo-1672839641769-b7a8afa0cb14?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Sankranti Cow" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3 style="margin: 0 0 1rem 0; color: #2c3e50;">Sankranti Cow</h3>
                     <p style="margin-bottom: 1.5rem; color: #555; min-height: 60px;">Experience the traditional South Indian festival cow decoration in AR.</p>
-                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 1rem;">
-                        <a href="sankranti-ar.html" class="btn ar-btn">
-                            <i class="fas fa-cube"></i> View in AR
+                    <div class="button-group" style="display: flex; gap: 8px; margin-top: 1rem; justify-content: center;">
+                        <a href="sankranti-ar.html" class="btn ar-btn" title="View in AR">
+                            <i class="fas fa-vr-cardboard"></i>
                         </a>
-                        <a href="models/sankranti/sankranti_cow_-_low_poly_-_south_indian_festival.glb" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download
+                        <a href="model-viewer.html?id=sankranti" class="btn embed-btn" title="View 3D Model">
+                            <i class="fas fa-cube"></i>
+                        </a>
+                        <a href="models/sankranti/sankranti_cow.glb" download class="btn download-btn" title="Download Model">
+                            <i class="fas fa-file-download"></i>
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Section -->
+    <section class="ai-section" id="ai-chat">
+        <div class="container">
+            <h2 class="section-title">Ask Our AI Guide</h2>
+            <p class="section-subtitle">Get answers to your questions about Indian heritage sites and culture</p>
+            
+            <div class="ai-chat-container">
+                <!-- Suggested Questions -->
+                <div class="suggested-questions">
+                    <p>Try asking:</p>
+                    <div class="question-chips">
+                        <button class="suggested-question">Tell me about the history of Taj Mahal</button>
+                        <button class="suggested-question">What are the main features of Ellora Caves?</button>
+                        <button class="suggested-question">What is the significance of the Kaaba in Islam?</button>
+                    </div>
+                </div>
+                
+                <!-- Chat Interface -->
+                <div class="ai-chat-interface">
+                    <div class="ai-chat-header">
+                        <h3>Heritage Guide AI</h3>
+                        <button class="ai-minimize-btn">−</button>
+                    </div>
+                    <div class="ai-chat-messages">
+                        <div class="ai-message assistant-message">
+                            <div class="ai-message-content">
+                                Namaste! I'm your AI guide to Indian heritage. Ask me anything about historical sites, cultural significance, or travel tips!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-chat-input">
+                        <textarea class="ai-user-input" placeholder="Type your question here..." rows="1"></textarea>
+                        <button class="ai-send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Toggle Chat Button (for mobile) -->
+                <button class="ai-toggle-chat">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Chat with AI</span>
+                </button>
             </div>
         </div>
     </section>
@@ -789,22 +1202,61 @@
         }); // End of DOMContentLoaded
     </script>
     
-    <!-- Main JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/ai-chat.js"></script>
+</body>
     
-    <!-- Feature Request Button -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const featureRequestBtn = document.getElementById('featureRequestBtn');
-            if (featureRequestBtn) {
-                featureRequestBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const subject = encodeURIComponent('Feature Request for Ctrl+Alt+Bharat');
-                    const body = encodeURIComponent('\n\n---\nSent from Ctrl+Alt+Bharat website');
-                    window.location.href = `mailto:test@gmail.com?subject=${subject}&body=${body}`;
-                });
-            }
-        });
-    </script>
+    <style>
+        /* Style for the action buttons */
+        .btn {
+            min-width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            padding: 0 12px;
+        }
+        
+        .ar-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        
+        .ar-btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+        }
+        
+        .embed-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+        }
+        
+        .embed-btn:hover {
+            background-color: #0b7dda;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+        
+        .download-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+    </style>
 </body>
 </html>
