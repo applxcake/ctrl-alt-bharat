@@ -2,11 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sanchi Stupa AR Experience</title>
-    <!-- A-Frame and AR.js scripts in head -->
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sankranti Cow AR Experience</title>
     <style>
         body { 
             margin: 0; 
@@ -49,22 +46,27 @@
         <div>Loading AR, please wait...</div>
     </div>
 
+    <!-- A-Frame and AR.js -->
+    <script>
+        // Clean up any existing A-Frame components
+        if (window.AFRAME) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
+        }
+    </script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
     <script>
         // Wait for A-Frame to load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Clean up any existing A-Frame components
-            if (window.AFRAME) {
-                delete AFRAME.components['arjs-anchor'];
-                delete AFRAME.components['arjs-anchor-marker'];
-                delete AFRAME.components['arjs-anchor-hit-testing'];
-                delete AFRAME.components['arjs-anchor-nft'];
-                delete AFRAME.systems.arjs;
-            }
+        window.addEventListener('load', function() {
 
             // Create a new scene
             const scene = document.createElement('a-scene');
             scene.setAttribute('embedded', '');
-            scene.setAttribute('renderer', 'antialias: true; alpha: true;');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true');
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
@@ -109,14 +111,14 @@
             
             // Create model container
             const modelContainer = document.createElement('a-entity');
-            modelContainer.setAttribute('position', '0 0.05 0');
-            modelContainer.setAttribute('scale', '0.2 0.2 0.2');
+            modelContainer.setAttribute('position', '0 0 0');
+            modelContainer.setAttribute('scale', '0.1 0.1 0.1');
             
-            // Add Taj Mahal model (temporary - replace with Sanchi Stupa model when available)
+            // Add Sankranti Cow model
             const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', 'url(./models/taj_mahal/scene.glb)');
-            model.setAttribute('scale', isMobile ? '0.05 0.05 0.05' : '0.1 0.1 0.1');
-            model.setAttribute('position', '0 0.1 0');
+            model.setAttribute('gltf-model', 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
+            model.setAttribute('scale', '1 1 1');
+            model.setAttribute('position', '0 0 0');
             model.setAttribute('rotation', '0 180 0');
             modelContainer.appendChild(model);
             
@@ -124,19 +126,19 @@
             const ground = document.createElement('a-plane');
             ground.setAttribute('position', '0 0 0');
             ground.setAttribute('rotation', '-90 0 0');
-            ground.setAttribute('width', '2');
-            ground.setAttribute('height', '2');
+            ground.setAttribute('width', '1');
+            ground.setAttribute('height', '1');
             ground.setAttribute('shadow', 'receive: true');
             ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1');
             modelContainer.appendChild(ground);
             
             // Add text label
             const text = document.createElement('a-text');
-            text.setAttribute('value', 'Taj Mahal (Sanchi Stupa coming soon)');
+            text.setAttribute('value', 'Sankranti Cow');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', isMobile ? '0 0.8 0' : '0 1.5 0');
-            text.setAttribute('scale', isMobile ? '1 1 1' : '2 2 2');
+            text.setAttribute('position', '0 0.8 0');
+            text.setAttribute('scale', '1 1 1');
             modelContainer.appendChild(text);
             
             marker.appendChild(modelContainer);
@@ -146,7 +148,7 @@
             const ambientLight = document.createElement('a-light');
             ambientLight.setAttribute('type', 'ambient');
             ambientLight.setAttribute('color', '#FFF');
-            ambientLight.setAttribute('intensity', '0.3');
+            ambientLight.setAttribute('intensity', '0.5');
             scene.appendChild(ambientLight);
             
             const dirLight = document.createElement('a-light');
@@ -156,13 +158,6 @@
             dirLight.setAttribute('position', '1 3 1');
             dirLight.setAttribute('shadow', 'cast: true');
             scene.appendChild(dirLight);
-            
-            const fillLight = document.createElement('a-light');
-            fillLight.setAttribute('type', 'directional');
-            fillLight.setAttribute('color', '#88C0D0');
-            fillLight.setAttribute('intensity', '0.4');
-            fillLight.setAttribute('position', '1 1 0.5');
-            scene.appendChild(fillLight);
             
             // Add scene to body and handle loading
             document.body.appendChild(scene);
@@ -189,7 +184,7 @@
     </script>
     
     <div class="info-panel">
-        Point your camera at the marker to view the Great Stupa of Sanchi
+        Point your camera at the marker to view the Sankranti Cow
     </div>
 </body>
 </html>
