@@ -73,11 +73,13 @@
     <a-scene 
         embedded 
         arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' 
-        renderer='antialias: true; alpha: true;'>
+        renderer='antialias: true; alpha: true;'
+        loading-screen="enabled: false"
+        timeout="10000">
         
         <!-- Preload assets -->
-        <a-assets>
-            <a-asset-item id="sanchi-model" src="models/sanchi/scene.gltf"></a-asset-item>
+        <a-assets timeout="10000">
+            <a-asset-item id="sanchi-model" src="./models/sanchi/fixed-scene.gltf"></a-asset-item>
         </a-assets>
         
         <!-- Marker-based AR -->
@@ -117,7 +119,7 @@
     </div>
     
     <!-- Font Awesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <script>
         // Hide loader when scene is loaded

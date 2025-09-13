@@ -1,0 +1,204 @@
+{
+    "asset": {
+        "generator": "Khronos glTF Blender I/O v1.6.13",
+        "version": "2.0"
+    },
+    "scene": 0,
+    "scenes": [
+        {
+            "name": "Scene",
+            "nodes": [0]
+        }
+    ],
+    "nodes": [
+        {
+            "mesh": 0,
+            "name": "GreatStupa"
+        }
+    ],
+    "materials": [
+        {
+            "name": "Material.001",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 0
+                },
+                "metallicFactor": 0,
+                "roughnessFactor": 0.5
+            }
+        },
+        {
+            "name": "Material.003",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 1
+                },
+                "metallicRoughnessTexture": {
+                    "index": 2
+                },
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+            },
+            "normalTexture": {
+                "index": 3
+            }
+        },
+        {
+            "name": "Material.004",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 4
+                },
+                "metallicRoughnessTexture": {
+                    "index": 5
+                },
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+            },
+            "normalTexture": {
+                "index": 6
+            }
+        },
+        {
+            "name": "Material.005",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 7
+                },
+                "metallicFactor": 0,
+                "roughnessFactor": 0.5
+            }
+        }
+    ],
+    "textures": [
+        {
+            "source": 0
+        },
+        {
+            "source": 1
+        },
+        {
+            "source": 2
+        },
+        {
+            "source": 3
+        },
+        {
+            "source": 4
+        },
+        {
+            "source": 5
+        },
+        {
+            "source": 6
+        },
+        {
+            "source": 7
+        }
+    ],
+    "images": [
+        {
+            "uri": "textures/Material.001_baseColor.jpeg"
+        },
+        {
+            "uri": "textures/Material.003_baseColor.jpeg"
+        },
+        {
+            "uri": "textures/Material.003_metallicRoughness.png"
+        },
+        {
+            "uri": "textures/Material.003_normal.png"
+        },
+        {
+            "uri": "textures/Material.004_baseColor.jpeg"
+        },
+        {
+            "uri": "textures/Material.004_metallicRoughness.png"
+        },
+        {
+            "uri": "textures/Material.004_normal.png"
+        },
+        {
+            "uri": "textures/Material.005_baseColor.jpeg"
+        }
+    ],
+    "meshes": [
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1,
+                        "TEXCOORD_0": 2
+                    },
+                    "indices": 3,
+                    "material": 0
+                }
+            ]
+        }
+    ],
+    "buffers": [
+        {
+            "uri": "scene.bin",
+            "byteLength": 6560600
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 3000000,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 3000000,
+            "byteLength": 3000000,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 6000000,
+            "byteLength": 200000,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 6200000,
+            "byteLength": 360600,
+            "target": 34963
+        }
+    ],
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 250000,
+            "type": "VEC3",
+            "max": [50.0, 100.0, 50.0],
+            "min": [-50.0, 0.0, -50.0]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 250000,
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 250000,
+            "type": "VEC2"
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 0,
+            "componentType": 5123,
+            "count": 300000,
+            "type": "SCALAR"
+        }
+    ]
+}
