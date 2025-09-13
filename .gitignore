@@ -8,7 +8,19 @@ __pycache__/
 venv/
 *.swp
 *.swo
-*.glb
-*.gltf
+# Allow .bin# Models
+/models/*
+!/models/*/
+!/models/*.glb
+!/models/*.gltf
+
+# Data files
+/data/*
+!/data/*/
+!/data/*.dat
+!/data/*.patt
+!/data/*/*.bin
+
+# Ignore other .bin files
 *.bin
 *.patt

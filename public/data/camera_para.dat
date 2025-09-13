@@ -1,0 +1,34 @@
+# Camera parameters for AR.js
+# This is a placeholder file - using default parameters
+# For better results, calibrate your camera and replace this file
+# with the generated camera parameters
+
+# Camera matrix
+camera matrix = {
+  1.0, 0.0, 0.0,
+  0.0, 1.0, 0.0,
+  0.0, 0.0, 1.0
+}
+
+# Distortion coefficients
+distortion = {
+  0.0, 0.0, 0.0, 0.0, 0.0
+}
+
+# Image size
+image size = {
+  width = 640
+  height = 480
+}
+
+# Focal length
+focal length = {
+  x = 700.0
+  y = 700.0
+}
+
+# Principal point
+principal point = {
+  x = 320.0
+  y = 240.0
+}

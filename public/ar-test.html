@@ -70,21 +70,20 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // Add AR.js configuration with performance optimizations
+            // Add AR.js configuration with simplified setup
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
-                    'sourceWidth: 640', // Lower resolution for better performance
+                    'sourceWidth: 640',
                     'sourceHeight: 480',
                     'displayWidth: 100%',
                     'displayHeight: 100%',
-                    'debugUIEnabled: false', // Disable debug UI for better performance
-                    'detectionMode: mono', // Better performance than 'mono_and_matrix'
-                    'matrixCodeType: 3x3', // Faster marker detection
-                    'cameraParametersUrl: https://raw.githack.com/AR-js-org/AR.js/master/three.js/data/data/camera_para.dat',
-                    'markerPatterns: https://raw.githack.com/AR-js-org/AR.js/master/aframe/data/data/hiro.patt',
-                    'maxDetectionRate: 30', // Limit detection rate to 30fps
-                    'trackingMethod: best' // Auto-select best tracking method
+                    'debugUIEnabled: false',
+                    'detectionMode: mono',
+                    'matrixCodeType: 3x3',
+                    'cameraParametersUrl: data/camera_para.dat',
+                    'maxDetectionRate: 30',
+                    'trackingMethod: best'
                 ].join('; ')
             };
             
@@ -97,14 +96,12 @@
             const camera = document.createElement('a-entity');
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
-            // Optimized camera settings
+            // Simplified camera settings
             const cameraConfig = {
-                fov: isMobile ? '45' : '60', // Narrower FOV for less distortion
-                near: '0.1', // Increased from 0.01 to prevent z-fighting
+                fov: isMobile ? '45' : '60',
+                near: '0.1',
                 far: '1000',
-                'camera': '',
-                'look-controls': 'enabled: true',
-                'wasd-controls': 'enabled: false'
+                'camera': ''
             };
             
             // Apply camera settings
@@ -116,14 +113,9 @@
             camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with explicit pattern
+            // Add marker with default hiro preset
             const marker = document.createElement('a-marker');
-            marker.setAttribute('type', 'pattern');
-            marker.setAttribute('url', 'https://raw.githack.com/AR-js-org/AR.js/master/aframe/data/data/hiro.patt');
-            marker.setAttribute('smooth', 'true');
-            marker.setAttribute('smoothCount', '10');
-            marker.setAttribute('smoothTolerance', '0.01');
-            marker.setAttribute('smoothThreshold', '5');
+            marker.setAttribute('preset', 'hiro');
             
             // Add Sankranti Cow model with optimized settings
             const model = document.createElement('a-entity');
