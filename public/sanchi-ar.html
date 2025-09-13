@@ -89,8 +89,8 @@
             <!-- No assets needed for the box -->
         </a-assets>
         
-        <!-- Simple box for testing with explicit marker type -->
-        <a-marker type='pattern' url='https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-pattern/trex.pt' emitevents="true">
+        <!-- Simple box for testing with Hiro marker -->
+        <a-marker preset="hiro" emitevents="true">
             <!-- Simple box with texture -->
             <a-box 
                 color="#4CC3D9"
@@ -127,12 +127,9 @@
     </a-scene>
     
     <!-- A-Frame Core -->
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    
-    <!-- AR.js with cache-busting and error handling -->
     <script>
-        // Clean up any existing AR.js components to prevent duplicates
-        if (window.ARjs) {
+        // Clean up any existing A-Frame components
+        if (window.AFRAME) {
             delete AFRAME.components['arjs-anchor'];
             delete AFRAME.components['arjs-anchor-marker'];
             delete AFRAME.components['arjs-anchor-hit-testing'];
@@ -140,7 +137,9 @@
             delete AFRAME.systems.arjs;
         }
     </script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js?t=" + new Date().getTime() + ""></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    
+    <!-- AR.js with specific version -->
     <script>
         // Clean up any existing AR.js components
         if (window.ARjs) {
@@ -149,6 +148,21 @@
             delete AFRAME.components['arjs-anchor-hit-testing'];
             delete AFRAME.components['arjs-anchor-nft'];
             delete AFRAME.systems.arjs;
+        }
+    </script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    <script>
+        // Clean up any existing AR.js components
+        if (window.ARjs) {
+            try {
+                delete AFRAME.components['arjs-anchor'];
+                delete AFRAME.components['arjs-anchor-marker'];
+                delete AFRAME.components['arjs-anchor-hit-testing'];
+                delete AFRAME.components['arjs-anchor-nft'];
+                delete AFRAME.systems.arjs;
+            } catch (e) {
+                console.log('Cleanup error (can be ignored):', e);
+            }
         }
 
         // Hide loader when scene is loaded
