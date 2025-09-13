@@ -71,10 +71,10 @@
         <div>Loading AR, please wait...</div>
     </div>
     
-    <!-- Model selector -->
+    <!-- Test cube controls -->
     <div class="model-selector">
-        <button class="model-btn active" data-model="./models/taj-mahal/taj_mahal_3d_model.glb" data-name="Taj Mahal" data-scale="0.02 0.02 0.02" data-rotation="0 180 0">Taj Mahal</button>
-        <button class="model-btn" data-model="./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb" data-name="Sankranti Cow" data-scale="0.1 0.1 0.1" data-rotation="0 0 0">Sankranti Cow</button>
+        <button id="red-cube" class="model-btn active">Red Cube</button>
+        <button id="green-cube" class="model-btn">Green Cube</button>
     </div>
     <script>
         // Clean up any existing AR.js components if they exist
@@ -179,63 +179,34 @@
             modelContainer.setAttribute('id', 'model-container');
             marker.appendChild(modelContainer);
             
-            // Function to load model
-            function loadModel(modelPath, modelName, scale = '0.1 0.1 0.1', rotation = '0 180 0') {
-                console.log('Loading model:', modelPath);
-                // Show loading indicator
-                document.querySelector('.arjs-loader').style.display = 'flex';
-                document.querySelector('.arjs-loader div').textContent = 'Loading ' + modelName + '...';
+            // Function to create test cube
+            function createTestCube(color = 'red') {
+                console.log('Creating', color, 'test cube');
                 
                 // Clear previous model
                 const container = document.querySelector('#model-container');
-                if (container) {
-                    container.innerHTML = '';
-                } else {
+                if (!container) {
                     console.error('Model container not found!');
                     return;
                 }
+                container.innerHTML = '';
                 
-                // Create new model with explicit path
-                const model = document.createElement('a-entity');
-                model.setAttribute('gltf-model', `url(${modelPath})`);
-                model.setAttribute('scale', scale);
-                model.setAttribute('position', '0 0 0');
-                model.setAttribute('rotation', rotation);
-                model.setAttribute('shadow', 'receive: false; cast: false');
-                model.classList.add('clickable');
-                model.setAttribute('animation', 'property: scale; from: 0 0 0; to: ' + scale + '; dur: 1000; easing: easeOutElastic');
+                // Create a simple colored cube
+                const cube = document.createElement('a-box');
+                cube.setAttribute('color', color);
+                cube.setAttribute('position', '0 0.5 0');
+                cube.setAttribute('scale', '0.5 0.5 0.5');
+                cube.setAttribute('shadow', 'receive: false; cast: false');
+                cube.classList.add('clickable');
                 
-                // Add model to container with animation
-                const wrapper = document.createElement('a-entity');
-                wrapper.setAttribute('position', '0 0 0');
-                wrapper.setAttribute('animation', 'property: scale; from: 0.1 0.1 0.1; to: 1 1 1; dur: 1000; easing: easeOutElastic');
-                wrapper.appendChild(model);
-                container.appendChild(wrapper);
+                // Add animation
+                cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 2000');
                 
-                // Update text label
-                const text = marker.querySelector('a-text');
-                if (text) {
-                    text.setAttribute('value', modelName);
-                }
+                // Add to container
+                container.appendChild(cube);
                 
-                // Hide loading indicator when model is loaded
-                model.addEventListener('model-loaded', function() {
-                    console.log('Model loaded:', modelPath);
-                    document.querySelector('.arjs-loader').style.display = 'none';
-                    
-                    // Add animation when marker is found
-                    marker.addEventListener('markerFound', () => {
-                        wrapper.setAttribute('animation', 'property: scale; from: 0.1 0.1 0.1; to: 1 1 1; dur: 1000; easing: easeOutElastic');
-                    });
-                });
-                
-                // Handle model loading errors
-                model.addEventListener('error', (e) => {
-                    console.error('Error loading model:', e);
-                    document.querySelector('.arjs-loader div').textContent = 'Error loading ' + modelName;
-                });
-                
-                return model;
+                console.log('Test cube created');
+                return cube;
             }
             
             // Add text label with mobile-optimized size
@@ -289,24 +260,21 @@
                         alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
                     });
                 
-                // Model selector buttons
-                const buttons = document.querySelectorAll('.model-btn');
-                buttons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        // Update active button
-                        buttons.forEach(btn => btn.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        // Get model data
-                        const modelPath = this.getAttribute('data-model');
-                        const modelName = this.getAttribute('data-name');
-                        const scale = this.getAttribute('data-scale') || '0.1 0.1 0.1';
-                        const rotation = this.getAttribute('data-rotation') || '0 180 0';
-                        
-                        // Load selected model
-                        loadModel(modelPath, modelName, scale, rotation);
-                    });
+                // Test cube buttons
+                document.getElementById('red-cube').addEventListener('click', () => {
+                    document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
+                    document.getElementById('red-cube').classList.add('active');
+                    createTestCube('red');
                 });
+                
+                document.getElementById('green-cube').addEventListener('click', () => {
+                    document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
+                    document.getElementById('green-cube').classList.add('active');
+                    createTestCube('green');
+                });
+                
+                // Create initial red cube
+                createTestCube('red');
             });
             
             // Handle marker events
