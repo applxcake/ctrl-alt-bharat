@@ -2,21 +2,33 @@
 // Debug logging
 console.log('DOM fully loaded');
 
-// Check if A-Frame is loaded
-if (typeof AFRAME === 'undefined') {
-    console.error('A-Frame is not loaded!');
-} else {
-    console.log('A-Frame version:', AFRAME.version);
+// Check if we're on a page that uses A-Frame
+const isARPage = document.querySelector('a-scene') !== null;
+
+// Only check for A-Frame if we're on an AR page
+if (isARPage) {
+    if (typeof AFRAME === 'undefined') {
+        console.error('A-Frame is not loaded!');
+    } else {
+        console.log('A-Frame version:', AFRAME.version);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event fired');
-    // DOM Elements
+    
+    // DOM Elements - only query if they exist
     const loadingScreen = document.getElementById('loading');
     const infoPanel = document.getElementById('info-panel');
     const closeButton = document.getElementById('close-info');
     const infoTitle = document.getElementById('info-title');
     const infoContent = document.getElementById('info-content');
+    
+    // Only proceed with AR-specific code if we're on an AR page
+    if (!isARPage) {
+        console.log('Not an AR page, skipping AR initialization');
+        return;
+    }
 
     // Heritage sites data with 3D model information
     const heritageSites = {
@@ -273,10 +285,14 @@ document.addEventListener('DOMContentLoaded', () => {
         infoPanel.style.display = 'block';
     }
 
-    // Close button event
-    closeButton.addEventListener('click', () => {
-        infoPanel.style.display = 'none';
-    });
+    // Close button event - only if closeButton exists
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            if (infoPanel) {
+                infoPanel.style.display = 'none';
+            }
+        });
+    }
 
     // Initialize AR when A-Frame is ready
     if (window.ARjs) {

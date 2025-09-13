@@ -397,19 +397,47 @@
         </div>
     </footer>
 
+    <!-- Help Button -->
+    <div id="help-btn" class="help-btn">?</div>
+    
+    <!-- Help Modal -->
+    <div id="help-modal" class="help-modal">
+        <div class="help-content">
+            <span class="close-help">&times;</span>
+            <h2>How to Use</h2>
+            <ol>
+                <li>Print the marker pattern from the markers folder</li>
+                <li>Allow camera access when prompted</li>
+                <li>Point your camera at the printed marker</li>
+                <li>Tap on the 3D model to see more information</li>
+            </ol>
+            <p><strong>Note:</strong> For best results, ensure good lighting and keep the marker steady.</p>
+        </div>
+    </div>
+
+    <!-- Loading Indicator (initially hidden) -->
+    <div id="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading AR Experience...</p>
+    </div>
+
+    <!-- Scripts -->
     <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
         
         // Add active class to nav links on scroll
-        window.addEventListener('scroll', () => {
+        function updateActiveNavLink() {
             let current = '';
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-links a');
@@ -417,7 +445,7 @@
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) {
                     current = section.getAttribute('id');
                 }
             });
@@ -428,44 +456,20 @@
                     link.classList.add('active');
                 }
             });
-        });
+        }
+        
+        // Throttle scroll events for better performance
+        let isScrolling;
+        window.addEventListener('scroll', () => {
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(updateActiveNavLink, 100);
+        }, false);
+        
+        // Initial call
+        updateActiveNavLink();
     </script>
-</body>
-                    <h3>Featured Heritage Sites:</h3>
-                    <ul>
-                        <li>Taj Mahal</li>
-                        <li>Hampi</li>
-                        <li>Khajuraho</li>
-                        <li>Konark Sun Temple</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Help Button -->
-        <div id="help-btn" class="help-btn">?</div>
-        
-        <!-- Help Modal -->
-        <div id="help-modal" class="help-modal">
-            <div class="help-content">
-                <span class="close-help">&times;</span>
-                <h2>How to Use</h2>
-                <ol>
-                    <li>Print the marker pattern from the markers folder</li>
-                    <li>Allow camera access when prompted</li>
-                    <li>Point your camera at the printed marker</li>
-                    <li>Tap on the 3D model to see more information</li>
-                </ol>
-                <p><strong>Note:</strong> For best results, ensure good lighting and keep the marker steady.</p>
-            </div>
-        </div>
-    </a-scene>
-
-    <div id="loading">
-        <div class="spinner"></div>
-        <p>Loading AR Experience...</p>
-    </div>
-
+    
+    <!-- Main JavaScript -->
     <script src="js/main.js"></script>
 </body>
 </html>
