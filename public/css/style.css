@@ -170,15 +170,19 @@ nav {
 
 /* ===== Hero Section ===== */
 .hero {
-    min-height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('https://www.thepalaceonwheels.org/storage/blog/taj-mahal-with-deccan-odyssey.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    padding: 12rem 0;
+    text-align: center;
+    position: relative;
+    color: white;
+    min-height: 80vh;
     display: flex;
     align-items: center;
-    text-align: center;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    padding: 6rem 1rem 4rem;
-    position: relative;
-    overflow: hidden;
+    justify-content: center;
 }
 
 .hero::before {
@@ -193,8 +197,8 @@ nav {
     pointer-events: none;
 }
 
-.hero-content {
-    max-width: 800px;
+.hero .container {
+    max-width: 1200px;
     margin: 0 auto;
     text-align: center;
     position: relative;
@@ -205,21 +209,51 @@ nav {
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    color: white;
     font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     line-height: 1.2;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation: fadeInUp 1s ease-out;
+    color: white;
 }
 
 .hero p {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     margin-bottom: 2.5rem;
-    opacity: 0.95;
-    max-width: 600px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero .btn {
+    animation: fadeInUp 1s ease-out 0.4s both;
+    font-size: 1.1rem;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.hero .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
@@ -743,81 +777,6 @@ a-scene {
 
 .close-btn:hover {
     color: #e74c3c;
-}
-
-/* Help Button */
-.help-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background-color: #e74c3c;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1001;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
-
-.help-btn:hover {
-    transform: scale(1.1);
-    background-color: #c0392b;
-}
-
-/* Help Modal */
-.help-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1002;
-    justify-content: center;
-    align-items: center;
-}
-
-.help-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 80%;
-    max-height: 80%;
-    overflow-y: auto;
-    position: relative;
-}
-
-.close-help {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-help:hover {
-    color: #e74c3c;
-}
-
-.help-content h2 {
-    color: #2c3e50;
-    margin-top: 0;
-}
-
-.help-content ol {
-    padding-left: 20px;
-}
-
-.help-content li {
-    margin-bottom: 10px;
 }
 
 /* Loading Screen */
