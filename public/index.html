@@ -270,13 +270,72 @@
         }
         
         /* Responsive */
+        /* Mobile Menu Styles */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
             }
             
+            .menu-toggle {
+                display: block;
+                z-index: 1001;
+            }
+            
             .nav-links {
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                padding: 2rem;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
             }
             
             .about-content {
@@ -292,7 +351,7 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-monument"></i> Ctrl+Alt+Bharat
             </a>
-            <button class="menu-toggle" aria-label="Toggle navigation">
+            <button class="menu-toggle" aria-label="Toggle navigation" style="display: none;">
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-links">
@@ -448,7 +507,6 @@
         </div>
     </section>
 
-    <!-- Download Section -->
     <!-- AR Experiences Section -->
     <section class="ar-experiences" style="padding: 6rem 0; background-color: #fff;">
         <div class="container">
@@ -458,113 +516,40 @@
             </p>
             <div class="features" style="margin-top: 2rem;">
                 <div class="feature-card" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1564507592331-d626af8231a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Taj Mahal" class="model-preview" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="https://images.unsplash.com/photo-1564507592331-d622afc0f2f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Taj Mahal" class="model-preview" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3>Taj Mahal</h3>
-                    <p>3D model of the iconic Taj Mahal monument.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
-                        <a href="models/taj-mahal/taj_mahal_3d_model.glb" download class="btn" style="flex: 1; text-align: center;">
-                            <i class="fas fa-download"></i> GLB
-                        </a>
-                        <a href="taj-mahal-ar.html" class="btn" style="flex: 1; text-align: center; background: #4a6fa5;">
-                            <i class="fas fa-cube"></i> View AR
-                        </a>
-                    </div>
+                    <p>Experience the beauty of the iconic white marble mausoleum in Agra, India.</p>
+                    <a href="taj-mahal-ar.html" class="btn" style="display: block; text-align: center; background: #4a6fa5; margin-top: 1rem;">
+                        <i class="fas fa-cube"></i> View in AR
+                    </a>
                 </div>
                 
                 <div class="feature-card" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1595433707802-6b2626ef1b91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Ellora Caves" class="model-preview" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Ellora Caves" class="model-preview" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3>Ellora Caves</h3>
-                    <p>3D model of the ancient rock-cut caves.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
-                        <a href="models/ellora/ellora_caves__india.glb" download class="btn" style="flex: 1; text-align: center;">
-                            <i class="fas fa-download"></i> GLB
-                        </a>
-                        <a href="ellora-ar.html" class="btn" style="flex: 1; text-align: center; background: #4a6fa5;">
-                            <i class="fas fa-cube"></i> View AR
-                        </a>
-                    </div>
+                    <p>Explore the magnificent rock-cut cave temples and monasteries in Maharashtra.</p>
+                    <a href="ellora-ar.html" class="btn" style="display: block; text-align: center; background: #4a6fa5; margin-top: 1rem;">
+                        <i class="fas fa-cube"></i> View in AR
+                    </a>
                 </div>
                 
                 <div class="feature-card" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1584811641749-ae2c1f0c84a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Sanchi Stupa" class="model-preview" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="https://images.pexels.com/photos/1547756/pexels-photo-1547756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sanchi Stupa" class="model-preview" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3>Sanchi Stupa</h3>
-                    <p>3D model of the ancient Buddhist monument.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
-                        <a href="models/sanchi/great_stupa_in_sanchi.glb" download class="btn" style="flex: 1; text-align: center;">
-                            <i class="fas fa-download"></i> GLB
-                        </a>
-                        <a href="sanchi-ar.html" class="btn" style="flex: 1; text-align: center; background: #4a6fa5;">
-                            <i class="fas fa-cube"></i> View AR
-                        </a>
-                    </div>
+                    <p>Discover the ancient Buddhist monument located in Madhya Pradesh.</p>
+                    <a href="sanchi-ar.html" class="btn" style="display: block; text-align: center; background: #4a6fa5; margin-top: 1rem;">
+                        <i class="fas fa-cube"></i> View in AR
+                    </a>
                 </div>
                 
                 <div class="feature-card" style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80" alt="Sankranti Cow" class="model-preview" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                    <img src="https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sankranti Cow" class="model-preview" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
                     <h3>Sankranti Cow</h3>
-                    <p>3D model of traditional South Indian festival cow.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
-                        <a href="models/sankranti/sankranti_cow_-_low_poly_-_south_indian_festival.glb" download class="btn" style="flex: 1; text-align: center;">
-                            <i class="fas fa-download"></i> GLB
-                        </a>
-                        <a href="sankranti-ar.html" class="btn" style="flex: 1; text-align: center; background: #4a6fa5;">
-                            <i class="fas fa-cube"></i> View AR
-                        </a>
-                    </div>
+                    <p>Experience the traditional South Indian festival cow decoration in AR.</p>
+                    <a href="sankranti-ar.html" class="btn" style="display: block; text-align: center; background: #4a6fa5; margin-top: 1rem;">
+                        <i class="fas fa-cube"></i> View in AR
+                    </a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Download Section -->
-    <section class="download-section" style="padding: 6rem 0; background-color: #f8f9fa;">
-        <div class="container">
-            <h2 class="section-title">Download 3D Models</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: #555; line-height: 1.6;">
-                Download our collection of 3D models to explore Indian heritage in augmented reality. These models are free to use for educational and non-commercial purposes.
-            </p>
-            
-            <div class="model-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                <!-- Taj Mahal -->
-                <div class="model-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
-                    <div style="height: 200px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1564507592331-d622afc0f2f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Taj Mahal" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-top: 0; color: var(--primary);">Taj Mahal</h3>
-                        <p style="color: #666; margin-bottom: 1.5rem;">Iconic white marble mausoleum in Agra, India.</p>
-                        <a href="/models/taj-mahal/taj_mahal_3d_model.glb" download class="btn" style="display: block; text-align: center; background: var(--secondary);">
-                            <i class="fas fa-download"></i> Download GLB
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Ellora Caves -->
-                <div class="model-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
-                    <div style="height: 200px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1585506942-246b9d5eac6a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Ellora Caves" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-top: 0; color: var(--primary);">Ellora Caves</h3>
-                        <p style="color: #666; margin-bottom: 1.5rem;">Rock-cut cave temples and monasteries in Maharashtra.</p>
-                        <a href="/models/ellora/ellora_caves__india.glb" download class="btn" style="display: block; text-align: center; background: var(--secondary);">
-                            <i class="fas fa-download"></i> Download GLB
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Sanchi Stupa -->
-                <div class="model-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
-                    <div style="height: 200px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1585506942818-6f0a36f8e3e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Sanchi Stupa" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-top: 0; color: var(--primary);">Sanchi Stupa</h3>
-                        <p style="color: #666; margin-bottom: 1.5rem;">Ancient Buddhist monument in Madhya Pradesh.</p>
-                        <a href="#" class="btn" style="display: block; text-align: center; background: #95a5a6; cursor: not-allowed;" disabled>
-                            <i class="fas fa-download"></i> Coming Soon
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -588,35 +573,56 @@
     <!-- Scripts -->
     <script>
         // Mobile menu toggle functionality
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-        
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                menuToggle.setAttribute('aria-expanded', 
-                    menuToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
-                );
-                
-                // Toggle between hamburger and close icon
-                const icon = menuToggle.querySelector('i');
-                if (icon) {
-                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
             
-            // Close menu when clicking on a nav link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                    const icon = menuToggle.querySelector('i');
-                    if (icon) {
-                        icon.className = 'fas fa-bars';
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', 
+                        navLinks.classList.contains('active') ? 'true' : 'false'
+                    );
+                    
+                    // Toggle body scroll when menu is open
+                    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (navLinks.classList.contains('active') && 
+                        !e.target.closest('.nav-links') && 
+                        !e.target.closest('.menu-toggle')) {
+                        navLinks.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
                     }
                 });
-            });
-        }
+                
+                // Close menu when clicking on a nav link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    });
+                });
+                
+                // Close menu on window resize if it becomes desktop view
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        if (window.innerWidth > 768) {
+                            navLinks.classList.remove('active');
+                            menuToggle.setAttribute('aria-expanded', 'false');
+                            document.body.style.overflow = '';
+                        }
+                    }, 250);
+                });
+            }
+        });
         
         // Smooth scrolling for anchor links with offset for fixed header
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
