@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AR Model Viewer</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Model selector buttons */
+        .model-selector {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1000;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .model-btn {
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .model-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .model-btn.active {
+            background: #2196F3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        }
+        
+        /* Loading indicator */
+        .arjs-loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+        
+        /* Hide AR.js debug UI */
+        .a-enter-vr, .a-enter-ar {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading indicator -->
+    <div class="arjs-loader">
+        <div>Loading, please wait...</div>
+    </div>
+    
+    <!-- Model selector -->
+    <div class="model-selector">
+        <button class="model-btn active" data-model="./models/taj-mahal/taj_mahal_3d_model.glb">Taj Mahal</button>
+        <button class="model-btn" data-model="./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb">Sankranti Cow</button>
+        <button class="model-btn" data-model="./models/konark/scene.glb">Konark</button>
+    </div>
+    
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
+    
+    <script>
+        // Wait for A-Frame to load
+        window.addEventListener('load', function() {
+            // Create a new scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('loading-screen', 'enabled: false');
+            
+            // AR.js configuration
+            const arjsConfig = {
+                'arjs': [
+                    'sourceType: webcam',
+                    'sourceWidth: 1280',
+                    'sourceHeight: 720',
+                    'displayWidth: 100%',
+                    'displayHeight: 100%',
+                    'debugUIEnabled: false',
+                    'detectionMode: mono',
+                    'matrixCodeType: 3x3',
+                    'trackingMethod: best',
+                    'maxDetectionRate: 30'
+                ].join('; ')
+            };
+            
+            // Apply AR.js configuration
+            Object.entries(arjsConfig).forEach(([key, value]) => {
+                scene.setAttribute(key, value);
+            });
+            
+            // Add camera
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', 'fov: 60; near: 0.1; far: 1000');
+            camera.setAttribute('position', '0 1.6 1.5');
+            scene.appendChild(camera);
+            
+            // Add marker
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('preset', 'hiro');
+            marker.setAttribute('emitevents', 'true');
+            
+            // Add model container
+            const modelContainer = document.createElement('a-entity');
+            modelContainer.setAttribute('id', 'model-container');
+            marker.appendChild(modelContainer);
+            
+            // Add text label
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'Taj Mahal');
+            text.setAttribute('color', 'white');
+            text.setAttribute('align', 'center');
+            text.setAttribute('position', '0 1.5 0');
+            text.setAttribute('scale', '2 2 2');
+            marker.appendChild(text);
+            
+            scene.appendChild(marker);
+            
+            // Add lighting
+            const ambientLight = document.createElement('a-entity');
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFFFFF; intensity: 0.8');
+            scene.appendChild(ambientLight);
+            
+            const directionalLight = document.createElement('a-entity');
+            directionalLight.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.8; position: 1 1 1');
+            scene.appendChild(directionalLight);
+            
+            // Add scene to body
+            document.body.appendChild(scene);
+            
+            // Hide loader when scene is loaded
+            scene.addEventListener('loaded', function() {
+                console.log('Scene loaded');
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Load initial model
+                loadModel('./models/taj-mahal/taj_mahal_3d_model.glb', 'Taj Mahal');
+            });
+            
+            // Model loading function
+            function loadModel(modelPath, modelName) {
+                // Show loading indicator
+                document.querySelector('.arjs-loader').style.display = 'block';
+                document.querySelector('.arjs-loader div').textContent = 'Loading ' + modelName + '...';
+                
+                // Clear previous model
+                const container = document.querySelector('#model-container');
+                container.innerHTML = '';
+                
+                // Create new model
+                const model = document.createElement('a-entity');
+                model.setAttribute('gltf-model', `url(${modelPath})`);
+                model.setAttribute('scale', '0.02 0.02 0.02');
+                model.setAttribute('position', '0 0 0');
+                model.setAttribute('rotation', '0 180 0');
+                model.setAttribute('shadow', 'receive: false; cast: false');
+                
+                // Add model to container
+                container.appendChild(model);
+                
+                // Update text label
+                const text = marker.querySelector('a-text');
+                if (text) {
+                    text.setAttribute('value', modelName);
+                }
+                
+                // Hide loading indicator when model is loaded
+                model.addEventListener('model-loaded', function() {
+                    console.log('Model loaded:', modelPath);
+                    document.querySelector('.arjs-loader').style.display = 'none';
+                });
+            }
+            
+            // Model selector buttons
+            const buttons = document.querySelectorAll('.model-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Load selected model
+                    const modelPath = this.getAttribute('data-model');
+                    const modelName = this.textContent.trim();
+                    loadModel(modelPath, modelName);
+                });
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                // Recalculate camera aspect ratio
+                if (camera.components.camera) {
+                    camera.components.camera.updateProjectionMatrix();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
