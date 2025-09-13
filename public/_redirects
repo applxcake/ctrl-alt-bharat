@@ -1,0 +1,22 @@
+# Redirect model viewer
+/model-viewer /model-viewer.html 200
+/model-viewer/* /model-viewer.html?id=$1 200
+
+# Redirect AR experiences
+/ar/* /ar.html?model=$1 200
+/sanchi /sanchi-ar.html 200
+/sankranti /sankranti-ar.html 200
+/kaaba /kaaba-ar.html 200
+/ellora /ellora-ar.html 200
+
+# Other pages
+/about /about.html 200
+/team /team.html 200
+/downloads /downloads.html 200
+/ar-experience /ar-experience.html 200
+
+# Homepage
+/ /index.html 200
+
+# 404 - Must be last
+/* /404.html 404
