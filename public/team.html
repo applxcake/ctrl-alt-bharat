@@ -56,26 +56,29 @@
         
         /* Team Section */
         .team-section {
-            padding: 80px 0;
-            background-color: #f9f9f9;
+            padding: 120px 0 80px;
         }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
+        
         .section-title {
             text-align: center;
             margin-bottom: 50px;
             font-size: 2.5rem;
             color: #333;
         }
+        
         .team-members {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 30px;
         }
+        
         .team-member {
             background: white;
             border-radius: 10px;
@@ -85,9 +88,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
+        
         .team-member:hover {
             transform: translateY(-10px);
         }
+        
         .team-member img {
             width: 150px;
             height: 150px;
@@ -96,15 +101,18 @@
             object-fit: cover;
             border: 5px solid #f0f0f0;
         }
+        
         .team-member h3 {
             margin: 10px 0 5px;
             color: #2c3e50;
         }
+        
         .team-role {
             color: #7f8c8d;
             font-style: italic;
             margin-bottom: 15px;
         }
+        
         .social-links a {
             display: inline-block;
             margin: 0 5px;
@@ -112,25 +120,42 @@
             font-size: 1.2rem;
             transition: color 0.3s ease;
         }
+        
         .social-links a:hover {
             color: #2980b9;
         }
-        .back-to-home {
-            display: block;
+        
+        .team-intro {
             text-align: center;
-            margin-top: 40px;
+            max-width: 800px;
+            margin: 0 auto 4rem;
         }
+        
+        .team-intro p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .back-to-home {
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
         .back-to-home a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent);
+            font-weight: 500;
+            transition: var(--transition);
         }
+        
         .back-to-home a:hover {
-            background-color: #2980b9;
+            color: var(--primary);
+        }
+        
+        .back-to-home i {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -143,7 +168,8 @@
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#heritage">Heritage</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="team.html" class="active">Our Team</a></li>
+                <li><a href="#" class="active">Our Team</a></li>
+                <li><a href="taj-placeholder-ar.html" class="btn">Try AR</a></li>
             </ul>
         </nav>
     </header>
@@ -151,42 +177,75 @@
     <section class="team-section">
         <div class="container">
             <h2 class="section-title">Our Team</h2>
+            <div class="team-intro">
+                <p>We are a passionate team of developers and designers dedicated to bringing Indian heritage to life through augmented reality technology.</p>
+            </div>
+            
             <div class="team-members">
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Batti Chandan Singh">
+                    <img src="https://ui-avatars.com/api/?name=Batti+Chandan+Singh&background=3498db&color=fff&size=200" alt="Batti Chandan Singh">
                     <h3>Batti Chandan Singh</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Mohammed Sabir">
+                    <img src="https://ui-avatars.com/api/?name=Mohammed+Sabir&background=3498db&color=fff&size=200" alt="Mohammed Sabir">
                     <h3>Mohammed Sabir</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Donepalli Pranitha">
+                    <img src="https://ui-avatars.com/api/?name=Donepalli+Pranitha&background=3498db&color=fff&size=200" alt="Donepalli Pranitha">
                     <h3>Donepalli Pranitha</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Thota Sai Teja">
+                    <img src="https://ui-avatars.com/api/?name=Thota+Sai+Teja&background=3498db&color=fff&size=200" alt="Thota Sai Teja">
                     <h3>Thota Sai Teja</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Safa Mahveen">
+                    <img src="https://ui-avatars.com/api/?name=Safa+Mahveen&background=3498db&color=fff&size=200" alt="Safa Mahveen">
                     <h3>Safa Mahveen</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Gandra Bala Aditya Reddy">
+                    <img src="https://ui-avatars.com/api/?name=Gandra+Bala+Aditya+Reddy&background=3498db&color=fff&size=200" alt="Gandra Bala Aditya Reddy">
                     <h3>Gandra Bala Aditya Reddy</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
             </div>
-
+            
             <div class="back-to-home">
-                <a href="index.html">← Back to Home</a>
+                <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
             </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2023 Ctrl+Alt+Bharat. All rights reserved.</p>
+            <p>&copy; 2024 Ctrl+Alt+Bharat. All rights reserved.</p>
         </div>
     </footer>
 
