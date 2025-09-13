@@ -77,7 +77,10 @@
     <a-scene 
         embedded 
         arjs='sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true;'
-        renderer='antialias: true; alpha: true; antialias: true;'>
+        renderer='antialias: true; alpha: true; antialias: true;'
+        vr-mode-ui="enabled: false"
+        loading-screen="enabled: false"
+        stats="true">
         
         <!-- Camera -->
         <a-entity camera></a-entity>
@@ -86,8 +89,8 @@
             <!-- No assets needed for the box -->
         </a-assets>
         
-        <!-- Simple box for testing -->
-        <a-marker preset="hiro">
+        <!-- Simple box for testing with explicit marker type -->
+        <a-marker type='pattern' url='https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-pattern/trex.pt' emitevents="true">
             <!-- Simple box with texture -->
             <a-box 
                 color="#4CC3D9"
@@ -123,9 +126,31 @@
         
     </a-scene>
     
+    <!-- A-Frame Core -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    
+    <!-- AR.js with cache-busting and error handling -->
     <script>
+        // Clean up any existing AR.js components to prevent duplicates
+        if (window.ARjs) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
+        }
+    </script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js?t=" + new Date().getTime() + ""></script>
+    <script>
+        // Clean up any existing AR.js components
+        if (window.ARjs) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
+        }
+
         // Hide loader when scene is loaded
         document.addEventListener('DOMContentLoaded', () => {
             const scene = document.querySelector('a-scene');
