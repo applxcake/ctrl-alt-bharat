@@ -1,12 +1,13 @@
 /* ===== Base Styles ===== */
 :root {
-    --primary: #2c3e50;
-    --secondary: #34495e;
-    --accent: #3498db;
-    --light: #ecf0f1;
+    --primary: #1a2b3c;         /* Darker blue for better contrast */
+    --secondary: #2c3e50;       /* Slightly lighter than primary */
+    --accent: #2980b9;          /* Slightly darker blue for better contrast */
+    --light: #f5f7fa;           /* Slightly off-white */
     --white: #ffffff;
-    --text: #2c3e50;
-    --text-light: #7f8c8d;
+    --text: #2c3e50;            /* Dark text for light backgrounds */
+    --text-light: #5d6d7e;      /* Slightly darker for better readability */
+    --text-on-dark: #ffffff;    /* White text for dark backgrounds */
     --transition: all 0.3s ease;
 }
 
@@ -66,13 +67,14 @@ section {
 
 /* ===== Header & Navigation ===== */
 header {
+    background-color: var(--primary);
+    padding: 1rem 0;
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    background: var(--white);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: var(--text-on-dark);
 }
 
 nav {
@@ -85,7 +87,8 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--text-on-dark);
+    text-decoration: none;
 }
 
 .nav-links {
@@ -95,10 +98,16 @@ nav {
 }
 
 .nav-links a {
-    color: var(--text);
+    color: var(--text-on-dark);
     font-weight: 500;
     padding: 0.5rem 0;
     position: relative;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.nav-links a:hover {
+    opacity: 1;
 }
 
 .nav-links a::after {
@@ -122,7 +131,9 @@ nav {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--text-on-dark);
     padding-top: 80px;
 }
 
@@ -151,15 +162,16 @@ nav {
 .btn {
     display: inline-block;
     background: var(--accent);
-    color: white;
+    color: var(--text-on-dark);
     padding: 0.8rem 2rem;
     border-radius: 4px;
     font-weight: 500;
-    border: none;
-    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     transition: var(--transition);
+    border: 2px solid var(--accent);
+    cursor: pointer;
     text-align: center;
-    text-decoration: none;
 }
 
 .btn:hover {
