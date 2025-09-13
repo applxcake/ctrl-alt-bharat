@@ -70,20 +70,32 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // Add AR.js configuration with simplified setup
+            // Add AR.js configuration with explicit marker settings
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
-                    'sourceWidth: 640',
-                    'sourceHeight: 480',
+                    'sourceWidth: 1280',
+                    'sourceHeight: 720',
                     'displayWidth: 100%',
                     'displayHeight: 100%',
-                    'debugUIEnabled: false',
+                    'debugUIEnabled: true',
                     'detectionMode: mono',
                     'matrixCodeType: 3x3',
-                    'cameraParametersUrl: data/camera_para.dat',
+                    'cameraParametersUrl: https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/camera_para.dat',
+                    'markerPatterns: https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro',
+                    'patternRatio: 0.85',
+                    'trackingMethod: best',
                     'maxDetectionRate: 30',
-                    'trackingMethod: best'
+                    'sourceType: webcam',
+                    'sourceWidth: 1280',
+                    'sourceHeight: 720',
+                    'displayWidth: 1280',
+                    'displayHeight: 720',
+                    'cameraNear: 0.01',
+                    'cameraFar: 10000',
+                    'rendererLog: false',
+                    'bufferColor: 32',
+                    'dithering: true'
                 ].join('; ')
             };
             
@@ -113,9 +125,13 @@
             camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with default hiro preset
+            // Add marker with explicit pattern
             const marker = document.createElement('a-marker');
-            marker.setAttribute('preset', 'hiro');
+            marker.setAttribute('type', 'pattern');
+            marker.setAttribute('url', 'https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro');
+            marker.setAttribute('emitevents', 'true');
+            marker.setAttribute('cursor', 'rayOrigin: mouse');
+            marker.setAttribute('material', 'opacity: 0.0; transparent: true');
             
             // Add Taj Mahal model with optimized settings
             const model = document.createElement('a-entity');
@@ -147,33 +163,46 @@
             
             scene.appendChild(marker);
             
-            // Optimized lighting for better performance
+            // Enhanced lighting for better visibility
             const ambientLight = document.createElement('a-entity');
             ambientLight.setAttribute('light', {
                 type: 'ambient',
                 color: '#FFFFFF',
-                intensity: '0.9',
-                'shadow-map-enabled': 'false' // Disable shadows for better performance
+                intensity: '1.0',
+                'shadow-map-enabled': 'false'
             });
             scene.appendChild(ambientLight);
             
-            // Single directional light (reduced from 3 to 1 for better performance)
-            const mainLight = document.createElement('a-entity');
-            mainLight.setAttribute('light', {
+            // Add multiple lights for better model visibility
+            const directionalLight1 = document.createElement('a-entity');
+            directionalLight1.setAttribute('light', {
                 type: 'directional',
                 color: '#FFFFFF',
                 intensity: '0.8',
-                position: '1 1 1',
-                'shadow-map-enabled': 'false',
-                'shadow-bias': '-0.001',
-                'shadow-camera-near': '0.1',
-                'shadow-camera-far': '1000',
-                'shadow-camera-left': '-10',
-                'shadow-camera-right': '10',
-                'shadow-camera-top': '10',
-                'shadow-camera-bottom': '-10'
+                position: '1 1 1'
             });
-            scene.appendChild(mainLight);
+            scene.appendChild(directionalLight1);
+            
+            const directionalLight2 = document.createElement('a-entity');
+            directionalLight2.setAttribute('light', {
+                type: 'directional',
+                color: '#FFFFFF',
+                intensity: '0.5',
+                position: '-1 1 -1'
+            });
+            scene.appendChild(directionalLight2);
+            
+            // Add a point light near the model
+            const pointLight = document.createElement('a-entity');
+            pointLight.setAttribute('light', {
+                type: 'point',
+                color: '#FFFFFF',
+                intensity: '0.6',
+                position: '0 2 1',
+                distance: '10',
+                decay: '1'
+            });
+            scene.appendChild(pointLight);
             
             // Add scene to body
             document.body.appendChild(scene);
