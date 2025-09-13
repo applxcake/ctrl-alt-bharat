@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanchi Stupa AR Experience</title>
+    <title>Sankranti Cow AR Experience</title>
     <style>
         body { 
             margin: 0; 
@@ -82,40 +82,48 @@
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             
-            // Add Sanchi Stupa model
+            // Add Sankranti Cow model
             const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', 'url(./models/sanchi/fixed-scene.gltf)');
+            model.setAttribute('gltf-model', 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
             model.setAttribute('position', '0 0 0');
-            model.setAttribute('scale', '0.1 0.1 0.1');
-            model.setAttribute('rotation', '0 0 0');
-            model.setAttribute('animation-mixer', '');
+            model.setAttribute('scale', '0.5 0.5 0.5');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('animation-mixer', 'clip: *; loop: repeat');
             marker.appendChild(model);
             
             // Add text label
             const text = document.createElement('a-text');
-            text.setAttribute('value', 'Sanchi Stupa');
+            text.setAttribute('value', 'Sankranti Cow');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 5 0');
-            text.setAttribute('scale', '5 5 5');
+            text.setAttribute('position', '0 1.5 0');
+            text.setAttribute('scale', '2 2 2');
             marker.appendChild(text);
             
             scene.appendChild(marker);
             
             // Add lighting
             const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 1.0');
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 0.8');
             scene.appendChild(ambientLight);
             
+            // Main directional light
             const directionalLight1 = document.createElement('a-entity');
-            directionalLight1.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.8');
-            directionalLight1.setAttribute('position', '1 1 1');
+            directionalLight1.setAttribute('light', 'type: directional; color: #FFE4B5; intensity: 0.8');
+            directionalLight1.setAttribute('position', '2 3 4');
             scene.appendChild(directionalLight1);
             
+            // Fill light
             const directionalLight2 = document.createElement('a-entity');
-            directionalLight2.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.5');
-            directionalLight2.setAttribute('position', '-1 1 -1');
+            directionalLight2.setAttribute('light', 'type: directional; color: #E6E6FA; intensity: 0.4');
+            directionalLight2.setAttribute('position', '-2 1 -1');
             scene.appendChild(directionalLight2);
+            
+            // Rim light
+            const directionalLight3 = document.createElement('a-entity');
+            directionalLight3.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.6');
+            directionalLight3.setAttribute('position', '0 5 2');
+            scene.appendChild(directionalLight3);
             
             // Add scene to body
             document.body.appendChild(scene);
