@@ -91,12 +91,28 @@
             modelContainer.setAttribute('position', '0 0 0');
             modelContainer.setAttribute('scale', '0.1 0.1 0.1');
             
-            // Add 3D model
+            // Add 3D model with error handling
             const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', 'url(./models/sanchi/great_stupa_in_sanchi.glb)');
-            model.setAttribute('scale', '0.1 0.1 0.1');
-            model.setAttribute('position', '0 0.5 0');
+            model.setAttribute('gltf-model', 'url(./models/sanchi/fixed-scene.gltf)');
+            model.setAttribute('scale', '0.5 0.5 0.5');
+            model.setAttribute('position', '0 1 0');
             model.setAttribute('rotation', '0 0 0');
+            
+            // Add loading and error handling
+            model.addEventListener('model-loaded', () => {
+                console.log('Sanchi Stupa model loaded successfully');
+            });
+            
+            model.addEventListener('error', (e) => {
+                console.error('Error loading Sanchi Stupa model:', e.detail);
+                // Fallback to a simple box if model fails to load
+                const box = document.createElement('a-box');
+                box.setAttribute('color', '#A0522D');
+                box.setAttribute('position', '0 0.5 0');
+                box.setAttribute('scale', '1 2 1');
+                modelContainer.appendChild(box);
+            });
+            
             modelContainer.appendChild(model);
             
             // Add ground plane

@@ -89,13 +89,13 @@
             // Create model container with scale
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.01 0.01 0.01');
+            modelContainer.setAttribute('scale', '0.15 0.15 0.15'); // Increased from 0.1 to 0.15
             
             // Add 3D model
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/christmas/christmas_tree.glb)');
-            model.setAttribute('scale', '0.5 0.5 0.5');
-            model.setAttribute('position', '0 0.5 0');
+            model.setAttribute('scale', '0.8 0.8 0.8'); // Increased from 0.5 to 0.8
+            model.setAttribute('position', '0 0.8 0'); // Slightly higher position
             model.setAttribute('rotation', '0 0 0');
             modelContainer.appendChild(model);
             

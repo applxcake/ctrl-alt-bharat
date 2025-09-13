@@ -89,13 +89,13 @@
             // Create model container with scale
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.1 0.1 0.1');
+            modelContainer.setAttribute('scale', '0.2 0.2 0.2'); // Increased from 0.1 to 0.2
             
             // Add 3D model
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/kaaba/kaaba_in_mecca.glb)');
-            model.setAttribute('scale', '0.02 0.02 0.02');
-            model.setAttribute('position', '0 0.5 0');
+            model.setAttribute('scale', '0.5 0.5 0.5'); // Increased from 0.2 to 0.5
+            model.setAttribute('position', '0 1 0'); // Adjusted position higher
             model.setAttribute('rotation', '0 0 0');
             modelContainer.appendChild(model);
             
