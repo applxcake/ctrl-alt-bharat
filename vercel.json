@@ -13,8 +13,20 @@
     }
   ],
   "routes": [
-    { "src": "/ar-experience", "dest": "/public/ar-experience.html" },
+    { "src": "/model-viewer", "dest": "/public/model-viewer.html" },
+    { "src": "/model-viewer/(?<id>[^/]+)", "dest": "/public/model-viewer.html?id=$id" },
+    { "src": "/ar/(?<model>[^/]+)", "dest": "/public/ar.html?model=$model" },
+    { "src": "/sanchi", "dest": "/public/sanchi-ar.html" },
+    { "src": "/sankranti", "dest": "/public/sankranti-ar.html" },
+    { "src": "/kaaba", "dest": "/public/kaaba-ar.html" },
+    { "src": "/ellora", "dest": "/public/ellora-ar.html" },
     { "src": "/", "dest": "/public/index.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/about", "dest": "/public/about.html" },
+    { "src": "/team", "dest": "/public/team.html" },
+    { "src": "/downloads", "dest": "/public/downloads.html" },
+    { "src": "/(.*)", "dest": "/public/404.html" }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/public/$1" }
   ]
 }
