@@ -77,27 +77,22 @@
         loading-screen="enabled: false"
         timeout="10000">
         
-        <!-- Preload assets -->
-        <a-assets timeout="10000">
-            <a-asset-item id="taj-mahal" src="./models/taj_mahal/scene.gltf"></a-asset-item>
-        </a-assets>
-        
-        <!-- Marker-based AR -->
+        <!-- Simple box for testing -->
         <a-marker preset="hiro">
-            <!-- Taj Mahal 3D Model -->
-            <a-entity 
-                gltf-model="#taj-mahal"
-                scale="0.05 0.05 0.05"
-                position="0 0 0"
-                rotation="0 0 0">
-            </a-entity>
+            <!-- Simple box with texture -->
+            <a-box 
+                color="#4CC3D9"
+                position="0 0.5 0"
+                scale="0.5 0.5 0.5"
+                rotation="0 45 0">
+            </a-box>
             
             <!-- Text label -->
             <a-text 
-                value="TAJ MAHAL" 
+                value="AR TEST" 
                 color="white" 
                 align="center"
-                position="0 2 0"
+                position="0 1.5 0"
                 scale="2 2 2">
             </a-text>
         </a-marker>
