@@ -70,12 +70,20 @@
         <i class="fas fa-arrow-left"></i>
     </a>
     
+    <div id="camera-message" style="display: none; position: fixed; top: 20px; left: 0; right: 0; background: rgba(0,0,0,0.8); color: white; padding: 15px; text-align: center; z-index: 1000;">
+        Please allow camera access to use AR features
+    </div>
+
     <a-scene 
-        embedded 
-        arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' 
-        renderer='antialias: true; alpha: true;'
-        loading-screen="enabled: false"
-        timeout="10000">
+        vr-mode-ui="enabled: false"
+        renderer="antialias: true; alpha: true;"
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+        device-orientation-permission-ui="enabled: false"
+        gesture-detector>
+        
+        <a-assets>
+            <!-- No assets needed for the box -->
+        </a-assets>
         
         <!-- Simple box for testing -->
         <a-marker preset="hiro">
@@ -97,10 +105,15 @@
             </a-text>
         </a-marker>
         
-        <!-- Camera and Lighting -->
+        <!-- Camera -->
         <a-entity camera></a-entity>
+        
+        <!-- Lighting -->
         <a-entity light="type: ambient; color: #FFF; intensity: 0.8"></a-entity>
         <a-entity light="type: directional; color: #FFF; intensity: 0.8" position="1 1 1"></a-entity>
+        
+        <!-- Add a simple ground plane -->
+        <a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" opacity="0.4"></a-plane>
         
         <!-- Marker not found message -->
         <a-entity position="0 0 0" visible="false" class="marker-not-found">
@@ -108,6 +121,21 @@
         </a-entity>
         
     </a-scene>
+    
+    <script>
+        // Check camera permissions
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                // Camera access granted
+                document.getElementById('camera-message').style.display = 'none';
+                stream.getTracks().forEach(track => track.stop());
+            })
+            .catch(function(err) {
+                // Camera access denied
+                console.error('Camera access error:', err);
+                document.getElementById('camera-message').style.display = 'block';
+            });
+    </script>
     
     <div class="info-panel">
         Point your camera at the marker to view the Great Stupa of Sanchi
