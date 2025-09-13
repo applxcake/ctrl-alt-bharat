@@ -12,21 +12,22 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
-    { "src": "/model-viewer", "dest": "/public/model-viewer.html" },
-    { "src": "/model-viewer/(?<id>[^/]+)", "dest": "/public/model-viewer.html?id=$id" },
-    { "src": "/ar/(?<model>[^/]+)", "dest": "/public/ar.html?model=$model" },
-    { "src": "/sanchi", "dest": "/public/sanchi-ar.html" },
-    { "src": "/sankranti", "dest": "/public/sankranti-ar.html" },
-    { "src": "/kaaba", "dest": "/public/kaaba-ar.html" },
-    { "src": "/ellora", "dest": "/public/ellora-ar.html" },
-    { "src": "/", "dest": "/public/index.html" },
-    { "src": "/about", "dest": "/public/about.html" },
-    { "src": "/team", "dest": "/public/team.html" },
-    { "src": "/downloads", "dest": "/public/downloads.html" },
-    { "src": "/(.*)", "dest": "/public/404.html" }
-  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/model-viewer", "destination": "/public/model-viewer.html" },
+    { "source": "/model-viewer/:id", "destination": "/public/model-viewer.html?id=:id" },
+    { "source": "/ar/:model", "destination": "/public/ar.html?model=:model" },
+    { "source": "/sanchi", "destination": "/public/sanchi-ar.html" },
+    { "source": "/sankranti", "destination": "/public/sankranti-ar.html" },
+    { "source": "/kaaba", "destination": "/public/kaaba-ar.html" },
+    { "source": "/ellora", "destination": "/public/ellora-ar.html" },
+    { "source": "/about", "destination": "/public/about.html" },
+    { "source": "/team", "destination": "/public/team.html" },
+    { "source": "/downloads", "destination": "/public/downloads.html" },
+    { "source": "/", "destination": "/public/index.html" },
+    { 
+      "source": "/(.*)", 
+      "destination": "/public/404.html",
+      "statusCode": 404
+    }
   ]
 }
