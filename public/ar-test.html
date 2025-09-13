@@ -70,39 +70,65 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // Add AR.js configuration
-            scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true');
+            // Add AR.js configuration with performance optimizations
+            const arjsConfig = {
+                'arjs': [
+                    'sourceType: webcam',
+                    'sourceWidth: 640', // Lower resolution for better performance
+                    'sourceHeight: 480',
+                    'displayWidth: 100%',
+                    'displayHeight: 100%',
+                    'debugUIEnabled: false', // Disable debug UI for better performance
+                    'detectionMode: mono', // Better performance than 'mono_and_matrix'
+                    'matrixCodeType: 3x3', // Faster marker detection
+                    'cameraParametersUrl: https://raw.githack.com/AR-js-org/AR.js/master/aframe/data/data/camera_para.dat',
+                    'maxDetectionRate: 30', // Limit detection rate to 30fps
+                    'trackingMethod: best' // Auto-select best tracking method
+                ].join('; ')
+            };
             
-            // Add camera with adjusted FOV and position
+            // Apply AR.js configuration
+            Object.entries(arjsConfig).forEach(([key, value]) => {
+                scene.setAttribute(key, value);
+            });
+            
+            // Add camera with optimized settings for mobile
             const camera = document.createElement('a-entity');
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const fov = isMobile ? '60' : '80'; // Wider FOV for mobile
-            camera.setAttribute('camera', `fov: ${fov};`);
-            camera.setAttribute('position', '0 0 0');
+            
+            // Optimized camera settings
+            const cameraConfig = {
+                fov: isMobile ? '45' : '60', // Narrower FOV for less distortion
+                near: '0.01',
+                far: '10000',
+                'camera': ''
+            };
+            
+            // Apply camera settings
+            Object.entries(cameraConfig).forEach(([key, value]) => {
+                camera.setAttribute(key, value);
+            });
+            
+            // Position camera further back
+            camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
-            
-            // Add a camera rig for better positioning
-            const cameraRig = document.createElement('a-entity');
-            cameraRig.setAttribute('position', '0 0 0');
-            scene.appendChild(cameraRig);
-            cameraRig.appendChild(camera);
-            
-            // Move camera back slightly for better framing on mobile
-            if (isMobile) {
-                camera.setAttribute('position', '0 0 0.5');
-            }
             
             // Add marker
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             
-            // Add Sankranti Cow model with mobile-optimized scale
+            // Add Sankranti Cow model with optimized settings
             const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
-            model.setAttribute('position', '0 0 0');
+            model.setAttribute('gltf-model', {
+                src: 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)',
+                cache: true, // Enable model caching
+                'premultiplied-vertex-colors': 'true', // Better performance
+                'shadow': 'receive: false; cast: false' // Disable shadows for better performance
+            });
             
-            // Adjust scale based on device (using existing isMobile variable)
-            const scale = isMobile ? '0.15 0.15 0.15' : '0.5 0.5 0.5';
+            // Position and scale model for better visibility
+            model.setAttribute('position', '0 0 0');
+            const scale = isMobile ? '0.1 0.1 0.1' : '0.3 0.3 0.3'; // Smaller scale for better performance
             model.setAttribute('scale', scale);
             
             model.setAttribute('rotation', '0 180 0');
@@ -120,28 +146,33 @@
             
             scene.appendChild(marker);
             
-            // Add lighting
+            // Optimized lighting for better performance
             const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 0.8');
+            ambientLight.setAttribute('light', {
+                type: 'ambient',
+                color: '#FFFFFF',
+                intensity: '0.9',
+                'shadow-map-enabled': 'false' // Disable shadows for better performance
+            });
             scene.appendChild(ambientLight);
             
-            // Main directional light
-            const directionalLight1 = document.createElement('a-entity');
-            directionalLight1.setAttribute('light', 'type: directional; color: #FFE4B5; intensity: 0.8');
-            directionalLight1.setAttribute('position', '2 3 4');
-            scene.appendChild(directionalLight1);
-            
-            // Fill light
-            const directionalLight2 = document.createElement('a-entity');
-            directionalLight2.setAttribute('light', 'type: directional; color: #E6E6FA; intensity: 0.4');
-            directionalLight2.setAttribute('position', '-2 1 -1');
-            scene.appendChild(directionalLight2);
-            
-            // Rim light
-            const directionalLight3 = document.createElement('a-entity');
-            directionalLight3.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.6');
-            directionalLight3.setAttribute('position', '0 5 2');
-            scene.appendChild(directionalLight3);
+            // Single directional light (reduced from 3 to 1 for better performance)
+            const mainLight = document.createElement('a-entity');
+            mainLight.setAttribute('light', {
+                type: 'directional',
+                color: '#FFFFFF',
+                intensity: '0.8',
+                position: '1 1 1',
+                'shadow-map-enabled': 'false',
+                'shadow-bias': '-0.001',
+                'shadow-camera-near': '0.1',
+                'shadow-camera-far': '1000',
+                'shadow-camera-left': '-10',
+                'shadow-camera-right': '10',
+                'shadow-camera-top': '10',
+                'shadow-camera-bottom': '-10'
+            });
+            scene.appendChild(mainLight);
             
             // Add scene to body
             document.body.appendChild(scene);
