@@ -2,15 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Indian Heritage AR Experience</title>
-    <!-- A-Frame and AR.js -->
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taj Mahal AR Experience</title>
     <style>
         body { 
             margin: 0; 
-            padding: 0; 
-            overflow: hidden;
+            overflow: hidden; 
             font-family: Arial, sans-serif;
         }
         .arjs-loader {
@@ -28,70 +25,25 @@
             font-size: 1.25em;
             margin-top: 1em;
         }
-        
-        /* Model selector buttons */
-        .model-selector {
-            position: fixed;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            z-index: 1000;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-        
-        .model-btn {
-            padding: 10px 15px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .model-btn:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-        }
-        
-        .model-btn.active {
-            background: #2196F3;
-            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
-        }
     </style>
 </head>
 <body>
     <div class="arjs-loader">
         <div>Loading AR, please wait...</div>
     </div>
-    
-    <!-- Test cube controls -->
-    <div class="model-selector">
-        <button id="red-cube" class="model-btn active">Red Cube</button>
-        <button id="green-cube" class="model-btn">Green Cube</button>
-    </div>
+
+    <!-- A-Frame and AR.js -->
     <script>
-        // Clean up any existing AR.js components if they exist
+        // Clean up any existing A-Frame components
         if (window.AFRAME) {
-            const cleanup = () => {
-                delete AFRAME.components['arjs-anchor'];
-                delete AFRAME.components['arjs-anchor-marker'];
-                delete AFRAME.components['arjs-anchor-hit-testing'];
-                delete AFRAME.components['arjs-anchor-nft'];
-                delete AFRAME.systems.arjs;
-            };
-            cleanup();
-            
-            // Also clean up on page unload to prevent memory leaks
-            window.addEventListener('beforeunload', cleanup);
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
         }
     </script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
     <script>
         // Wait for A-Frame to load
@@ -119,7 +71,7 @@
             scene.setAttribute('vr-mode-ui', 'enabled: false');
             scene.setAttribute('loading-screen', 'enabled: false');
             
-            // AR.js configuration with CDN resources
+            // Simplified AR.js configuration
             const arjsConfig = {
                 'arjs': [
                     'sourceType: webcam',
@@ -131,10 +83,7 @@
                     'detectionMode: mono',
                     'matrixCodeType: 3x3',
                     'trackingMethod: best',
-                    'maxDetectionRate: 30',
-                    'patternRatio: 0.85',
-                    'cameraParametersUrl: https://rawcdn.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/camera_para.dat',
-                    'markerPatternUrl: https://rawcdn.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro'
+                    'maxDetectionRate: 30'
                 ].join('; ')
             };
             
@@ -143,13 +92,13 @@
                 scene.setAttribute(key, value);
             });
             
-            // Add camera with adjusted settings for mobile
+            // Add camera with optimized settings for mobile
             const camera = document.createElement('a-entity');
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
-            // Camera settings without mobile zoom
+            // Simplified camera settings
             const cameraConfig = {
-                fov: '60', // Same FOV for both mobile and desktop
+                fov: isMobile ? '45' : '60',
                 near: '0.1',
                 far: '1000',
                 'camera': ''
@@ -160,54 +109,32 @@
                 camera.setAttribute(key, value);
             });
             
-            // Position camera for better view
-            camera.setAttribute('position', isMobile ? '0 1.6 2.5' : '0 1.6 1.5');
+            // Position camera further back
+            camera.setAttribute('position', '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with hiro preset (simplest option)
+            // Add marker with default hiro preset
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             marker.setAttribute('emitevents', 'true');
             marker.setAttribute('cursor', 'rayOrigin: mouse');
             
-            // Add debug events
-            marker.addEventListener('markerFound', () => console.log('Marker found!'));
-            marker.addEventListener('markerLost', () => console.log('Marker lost!'));
+            // Add Taj Mahal model with optimized settings
+            const model = document.createElement('a-entity');
+            model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
+            model.setAttribute('scale', isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02');
+            model.setAttribute('position', '0 0 0');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('shadow', 'receive: false; cast: false');
             
-            // Create model container
-            const modelContainer = document.createElement('a-entity');
-            modelContainer.setAttribute('id', 'model-container');
-            marker.appendChild(modelContainer);
+            // Position and scale model for better visibility
+            model.setAttribute('position', '0 0 0');
+            const scale = isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02';
+            model.setAttribute('scale', scale);
             
-            // Function to create test cube
-            function createTestCube(color = 'red') {
-                console.log('Creating', color, 'test cube');
-                
-                // Clear previous model
-                const container = document.querySelector('#model-container');
-                if (!container) {
-                    console.error('Model container not found!');
-                    return;
-                }
-                container.innerHTML = '';
-                
-                // Create a simple colored cube
-                const cube = document.createElement('a-box');
-                cube.setAttribute('color', color);
-                cube.setAttribute('position', '0 0.5 0');
-                cube.setAttribute('scale', '0.5 0.5 0.5');
-                cube.setAttribute('shadow', 'receive: false; cast: false');
-                cube.classList.add('clickable');
-                
-                // Add animation
-                cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 2000');
-                
-                // Add to container
-                container.appendChild(cube);
-                
-                console.log('Test cube created');
-                return cube;
-            }
+            // Rotate and position for better viewing angle
+            model.setAttribute('rotation', '0 180 0');
+            marker.appendChild(model);
             
             // Add text label with mobile-optimized size
             const text = document.createElement('a-text');
@@ -220,22 +147,13 @@
             
             scene.appendChild(marker);
             
-            // Lighting setup
+            // Simple lighting setup
             const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', {
-                type: 'ambient',
-                color: '#FFFFFF',
-                intensity: 0.8
-            });
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFFFFF; intensity: 0.8');
             scene.appendChild(ambientLight);
             
             const directionalLight = document.createElement('a-entity');
-            directionalLight.setAttribute('light', {
-                type: 'directional',
-                color: '#FFFFFF',
-                intensity: 0.8,
-                position: {x: 1, y: 1, z: 1}
-            });
+            directionalLight.setAttribute('light', 'type: directional; color: #FFFFFF; intensity: 0.8; position: 1 1 1');
             scene.appendChild(directionalLight);
             
             // Add scene to body
@@ -251,30 +169,11 @@
                     .then(stream => {
                         console.log('Camera access granted');
                         stream.getTracks().forEach(track => track.stop());
-                        
-                        // Create initial test cube
-                        createTestCube('red');
                     })
                     .catch(err => {
                         console.error('Camera access error:', err);
                         alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
                     });
-                
-                // Test cube buttons
-                document.getElementById('red-cube').addEventListener('click', () => {
-                    document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
-                    document.getElementById('red-cube').classList.add('active');
-                    createTestCube('red');
-                });
-                
-                document.getElementById('green-cube').addEventListener('click', () => {
-                    document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
-                    document.getElementById('green-cube').classList.add('active');
-                    createTestCube('green');
-                });
-                
-                // Create initial red cube
-                createTestCube('red');
             });
             
             // Handle marker events
