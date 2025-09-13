@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Test</title>
+    <title>Sanchi Stupa AR Experience</title>
     <style>
         body { 
             margin: 0; 
@@ -82,34 +82,40 @@
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             
-            // Add a simple box
-            const box = document.createElement('a-box');
-            box.setAttribute('position', '0 0.5 0');
-            box.setAttribute('scale', '0.5 0.5 0.5');
-            box.setAttribute('color', '#4CC3D9');
-            box.setAttribute('rotation', '0 45 0');
-            marker.appendChild(box);
+            // Add Sanchi Stupa model
+            const model = document.createElement('a-entity');
+            model.setAttribute('gltf-model', 'url(./models/sanchi/fixed-scene.gltf)');
+            model.setAttribute('position', '0 0 0');
+            model.setAttribute('scale', '0.1 0.1 0.1');
+            model.setAttribute('rotation', '0 0 0');
+            model.setAttribute('animation-mixer', '');
+            marker.appendChild(model);
             
             // Add text label
             const text = document.createElement('a-text');
-            text.setAttribute('value', 'AR Test');
+            text.setAttribute('value', 'Sanchi Stupa');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 1 0');
-            text.setAttribute('scale', '2 2 2');
+            text.setAttribute('position', '0 5 0');
+            text.setAttribute('scale', '5 5 5');
             marker.appendChild(text);
             
             scene.appendChild(marker);
             
             // Add lighting
             const ambientLight = document.createElement('a-entity');
-            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 0.8');
+            ambientLight.setAttribute('light', 'type: ambient; color: #FFF; intensity: 1.0');
             scene.appendChild(ambientLight);
             
-            const directionalLight = document.createElement('a-entity');
-            directionalLight.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.8');
-            directionalLight.setAttribute('position', '1 1 1');
-            scene.appendChild(directionalLight);
+            const directionalLight1 = document.createElement('a-entity');
+            directionalLight1.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.8');
+            directionalLight1.setAttribute('position', '1 1 1');
+            scene.appendChild(directionalLight1);
+            
+            const directionalLight2 = document.createElement('a-entity');
+            directionalLight2.setAttribute('light', 'type: directional; color: #FFF; intensity: 0.5');
+            directionalLight2.setAttribute('position', '-1 1 -1');
+            scene.appendChild(directionalLight2);
             
             // Add scene to body
             document.body.appendChild(scene);
