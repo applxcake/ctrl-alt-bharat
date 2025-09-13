@@ -2,23 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanchi Stupa - AR Experience</title>
-    <!-- A-Frame and AR.js with specific versions -->
-    <script>
-        // Clean up any existing A-Frame components
-        if (window.AFRAME) {
-            delete AFRAME.components['arjs-anchor'];
-            delete AFRAME.components['arjs-anchor-marker'];
-            delete AFRAME.components['arjs-anchor-hit-testing'];
-            delete AFRAME.components['arjs-anchor-nft'];
-            delete AFRAME.systems.arjs;
-        }
-    </script>
-    <!-- A-Frame and GLTF Model Loader -->
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-animation-mixer@^1.0.0/dist/aframe-animation-mixer.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar-nft.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sanchi Stupa AR Experience</title>
     <style>
         body { 
             margin: 0; 
@@ -47,30 +32,12 @@
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
             color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
+            padding: 10px 20px;
+            border-radius: 20px;
             font-size: 14px;
             z-index: 100;
             text-align: center;
             max-width: 80%;
-        }
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            cursor: pointer;
-            text-decoration: none;
         }
     </style>
 </head>
@@ -78,233 +45,155 @@
     <div class="arjs-loader">
         <div>Loading AR, please wait...</div>
     </div>
-    
-    <a href="index.html" class="back-button" aria-label="Back to Home">
-        <i class="fas fa-arrow-left"></i>
-    </a>
-    
-    <div id="camera-message" style="display: none; position: fixed; top: 20px; left: 0; right: 0; background: rgba(0,0,0,0.8); color: white; padding: 15px; text-align: center; z-index: 1000;">
-        Please allow camera access to use AR features
-    </div>
 
-    <a-scene 
-        embedded 
-        arjs='sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true;'
-        renderer='antialias: true; alpha: true;'
-        vr-mode-ui="enabled: false"
-        loading-screen="enabled: false">
-        
-        <!-- Camera -->
-        <a-entity camera></a-entity>
-        
-        <a-assets>
-            <!-- No assets needed for the box -->
-        </a-assets>
-        
-        <!-- Simple box for testing -->
-        <a-marker preset="hiro" id="stupa-marker">
-            <!-- Sanchi Stupa Model -->
-            <a-entity 
-                id="stupa-model"
-                position="0 0 0"
-                scale="0.1 0.1 0.1"
-                gltf-model="#stupa"
-                shadow="cast: true; receive: true"
-                animation-mixer="loop: repeat">
-            </a-entity>
-            
-            <!-- Text label -->
-            <a-text 
-                value="Sanchi Stupa" 
-                color="white" 
-                align="center"
-                position="0 2 0"
-                scale="2 2 2">
-            </a-text>
-            
-            <!-- Ground plane for shadows -->
-            <a-circle 
-                position="0 0 0" 
-                rotation="-90 0 0" 
-                radius="2" 
-                color="#8B4513"
-                shadow="receive: true"
-                material="shader: standard; roughness: 0.8; metalness: 0.1">
-            </a-circle>
-        </a-marker>
-        
-        <!-- Model assets -->
-        <a-assets>
-            <a-asset-item id="stupa" src="./models/sanchi/fixed-scene.gltf"></a-asset-item>
-        </a-assets>
-        
-        <!-- Camera -->
-        <a-entity camera></a-entity>
-        
-        <!-- Enhanced Lighting -->
-        <a-entity light="type: ambient; color: #FFF; intensity: 0.4"></a-entity>
-        
-        <!-- Main directional light with shadows -->
-        <a-light 
-            type="directional" 
-            color="#FFFAF0" 
-            intensity="0.8"
-            position="1 3 1"
-            shadow="cast: true; shadowMapHeight: 1024; shadowMapWidth: 1024">
-        </a-light>
-        
-        <!-- Fill light -->
-        <a-light 
-            type="directional" 
-            color="#88C0D0" 
-            intensity="0.3"
-            position="-1 1 0.5">
-        </a-light>
-        
-        <!-- Marker not found message -->
-        <a-entity position="0 0 0" visible="false" class="marker-not-found">
-            <a-text value="Point camera at marker" color="white" align="center" position="0 0.5 0"></a-text>
-        </a-entity>
-        
-    </a-scene>
-    
-    <!-- A-Frame Core -->
-    <script>
-        // Clean up any existing A-Frame components
-        if (window.AFRAME) {
-            delete AFRAME.components['arjs-anchor'];
-            delete AFRAME.components['arjs-anchor-marker'];
-            delete AFRAME.components['arjs-anchor-hit-testing'];
-            delete AFRAME.components['arjs-anchor-nft'];
-            delete AFRAME.systems.arjs;
-        }
-    </script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    
-    <!-- AR.js with specific version -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
     <script>
-        // Clean up any existing AR.js components
-        if (window.ARjs) {
-            delete AFRAME.components['arjs-anchor'];
-            delete AFRAME.components['arjs-anchor-marker'];
-            delete AFRAME.components['arjs-anchor-hit-testing'];
-            delete AFRAME.components['arjs-anchor-nft'];
-            delete AFRAME.systems.arjs;
-        }
-    </script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
-    <script>
-        // Wait for A-Frame to be ready
-        document.addEventListener('DOMContentLoaded', () => {
-            // Clean up any existing AR.js components
-            const cleanupARComponents = () => {
-                if (window.AFRAME) {
-                    const components = [
-                        'arjs-anchor',
-                        'arjs-anchor-marker',
-                        'arjs-anchor-hit-testing',
-                        'arjs-anchor-nft',
-                        'arjs-anchor-nft'
-                    ];
-                    
-                    components.forEach(component => {
-                        try {
-                            delete AFRAME.components[component];
-                        } catch (e) {
-                            console.warn(`Could not clean up ${component}:`, e);
-                        }
-                    });
-                    
-                    if (AFRAME.systems.arjs) {
-                        delete AFRAME.systems.arjs;
-                    }
-                }
-            };
-            
-            // Initialize AR.js
-            const initAR = () => {
-                cleanupARComponents();
-                
-                const scene = document.querySelector('a-scene');
-                if (!scene) return;
-                
-                scene.addEventListener('loaded', () => {
-                    console.log('A-Frame scene loaded');
-                    document.querySelector('.arjs-loader').style.display = 'none';
-                    
-                    // Add event listeners for marker found/lost
-                    const marker = document.querySelector('#stupa-marker');
-                    if (marker) {
-                        marker.addEventListener('markerFound', () => {
-                            console.log('Marker found!');
-                        });
-                        marker.addEventListener('markerLost', () => {
-                            console.log('Marker lost!');
-                        });
-                    }
-                    
-                    // Check camera access
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(stream => {
-                            console.log('Camera access granted');
-                            stream.getTracks().forEach(track => track.stop());
-                        })
-                        .catch(err => {
-                            console.error('Camera access error:', err);
-                            alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
-                        });
-                });
-                
-                // Handle marker found/lost events
-                const marker = document.querySelector('a-marker');
-                if (marker) {
-                    marker.addEventListener('markerFound', () => {
-                        console.log('Marker found');
-                        const notFoundEl = document.querySelector('.marker-not-found');
-                        if (notFoundEl) notFoundEl.setAttribute('visible', 'false');
-                    });
-                    
-                    marker.addEventListener('markerLost', () => {
-                        console.log('Marker lost');
-                        const notFoundEl = document.querySelector('.marker-not-found');
-                        if (notFoundEl) notFoundEl.setAttribute('visible', 'true');
-                    });
-                }
-            };
-            
-            // Initialize AR when A-Frame is ready
+        // Wait for A-Frame to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clean up any existing A-Frame components
             if (window.AFRAME) {
-                initAR();
-            } else {
-                window.addEventListener('aframe-loaded', initAR);
+                delete AFRAME.components['arjs-anchor'];
+                delete AFRAME.components['arjs-anchor-marker'];
+                delete AFRAME.components['arjs-anchor-hit-testing'];
+                delete AFRAME.components['arjs-anchor-nft'];
+                delete AFRAME.systems.arjs;
             }
+
+            // Create a new scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true; shadow: true; shadowMapEnabled: true;');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('loading-screen', 'enabled: false');
+            
+            // AR.js configuration
+            const arjsConfig = {
+                'arjs': [
+                    'sourceType: webcam',
+                    'sourceWidth: 1280',
+                    'sourceHeight: 720',
+                    'displayWidth: 100%',
+                    'displayHeight: 100%',
+                    'debugUIEnabled: true',
+                    'detectionMode: mono',
+                    'matrixCodeType: 3x3',
+                    'trackingMethod: best',
+                    'maxDetectionRate: 30',
+                    'cameraParametersUrl: https://rawcdn.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/camera_para.dat',
+                    'markerPatternUrl: https://rawcdn.githack.com/AR-js-org/AR.js/3.4.0/aframe/examples/asset/data/patt.hiro'
+                ].join('; ')
+            };
+            
+            // Apply AR.js configuration
+            Object.entries(arjsConfig).forEach(([key, value]) => {
+                scene.setAttribute(key, value);
+            });
+            
+            // Add camera with optimized settings for mobile
+            const camera = document.createElement('a-entity');
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            // Camera settings
+            camera.setAttribute('camera', `fov: ${isMobile ? '45' : '60'}; near: 0.1; far: 1000`);
+            camera.setAttribute('position', '0 1.6 1.5');
+            scene.appendChild(camera);
+            
+            // Add marker with hiro preset
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('preset', 'hiro');
+            marker.setAttribute('emitevents', 'true');
+            marker.setAttribute('cursor', 'rayOrigin: mouse');
+            marker.setAttribute('raycaster', 'objects: .clickable');
+            
+            // Create model container
+            const modelContainer = document.createElement('a-entity');
+            modelContainer.setAttribute('position', '0 0.05 0');
+            modelContainer.setAttribute('scale', '0.2 0.2 0.2');
+            
+            // Add Sanchi Stupa model
+            const model = document.createElement('a-entity');
+            model.setAttribute('gltf-model', 'url(./models/sanchi/fixed-scene.glb)');
+            model.setAttribute('scale', isMobile ? '0.5 0.5 0.5' : '1 1 1');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('shadow', 'cast: true; receive: true');
+            modelContainer.appendChild(model);
+            
+            // Add ground plane
+            const ground = document.createElement('a-plane');
+            ground.setAttribute('position', '0 0 0');
+            ground.setAttribute('rotation', '-90 0 0');
+            ground.setAttribute('width', '2');
+            ground.setAttribute('height', '2');
+            ground.setAttribute('shadow', 'receive: true');
+            ground.setAttribute('material', {
+                src: 'https://cdn.aframe.io/360-image-gallery/primitives/wood.jpg',
+                repeat: '2 2',
+                roughness: 0.8,
+                metalness: 0.1
+            });
+            modelContainer.appendChild(ground);
+            
+            // Add text label
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'Sanchi Stupa');
+            text.setAttribute('color', 'white');
+            text.setAttribute('align', 'center');
+            text.setAttribute('position', isMobile ? '0 0.8 0' : '0 1.5 0');
+            text.setAttribute('scale', isMobile ? '1 1 1' : '2 2 2');
+            modelContainer.appendChild(text);
+            
+            marker.appendChild(modelContainer);
+            scene.appendChild(marker);
+            
+            // Add lighting
+            const ambientLight = document.createElement('a-light');
+            ambientLight.setAttribute('type', 'ambient');
+            ambientLight.setAttribute('color', '#FFF');
+            ambientLight.setAttribute('intensity', '0.3');
+            scene.appendChild(ambientLight);
+            
+            const dirLight = document.createElement('a-light');
+            dirLight.setAttribute('type', 'directional');
+            dirLight.setAttribute('color', '#FFFAF0');
+            dirLight.setAttribute('intensity', '0.8');
+            dirLight.setAttribute('position', '1 3 1');
+            dirLight.setAttribute('shadow', 'cast: true; shadowMapHeight: 1024; shadowMapWidth: 1024; shadowBias: -0.001');
+            scene.appendChild(dirLight);
+            
+            const fillLight = document.createElement('a-light');
+            fillLight.setAttribute('type', 'directional');
+            fillLight.setAttribute('color', '#88C0D0');
+            fillLight.setAttribute('intensity', '0.4');
+            fillLight.setAttribute('position', '1 1 0.5');
+            scene.appendChild(fillLight);
+            
+            // Add scene to body and handle loading
+            document.body.appendChild(scene);
+            
+            scene.addEventListener('loaded', function() {
+                console.log('Scene loaded');
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Check camera access
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        console.log('Camera access granted');
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
+                    });
+            });
+            
+            marker.addEventListener('markerFound', () => console.log('Marker found'));
+            marker.addEventListener('markerLost', () => console.log('Marker lost'));
         });
     </script>
     
     <div class="info-panel">
         Point your camera at the marker to view the Great Stupa of Sanchi
     </div>
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <script>
-        // Hide loader when scene is loaded
-        window.addEventListener('arjs-nft-loaded', function() {
-            document.querySelector('.arjs-loader').style.display = 'none';
-        });
-        
-        // Show/hide marker not found message
-        const scene = document.querySelector('a-scene');
-        const markerNotFound = document.querySelector('.marker-not-found');
-        
-        scene.addEventListener('markerFound', function() {
-            markerNotFound.setAttribute('visible', 'false');
-        });
-        
-        scene.addEventListener('markerLost', function() {
-            markerNotFound.setAttribute('visible', 'true');
-        });
-    </script>
 </body>
 </html>
