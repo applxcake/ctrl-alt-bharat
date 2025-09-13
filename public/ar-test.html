@@ -73,10 +73,24 @@
             // Add AR.js configuration
             scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%; debugUIEnabled: true');
             
-            // Add camera
+            // Add camera with adjusted FOV and position
             const camera = document.createElement('a-entity');
-            camera.setAttribute('camera', '');
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const fov = isMobile ? '60' : '80'; // Wider FOV for mobile
+            camera.setAttribute('camera', `fov: ${fov};`);
+            camera.setAttribute('position', '0 0 0');
             scene.appendChild(camera);
+            
+            // Add a camera rig for better positioning
+            const cameraRig = document.createElement('a-entity');
+            cameraRig.setAttribute('position', '0 0 0');
+            scene.appendChild(cameraRig);
+            cameraRig.appendChild(camera);
+            
+            // Move camera back slightly for better framing on mobile
+            if (isMobile) {
+                camera.setAttribute('position', '0 0 0.5');
+            }
             
             // Add marker
             const marker = document.createElement('a-marker');
@@ -87,9 +101,8 @@
             model.setAttribute('gltf-model', 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
             model.setAttribute('position', '0 0 0');
             
-            // Adjust scale based on device
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const scale = isMobile ? '0.2 0.2 0.2' : '0.5 0.5 0.5';
+            // Adjust scale based on device (using existing isMobile variable)
+            const scale = isMobile ? '0.15 0.15 0.15' : '0.5 0.5 0.5';
             model.setAttribute('scale', scale);
             
             model.setAttribute('rotation', '0 180 0');
