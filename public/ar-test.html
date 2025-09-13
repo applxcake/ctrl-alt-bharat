@@ -73,8 +73,8 @@
     
     <!-- Model selector -->
     <div class="model-selector">
-        <button class="model-btn active" data-model="models/taj-mahal/taj_mahal_3d_model.glb" data-name="Taj Mahal" data-scale="0.02 0.02 0.02" data-rotation="0 180 0">Taj Mahal</button>
-        <button class="model-btn" data-model="models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb" data-name="Sankranti Cow" data-scale="0.1 0.1 0.1" data-rotation="0 180 0">Sankranti Cow</button>
+        <button class="model-btn active" data-model="./models/taj-mahal/taj_mahal_3d_model.glb" data-name="Taj Mahal" data-scale="0.02 0.02 0.02" data-rotation="0 180 0">Taj Mahal</button>
+        <button class="model-btn" data-model="./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb" data-name="Sankranti Cow" data-scale="0.1 0.1 0.1" data-rotation="0 0 0">Sankranti Cow</button>
     </div>
     <script>
         // Clean up any existing AR.js components if they exist
@@ -133,8 +133,8 @@
                     'trackingMethod: best',
                     'maxDetectionRate: 30',
                     'patternRatio: 0.85',
-                    'cameraParametersUrl: https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/camera_para.dat',
-                    'markerPatternUrl: https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/patt.hiro'
+                    'cameraParametersUrl: data/camera_para.dat',
+                    'markerPatternUrl: data/patt.hiro'
                 ].join('; ')
             };
             
@@ -164,10 +164,9 @@
             camera.setAttribute('position', isMobile ? '0 1.6 2.5' : '0 1.6 1.5');
             scene.appendChild(camera);
             
-            // Add marker with explicit pattern
+            // Add marker with hiro preset (simplest and most reliable)
             const marker = document.createElement('a-marker');
-            marker.setAttribute('type', 'pattern');
-            marker.setAttribute('url', 'https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/patt.hiro');
+            marker.setAttribute('preset', 'hiro');
             marker.setAttribute('emitevents', 'true');
             marker.setAttribute('cursor', 'rayOrigin: mouse');
             marker.setAttribute('smooth', 'true');
@@ -182,15 +181,21 @@
             
             // Function to load model
             function loadModel(modelPath, modelName, scale = '0.1 0.1 0.1', rotation = '0 180 0') {
+                console.log('Loading model:', modelPath);
                 // Show loading indicator
                 document.querySelector('.arjs-loader').style.display = 'flex';
                 document.querySelector('.arjs-loader div').textContent = 'Loading ' + modelName + '...';
                 
                 // Clear previous model
                 const container = document.querySelector('#model-container');
-                container.innerHTML = '';
+                if (container) {
+                    container.innerHTML = '';
+                } else {
+                    console.error('Model container not found!');
+                    return;
+                }
                 
-                // Create new model
+                // Create new model with explicit path
                 const model = document.createElement('a-entity');
                 model.setAttribute('gltf-model', `url(${modelPath})`);
                 model.setAttribute('scale', scale);
@@ -198,6 +203,7 @@
                 model.setAttribute('rotation', rotation);
                 model.setAttribute('shadow', 'receive: false; cast: false');
                 model.classList.add('clickable');
+                model.setAttribute('animation', 'property: scale; from: 0 0 0; to: ' + scale + '; dur: 1000; easing: easeOutElastic');
                 
                 // Add model to container with animation
                 const wrapper = document.createElement('a-entity');
