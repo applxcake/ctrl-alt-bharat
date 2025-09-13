@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Stupa of Sanchi - AR Experience</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+        }
+        .arjs-loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            margin-top: 1em;
+        }
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 100;
+            text-align: center;
+            max-width: 80%;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="arjs-loader">
+        <div>Loading AR, please wait...</div>
+    </div>
+    
+    <a href="index.html" class="back-button" aria-label="Back to Home">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    
+    <a-scene 
+        embedded 
+        arjs='sourceWidth: 1280; sourceHeight: 720; displayWidth: 100%; displayHeight: 100%;' 
+        renderer='antialias: true; alpha: true;'>
+        
+        <!-- Preload assets -->
+        <a-assets>
+            <a-asset-item id="sanchi-model" src="models/sanchi/scene.gltf"></a-asset-item>
+        </a-assets>
+        
+        <!-- Marker-based AR -->
+        <a-marker preset="hiro">
+            <!-- Great Stupa of Sanchi 3D Model -->
+            <a-entity 
+                gltf-model="#sanchi-model"
+                scale="0.1 0.1 0.1"
+                position="0 0.5 0"
+                rotation="0 0 0">
+            </a-entity>
+            
+            <!-- Text label -->
+            <a-text 
+                value="GREAT STUPA OF SANCHI" 
+                color="white" 
+                align="center"
+                position="0 1.5 0"
+                scale="2 2 2">
+            </a-text>
+        </a-marker>
+        
+        <!-- Camera and Lighting -->
+        <a-entity camera></a-entity>
+        <a-entity light="type: ambient; color: #FFF; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; color: #FFF; intensity: 0.8" position="1 1 1"></a-entity>
+        
+        <!-- Marker not found message -->
+        <a-entity position="0 0 0" visible="false" class="marker-not-found">
+            <a-text value="Point camera at marker" color="white" align="center" position="0 0.5 0"></a-text>
+        </a-entity>
+        
+    </a-scene>
+    
+    <div class="info-panel">
+        Point your camera at the marker to view the Great Stupa of Sanchi
+    </div>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // Hide loader when scene is loaded
+        window.addEventListener('arjs-nft-loaded', function() {
+            document.querySelector('.arjs-loader').style.display = 'none';
+        });
+        
+        // Show/hide marker not found message
+        const scene = document.querySelector('a-scene');
+        const markerNotFound = document.querySelector('.marker-not-found');
+        
+        scene.addEventListener('markerFound', function() {
+            markerNotFound.setAttribute('visible', 'false');
+        });
+        
+        scene.addEventListener('markerLost', function() {
+            markerNotFound.setAttribute('visible', 'true');
+        });
+    </script>
+</body>
+</html>
