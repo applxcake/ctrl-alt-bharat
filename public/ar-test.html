@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sankranti Cow AR Experience</title>
+    <title>Taj Mahal AR Experience</title>
     <style>
         body { 
             margin: 0; 
@@ -117,27 +117,28 @@
             const marker = document.createElement('a-marker');
             marker.setAttribute('preset', 'hiro');
             
-            // Add Sankranti Cow model with optimized settings
+            // Add Taj Mahal model with optimized settings
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', {
-                src: 'url(./models/festival/sankranti_cow_-_low_poly_-_south_indian_festival.glb)',
-                cache: true, // Enable model caching
-                'premultiplied-vertex-colors': 'true', // Better performance
-                'shadow': 'receive: false; cast: false' // Disable shadows for better performance
+                src: 'url(./models/taj-mahal/taj_mahal_3d_model.glb)',
+                cache: true,
+                'premultiplied-vertex-colors': 'true',
+                'shadow': 'receive: false; cast: false',
+                'animation': 'enabled: false'
             });
             
             // Position and scale model for better visibility
             model.setAttribute('position', '0 0 0');
-            const scale = isMobile ? '0.1 0.1 0.1' : '0.3 0.3 0.3'; // Smaller scale for better performance
+            const scale = isMobile ? '0.01 0.01 0.01' : '0.02 0.02 0.02';
             model.setAttribute('scale', scale);
             
+            // Rotate and position for better viewing angle
             model.setAttribute('rotation', '0 180 0');
-            model.setAttribute('animation-mixer', 'clip: *; loop: repeat');
             marker.appendChild(model);
             
             // Add text label with mobile-optimized size
             const text = document.createElement('a-text');
-            text.setAttribute('value', 'Sankranti Cow');
+            text.setAttribute('value', 'Taj Mahal');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
             text.setAttribute('position', isMobile ? '0 0.8 0' : '0 1.5 0');
