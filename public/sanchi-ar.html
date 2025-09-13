@@ -182,6 +182,13 @@
     </div>
     
     <script>
+        // Handle feature request button
+        document.getElementById('featureRequestBtn').addEventListener('click', function() {
+            const subject = encodeURIComponent('Feature Request for Sanchi Stupa AR');
+            const body = encodeURIComponent('\n\n---\nSent from Sanchi Stupa AR Experience');
+            window.location.href = `mailto:test@gmail.com?subject=${subject}&body=${body}`;
+        });
+
         document.getElementById('downloadBtn').addEventListener('click', function() {
             // Create a temporary link element
             const link = document.createElement('a');

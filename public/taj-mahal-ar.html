@@ -44,18 +44,32 @@
             flex-direction: column;
             gap: 10px;
         }
-        .download-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn {
             padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
             font-size: 14px;
-            transition: background 0.3s;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
         }
         .download-btn:hover {
-            background: #45a049;
+            background-color: #45a049;
+        }
+        .feature-request-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .feature-request-btn:hover {
+            background-color: #0b7dda;
         }
         a-scene {
             width: 100%;
@@ -191,19 +205,28 @@
                 });
         });
         
+        // Handle feature request button
+        document.getElementById('featureRequestBtn').addEventListener('click', function() {
+            const subject = encodeURIComponent('Feature Request for Taj Mahal AR');
+            const body = encodeURIComponent('\n\n---\nSent from Taj Mahal AR Experience');
+            window.location.href = `mailto:test@gmail.com?subject=${subject}&body=${body}`;
+        });
+
         // Handle download button
         document.getElementById('downloadBtn').addEventListener('click', function() {
             const link = document.createElement('a');
-            link.href = 'https://github.com/applxcake/ctrl-alt-bharat/raw/main/public/models/taj_mahal/Box.glb';
-            link.download = 'taj_mahal_model.glb';
+            link.href = './models/taj_mahal/taj_mahal_3d_model.glb';
+            link.download = 'taj_mahal_3d_model.glb';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            // Show download feedback
+            // Update button text temporarily
             const btn = this;
             const originalText = btn.textContent;
             btn.textContent = 'Downloading...';
+            
+            // Reset button text after download starts
             setTimeout(() => {
                 btn.textContent = 'Download Complete!';
                 setTimeout(() => {
