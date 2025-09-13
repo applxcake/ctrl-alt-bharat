@@ -46,12 +46,12 @@ An interactive Augmented Reality experience showcasing India's rich cultural her
 ### Team Name: Ctrl+Alt+Bharat
 
 #### Team Members:
-- **Aditya**
-- **Ritik**
-- **Ansh**
-- **Aditi**
-- **Riya**
-- **Abhay**
+- Batti Chandan Singh
+- Mohammed Sabir
+- Donepalli Pranitha
+- Thota Sai Teja
+- Safa Mahveen
+- Gandra Bala Aditya Reddy
 
 *Working together to bring Indian heritage to life through augmented reality*
 

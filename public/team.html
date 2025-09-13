@@ -6,6 +6,55 @@
     <title>Our Team - Ctrl+Alt+Bharat</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Header Styles */
+        header {
+            background: #2c3e50;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #3498db;
+        }
+        
+        /* Team Section */
         .team-section {
             padding: 80px 0;
             background-color: #f9f9f9;
@@ -87,17 +136,15 @@
 </head>
 <body>
     <header>
-        <nav>
-            <div class="container">
-                <a href="index.html" class="logo">Ctrl+Alt+Bharat</a>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="index.html#heritage">Heritage Sites</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                    <li><a href="team.html" class="active">Our Team</a></li>
-                </ul>
-            </div>
+        <nav class="container">
+            <a href="index.html" class="logo">Ctrl+Alt+Bharat</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#heritage">Heritage</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="team.html" class="active">Our Team</a></li>
+            </ul>
         </nav>
     </header>
 
@@ -106,28 +153,28 @@
             <h2 class="section-title">Our Team</h2>
             <div class="team-members">
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Aditya">
-                    <h3>Aditya</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Batti Chandan Singh">
+                    <h3>Batti Chandan Singh</h3>
                 </div>
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Ritik">
-                    <h3>Ritik</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Mohammed Sabir">
+                    <h3>Mohammed Sabir</h3>
                 </div>
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Ansh">
-                    <h3>Ansh</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Donepalli Pranitha">
+                    <h3>Donepalli Pranitha</h3>
                 </div>
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Aditi">
-                    <h3>Aditi</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Thota Sai Teja">
+                    <h3>Thota Sai Teja</h3>
                 </div>
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Riya">
-                    <h3>Riya</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Safa Mahveen">
+                    <h3>Safa Mahveen</h3>
                 </div>
                 <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Abhay">
-                    <h3>Abhay</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Gandra Bala Aditya Reddy">
+                    <h3>Gandra Bala Aditya Reddy</h3>
                 </div>
             </div>
 
