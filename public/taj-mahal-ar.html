@@ -124,16 +124,17 @@
         
         // Add the Taj Mahal 3D model
         const model = document.createElement('a-entity');
-        model.setAttribute('gltf-model', 'url(./models/taj_mahal/Box.glb)');
-        model.setAttribute('scale', '0.8 0.8 0.8');
-        model.setAttribute('position', '0 0.5 0');
-        model.setAttribute('rotation', '0 0 0');
+        model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
+        model.setAttribute('scale', '0.1 0.1 0.1'); // Start with a smaller scale
+        model.setAttribute('position', '0 0 0');
+        model.setAttribute('rotation', '0 180 0'); // Rotate to face the camera
         
         // Add loading and error handling
         model.addEventListener('model-loaded', () => {
             console.log('Taj Mahal model loaded successfully');
-            // Adjust model position and scale after loading if needed
-            model.setAttribute('scale', '0.8 0.8 0.8');
+            // Adjust model position and scale after loading
+            model.setAttribute('scale', '0.2 0.2 0.2'); // Adjust scale as needed
+            model.setAttribute('position', '0 0.5 0');
         });
         
         model.addEventListener('error', (e) => {
