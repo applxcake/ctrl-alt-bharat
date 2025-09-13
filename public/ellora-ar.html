@@ -103,14 +103,15 @@
             // Create model container with scale
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.01 0.01 0.01');
+            modelContainer.setAttribute('scale', '1 1 1');
+            modelContainer.setAttribute('data-raycastable', 'true');
             
-            // Copy the model to a local directory first
+            // Add 3D model
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/ellora/ellora_caves__india.glb)');
-            model.setAttribute('scale', '4 4 4');
-            model.setAttribute('position', '0 -1 0');
-            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('scale', '0.1 0.1 0.1');
+            model.setAttribute('position', '0 0.5 0');
+            model.setAttribute('rotation', '0 0 0');
             modelContainer.appendChild(model);
             
             // Add ground plane

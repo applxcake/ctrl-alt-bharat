@@ -91,12 +91,12 @@
             modelContainer.setAttribute('position', '0 0 0');
             modelContainer.setAttribute('scale', '0.1 0.1 0.1');
             
-            // Copy the model to a local directory first
+            // Add 3D model
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/sanchi/great_stupa_in_sanchi.glb)');
-            model.setAttribute('scale', '4 4 4');
-            model.setAttribute('position', '0 -1 0');
-            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('scale', '0.1 0.1 0.1');
+            model.setAttribute('position', '0 0.5 0');
+            model.setAttribute('rotation', '0 0 0');
             modelContainer.appendChild(model);
             
             // Add ground plane
@@ -115,7 +115,7 @@
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
             text.setAttribute('position', '0 5 0');
-            text.setAttribute('scale', '3.5 3.5 3.5');
+            text.setAttribute('scale', '5.5 5.5 5.5');
             modelContainer.appendChild(text);
             
             marker.appendChild(modelContainer);
