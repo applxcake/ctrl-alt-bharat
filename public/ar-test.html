@@ -129,37 +129,40 @@
             model.setAttribute('rotation', '0 180 0');
             marker.appendChild(model);
             
-            // Create a container for the model with smaller scale
+            // Create a container for the model with even smaller scale and better anchoring
             const modelContainer = document.createElement('a-entity');
-            modelContainer.setAttribute('position', '0 0.1 0');
-            modelContainer.setAttribute('scale', '0.3 0.3 0.3'); // Reduced size
+            modelContainer.setAttribute('position', '0 0.05 0');  // Lowered position
+            modelContainer.setAttribute('scale', '0.2 0.2 0.2');  // Further reduced size
             
-            // Add a simple box with better materials and shadow
+            // Add a simple box with better anchoring and stability
             const box = document.createElement('a-box');
             box.setAttribute('color', '#4CC3D9');
-            box.setAttribute('position', '0 0.25 0');
+            box.setAttribute('position', '0 0.2 0');  // Lowered position
+            box.setAttribute('scale', '0.8 0.8 0.8');  // Slightly smaller
             box.setAttribute('shadow', 'cast: true; receive: true');
             box.setAttribute('material', 'roughness: 0.5; metalness: 0.5');
-            box.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 4000');
+            // Slower, smoother animation for better stability
+            box.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear');
             
-            // Add a ground plane for shadows
+            // Add a smaller ground plane for better stability
             const ground = document.createElement('a-plane');
             ground.setAttribute('position', '0 0 0');
             ground.setAttribute('rotation', '-90 0 0');
-            ground.setAttribute('width', '4');
-            ground.setAttribute('height', '4');
+            ground.setAttribute('width', '2');  // Smaller plane
+            ground.setAttribute('height', '2');
             ground.setAttribute('color', '#DDD');
             ground.setAttribute('shadow', 'receive: true');
-            ground.setAttribute('material', 'shader: standard');
+            ground.setAttribute('material', 'shader: standard; metalness: 0.1; roughness: 0.8');
             
-            // Add a smaller box on top
+            // Add a smaller, simpler box on top
             const smallBox = document.createElement('a-box');
             smallBox.setAttribute('color', '#FF6B6B');
-            smallBox.setAttribute('position', '0 0.5 0');
-            smallBox.setAttribute('scale', '0.5 0.5 0.5');
+            smallBox.setAttribute('position', '0 0.4 0');  // Lowered position
+            smallBox.setAttribute('scale', '0.3 0.3 0.3');  // Smaller
             smallBox.setAttribute('shadow', 'cast: true; receive: true');
-            smallBox.setAttribute('material', 'roughness: 0.2; metalness: 0.8');
-            smallBox.setAttribute('animation', 'property: position; to: 0 0.8 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine');
+            smallBox.setAttribute('material', 'roughness: 0.3; metalness: 0.7');
+            // Simpler, more stable animation
+            smallBox.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear');
             
             // Assemble the model
             modelContainer.appendChild(ground);
@@ -186,13 +189,14 @@
             ambientLight.setAttribute('intensity', '0.3');
             scene.appendChild(ambientLight);
             
-            // Directional light for main shadows
+            // Directional light with optimized shadows
             const dirLight = document.createElement('a-light');
             dirLight.setAttribute('type', 'directional');
             dirLight.setAttribute('color', '#FFF');
-            dirLight.setAttribute('intensity', '0.8');
-            dirLight.setAttribute('position', '-1 2 1');
-            dirLight.setAttribute('shadow', 'cast: true; shadowMapHeight: 1024; shadowMapWidth: 1024');
+            dirLight.setAttribute('intensity', '0.6');  // Reduced intensity
+            dirLight.setAttribute('position', '1 2 1');  // Changed angle
+            // Optimized shadow settings for better performance
+            dirLight.setAttribute('shadow', 'cast: true; shadowMapHeight: 512; shadowMapWidth: 512; shadowBias: -0.0005');
             scene.appendChild(dirLight);
             
             // Additional fill light
