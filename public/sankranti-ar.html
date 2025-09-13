@@ -68,6 +68,8 @@
             scene.setAttribute('renderer', 'antialias: true; alpha: true;');
             scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false; detectionMode: mono;');
             
+            // Simple AR.js configuration
+            
             // Add camera with default settings
             const camera = document.createElement('a-entity');
             camera.setAttribute('camera', 'fov: 80; near: 0.1; far: 1000');
@@ -81,27 +83,27 @@
             marker.setAttribute('cursor', 'rayOrigin: mouse');
             marker.setAttribute('raycaster', 'objects: .clickable');
             
-            // Create model container with scale and position adjustment
+            // Create model container with scale
             const modelContainer = document.createElement('a-entity');
-            modelContainer.setAttribute('position', '0 -0.3 0');  // Centered position
-            modelContainer.setAttribute('scale', '0.8 0.8 0.8');  // Increased scale
+            modelContainer.setAttribute('position', '0 0 0');
+            modelContainer.setAttribute('scale', '0.1 0.1 0.1');
             
-            // Add Sankranti Cow model
+            // Copy the model to a local directory first
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/sankranti/sankranti_cow_-_low_poly_-_south_indian_festival.glb)');
-            model.setAttribute('scale', '1 1 1');
-            model.setAttribute('position', '0 0 0');  // Centered within container
+            model.setAttribute('scale', '4 4 4');
+            model.setAttribute('position', '0 -1 0');
             model.setAttribute('rotation', '0 180 0');
             modelContainer.appendChild(model);
             
-            // Add ground plane - positioned to match the model's base
+            // Add ground plane
             const ground = document.createElement('a-plane');
-            ground.setAttribute('position', '0 -0.1 0');  // Adjusted to match model's base
+            ground.setAttribute('position', '0 -0.5 0');
             ground.setAttribute('rotation', '-90 0 0');
-            ground.setAttribute('width', '3');
-            ground.setAttribute('height', '3');
+            ground.setAttribute('width', '4');
+            ground.setAttribute('height', '4');
             ground.setAttribute('shadow', 'receive: true');
-            ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1; transparent: true; opacity: 0.9');
+            ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1');
             modelContainer.appendChild(ground);
             
             // Add text label
@@ -109,8 +111,8 @@
             text.setAttribute('value', 'Sankranti Cow');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 2 0');
-            text.setAttribute('scale', '2.5 2.5 2.5');
+            text.setAttribute('position', '0 5 0');
+            text.setAttribute('scale', '3.5 3.5 3.5');
             modelContainer.appendChild(text);
             
             marker.appendChild(modelContainer);

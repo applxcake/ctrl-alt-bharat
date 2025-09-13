@@ -2,12 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Taj Mahal AR</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.0/aframe/build/aframe-ar.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taj Mahal AR Experience</title>
     <style>
-        body { margin: 0; overflow: hidden; }
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+        }
         .arjs-loader {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -23,57 +25,115 @@
             font-size: 1.25em;
             margin-top: 1em;
         }
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 100;
+            text-align: center;
+            max-width: 80%;
+        }
     </style>
 </head>
 <body>
     <div class="arjs-loader">
         <div>Loading AR, please wait...</div>
     </div>
-    
-    <a-scene embedded arjs>
-        <!-- Main marker with Taj Mahal model -->
-        <a-marker preset="hiro">
-            <!-- Taj Mahal Model -->
-            <a-entity position="0 0.5 0" scale="0.5 0.5 0.5">
-                <a-entity id="taj-model" gltf-model="url(/models/taj_mahal/Box.glb)">
-                    <!-- Fallback in case model doesn't load -->
-                    <a-box color="#e74c3c" visible="false" class="fallback"></a-box>
-                </a-entity>
-            </a-entity>
-            
-            <!-- Text label -->
-            <a-text value="TAJ MAHAL" 
-                   color="white" 
-                   align="center" 
-                   position="0 1.5 0" 
-                   scale="1.5 1.5 1.5">
-            </a-text>
-        </a-marker>
-        
-        <!-- Camera and lighting -->
-        <a-entity camera></a-entity>
-        <a-entity light="type: ambient; color: #888; intensity: 0.8"></a-entity>
-        <a-entity light="type: directional; color: #fff; intensity: 1" position="-1 1 0.5"></a-entity>
-    </a-scene>
+
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.loaders.min.js"></script>
     
     <script>
-        // Handle scene loading
-        document.querySelector('a-scene').addEventListener('loaded', function() {
-            console.log('AR scene loaded');
-            document.querySelector('.arjs-loader').style.display = 'none';
+        // Wait for A-Frame to load
+        window.addEventListener('load', function() {
+            // Create a new scene with simplified configuration
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false');
             
-            // Log model loading status
-            const model = document.querySelector('#taj-model');
-            model.addEventListener('model-loaded', () => {
+            // Add camera
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', '');
+            camera.setAttribute('position', '0 1.6 0');
+            scene.appendChild(camera);
+            
+            // Add lights
+            const ambientLight = document.createElement('a-entity');
+            ambientLight.setAttribute('light', 'type: ambient; color: #888; intensity: 0.8');
+            scene.appendChild(ambientLight);
+            
+            const directionalLight = document.createElement('a-entity');
+            directionalLight.setAttribute('light', 'type: directional; color: #fff; intensity: 0.8');
+            directionalLight.setAttribute('position', '1 1 0.5');
+            scene.appendChild(directionalLight);
+            
+            // Add marker and model
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('type', 'pattern');
+            marker.setAttribute('url', 'data/patt.hiro');
+            
+            const model = document.createElement('a-entity');
+            model.setAttribute('position', '0 0 0');
+            model.setAttribute('scale', '0.05 0.05 0.05');
+            
+            const gltfModel = document.createElement('a-entity');
+            gltfModel.setAttribute('gltf-model', 'url(/models/taj-mahal/taj_mahal_3d_model.glb)');
+            gltfModel.setAttribute('position', '0 0 0');
+            
+            // Add fallback box
+            const fallbackBox = document.createElement('a-box');
+            fallbackBox.setAttribute('color', '#e74c3c');
+            fallbackBox.setAttribute('visible', 'false');
+            fallbackBox.setAttribute('class', 'fallback');
+            
+            // Add text label
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'TAJ MAHAL');
+            text.setAttribute('color', 'white');
+            text.setAttribute('align', 'center');
+            text.setAttribute('position', '0 10 0');
+            text.setAttribute('scale', '10 10 10');
+            
+            // Assemble the scene
+            model.appendChild(gltfModel);
+            model.appendChild(fallbackBox);
+            model.appendChild(text);
+            marker.appendChild(model);
+            scene.appendChild(marker);
+            
+            // Add info panel
+            const infoPanel = document.createElement('div');
+            infoPanel.className = 'info-panel';
+            infoPanel.textContent = 'Point your camera at the Hiro marker to see the Taj Mahal in AR';
+            document.body.appendChild(infoPanel);
+            
+            // Handle model loading
+            gltfModel.addEventListener('model-loaded', function() {
                 console.log('Taj Mahal model loaded successfully');
-                // Hide fallback if model loads
-                document.querySelector('.fallback').setAttribute('visible', 'false');
+                fallbackBox.setAttribute('visible', 'false');
             });
             
-            model.addEventListener('error', (e) => {
+            gltfModel.addEventListener('error', function(e) {
                 console.error('Error loading model:', e.detail);
-                // Show fallback if model fails to load
-                document.querySelector('.fallback').setAttribute('visible', 'true');
+                fallbackBox.setAttribute('visible', 'true');
+            });
+            
+            // Add scene to body
+            document.body.appendChild(scene);
+            
+            // Hide loader when scene is loaded
+            scene.addEventListener('loaded', function() {
+                document.querySelector('.arjs-loader').style.display = 'none';
             });
         });
     </script>

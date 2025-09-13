@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Taj Mahal AR Experience</title>
     <style>
         body { 
             margin: 0; 
+            padding: 0;
             overflow: hidden; 
             font-family: Arial, sans-serif;
         }
@@ -37,7 +38,29 @@
             font-size: 14px;
             z-index: 100;
             text-align: center;
-            max-width: 80%;
+            max-width: 90%;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+        a-scene {
+            width: 100%;
+            height: 100vh;
+            display: block;
         }
     </style>
 </head>
@@ -48,117 +71,193 @@
 
     <!-- A-Frame and AR.js -->
     <script>
-        // Clean up any existing A-Frame components
+        // Clean up any existing A-Frame components to prevent duplicate registration
         if (window.AFRAME) {
-            delete AFRAME.components['arjs-anchor'];
-            delete AFRAME.components['arjs-anchor-marker'];
-            delete AFRAME.components['arjs-anchor-hit-testing'];
-            delete AFRAME.components['arjs-anchor-nft'];
-            delete AFRAME.systems.arjs;
+            const components = [
+                'arjs-anchor', 'arjs-anchor-marker', 'arjs-anchor-hit-testing',
+                'arjs-anchor-nft', 'arjs-camera', 'arjs-debugui', 'arjs-device-orientation-permission-ui'
+            ];
+            
+            components.forEach(component => {
+                if (AFRAME.components[component]) {
+                    delete AFRAME.components[component];
+                }
+            });
+            
+            if (AFRAME.systems.arjs) {
+                delete AFRAME.systems.arjs;
+            }
         }
     </script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
     <script>
-        // Wait for A-Frame to load
-        window.addEventListener('load', function() {
-            // Create a new scene with simplified configuration
-            const scene = document.createElement('a-scene');
-            scene.setAttribute('vr-mode-ui', 'enabled: false');
-            scene.setAttribute('renderer', 'antialias: true; alpha: true;');
-            scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false; detectionMode: mono;');
+        // Create a new scene with AR.js configuration
+        const scene = document.createElement('a-scene');
+        scene.setAttribute('embedded', '');
+        scene.setAttribute('renderer', 'antialias: true; alpha: true; precision: mediump;');
+        scene.setAttribute('vr-mode-ui', 'enabled: false');
+        scene.setAttribute('arjs', {
+            sourceType: 'webcam',
+            debugUIEnabled: false,
+            detectionMode: 'mono',
+            maxDetectionRate: 30,
+            sourceWidth: 1280,
+            sourceHeight: 720,
+            displayWidth: 1280,
+            displayHeight: 720
+        });
+        
+        // Add camera
+        const camera = document.createElement('a-entity');
+        camera.setAttribute('camera', '');
+        camera.setAttribute('arjs-device-orientation-permission-ui', 'enabled: false');
+        camera.setAttribute('arjs-camera', 'debugUIEnabled: false');
+        scene.appendChild(camera);
+        
+        // Add lights
+        const ambientLight = document.createElement('a-light');
+        ambientLight.setAttribute('type', 'ambient');
+        ambientLight.setAttribute('color', '#888');
+        ambientLight.setAttribute('intensity', '0.8');
+        scene.appendChild(ambientLight);
+        
+        const directionalLight = document.createElement('a-light');
+        directionalLight.setAttribute('type', 'directional');
+        directionalLight.setAttribute('color', '#fff');
+        directionalLight.setAttribute('intensity', '0.8');
+        directionalLight.setAttribute('position', '1 1 0.5');
+        scene.appendChild(directionalLight);
+        
+        // Add marker with hiro preset
+        const marker = document.createElement('a-marker');
+        marker.setAttribute('type', 'pattern');
+        marker.setAttribute('url', 'https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/hiro.patt');
+        
+        // Add raycaster to the scene instead of marker
+        const raycaster = document.createElement('a-entity');
+        raycaster.setAttribute('raycaster', {
+            objects: '[data-raycastable]',
+            far: 100,
+            interval: 1000
+        });
+        scene.appendChild(raycaster);
+        
+        // Add cursor to camera
+        const cursor = document.createElement('a-entity');
+        cursor.setAttribute('cursor', {
+            rayOrigin: 'mouse',
+            fuse: false
+        });
+        camera.appendChild(cursor);
+        
+        // Create model container with raycastable attribute
+        const modelContainer = document.createElement('a-entity');
+        modelContainer.setAttribute('position', '0 0 0');
+        modelContainer.setAttribute('scale', '0.1 0.1 0.1');
+        modelContainer.setAttribute('data-raycastable', 'true');
+        
+        // Add 3D model
+        const model = document.createElement('a-entity');
+        model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
+        model.setAttribute('scale', '4 4 4');
+        model.setAttribute('position', '0 -1 0');
+        model.setAttribute('rotation', '0 180 0');
+        modelContainer.appendChild(model);
+        
+        // Add ground plane
+        const ground = document.createElement('a-plane');
+        ground.setAttribute('position', '0 -0.5 0');
+        ground.setAttribute('rotation', '-90 0 0');
+        ground.setAttribute('width', '4');
+        ground.setAttribute('height', '4');
+        ground.setAttribute('shadow', 'receive: true');
+        ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1');
+        modelContainer.appendChild(ground);
+        
+        // Add text label
+        const text = document.createElement('a-text');
+        text.setAttribute('value', 'Taj Mahal');
+        text.setAttribute('color', 'white');
+        text.setAttribute('align', 'center');
+        text.setAttribute('position', '0 5 0');
+        text.setAttribute('scale', '3.5 3.5 3.5');
+        modelContainer.appendChild(text);
+        
+        marker.appendChild(modelContainer);
+        scene.appendChild(marker);
+        
+        // Add scene to body and handle loading
+        document.body.appendChild(scene);
+        
+        // Wait for both scene and components to be ready
+        Promise.all([
+            new Promise(resolve => scene.addEventListener('loaded', resolve)),
+            new Promise(resolve => {
+                if (AFRAME.components['arjs-camera']) {
+                    resolve();
+                } else {
+                    const check = setInterval(() => {
+                        if (AFRAME.components['arjs-camera']) {
+                            clearInterval(check);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            })
+        ]).then(() => {
+            console.log('Scene loaded');
+            document.querySelector('.arjs-loader').style.display = 'none';
             
-            // Simple AR.js configuration
-            
-            // Add camera with default settings
-            const camera = document.createElement('a-entity');
-            camera.setAttribute('camera', 'fov: 80; near: 0.1; far: 1000');
-            camera.setAttribute('position', '0 1.6 0');
-            scene.appendChild(camera);
-            
-            // Add marker with hiro preset
-            const marker = document.createElement('a-marker');
-            marker.setAttribute('preset', 'hiro');
-            marker.setAttribute('emitevents', 'true');
-            marker.setAttribute('cursor', 'rayOrigin: mouse');
-            marker.setAttribute('raycaster', 'objects: .clickable');
-            
-            // Create model container with scale
-            const modelContainer = document.createElement('a-entity');
-            modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.1 0.1 0.1');
-            
-            // Copy the model to a local directory first
-            const model = document.createElement('a-entity');
-            model.setAttribute('gltf-model', 'url(./models/taj-mahal/taj_mahal_3d_model.glb)');
-            model.setAttribute('scale', '4 4 4');
-            model.setAttribute('position', '0 -1 0');
-            model.setAttribute('rotation', '0 180 0');
-            modelContainer.appendChild(model);
-            
-            // Add ground plane
-            const ground = document.createElement('a-plane');
-            ground.setAttribute('position', '0 -0.5 0');
-            ground.setAttribute('rotation', '-90 0 0');
-            ground.setAttribute('width', '4');
-            ground.setAttribute('height', '4');
-            ground.setAttribute('shadow', 'receive: true');
-            ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1');
-            modelContainer.appendChild(ground);
-            
-            // Add text label
-            const text = document.createElement('a-text');
-            text.setAttribute('value', 'Taj Mahal');
-            text.setAttribute('color', 'white');
-            text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 5 0');
-            text.setAttribute('scale', '3.5 3.5 3.5');
-            modelContainer.appendChild(text);
-            
-            marker.appendChild(modelContainer);
-            scene.appendChild(marker);
-            
-            // Add lighting
-            const ambientLight = document.createElement('a-light');
-            ambientLight.setAttribute('type', 'ambient');
-            ambientLight.setAttribute('color', '#FFF');
-            ambientLight.setAttribute('intensity', '0.5');
-            scene.appendChild(ambientLight);
-            
-            const dirLight = document.createElement('a-light');
-            dirLight.setAttribute('type', 'directional');
-            dirLight.setAttribute('color', '#FFFAF0');
-            dirLight.setAttribute('intensity', '0.8');
-            dirLight.setAttribute('position', '1 3 1');
-            dirLight.setAttribute('shadow', 'cast: true');
-            scene.appendChild(dirLight);
-            
-            // Add scene to body and handle loading
-            document.body.appendChild(scene);
-            
-            scene.addEventListener('loaded', function() {
-                console.log('Scene loaded');
-                document.querySelector('.arjs-loader').style.display = 'none';
-                
-                // Check camera access
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(stream => {
-                        console.log('Camera access granted');
-                        stream.getTracks().forEach(track => track.stop());
-                    })
-                    .catch(err => {
-                        console.error('Camera access error:', err);
-                        alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
-                    });
-            });
-            
-            marker.addEventListener('markerFound', () => console.log('Marker found'));
-            marker.addEventListener('markerLost', () => console.log('Marker lost'));
+            // Check camera access
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    console.log('Camera access granted');
+                    window.arStream = stream;
+                })
+                .catch(err => {
+                    console.error('Camera access error:', err);
+                    alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
+                });
+        }).catch(console.error);
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (window.arStream) {
+                window.arStream.getTracks().forEach(track => track.stop());
+            }
         });
     </script>
     
     <div class="info-panel">
-        Point your camera at the Hiro marker to view the Taj Mahal
+        <div>Point your camera at the Hiro marker to view the Taj Mahal</div>
+        <button id="downloadBtn" class="download-btn">Download Model</button>
     </div>
+    
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = './models/taj-mahal/taj_mahal_3d_model.glb';
+            link.download = 'taj_mahal_3d_model.glb';
+            
+            // Append to body, trigger click and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Optional: Show a message
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Downloading...';
+            setTimeout(() => {
+                btn.textContent = 'Download Complete!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }, 500);
+        });
+    </script>
 </body>
 </html>

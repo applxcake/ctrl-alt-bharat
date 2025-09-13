@@ -33,26 +33,14 @@
             background: rgba(0, 0, 0, 0.7);
             color: white;
             padding: 10px 20px;
-            border-radius: 20px;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             font-size: 14px;
             z-index: 100;
             text-align: center;
             max-width: 80%;
-        }
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
     </style>
 </head>
@@ -74,37 +62,16 @@
     </script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
         // Wait for A-Frame to load
         window.addEventListener('load', function() {
-            // Create a new scene
+            // Create a new scene with simplified configuration
             const scene = document.createElement('a-scene');
-            scene.setAttribute('embedded', '');
-            scene.setAttribute('renderer', 'antialias: true; alpha: true; willReadFrequently: true');
             scene.setAttribute('vr-mode-ui', 'enabled: false');
-            scene.setAttribute('loading-screen', 'enabled: false');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true;');
+            scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false; detectionMode: mono;');
             
-            // AR.js configuration
-            const arjsConfig = {
-                'arjs': [
-                    'sourceType: webcam',
-                    'sourceWidth: 1280',
-                    'sourceHeight: 720',
-                    'displayWidth: 100%',
-                    'displayHeight: 100%',
-                    'debugUIEnabled: false',
-                    'detectionMode: mono',
-                    'matrixCodeType: 3x3',
-                    'trackingMethod: best',
-                    'maxDetectionRate: 30'
-                ].join('; ')
-            };
-            
-            // Apply AR.js configuration
-            Object.entries(arjsConfig).forEach(([key, value]) => {
-                scene.setAttribute(key, value);
-            });
+            // Simple AR.js configuration
             
             // Add camera with default settings
             const camera = document.createElement('a-entity');
@@ -122,25 +89,24 @@
             // Create model container with scale
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.15 0.15 0.15');
+            modelContainer.setAttribute('scale', '0.01 0.01 0.01');
             
-            // Add the Christmas Tree model
+            // Copy the model to a local directory first
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/christmas/christmas_tree.glb)');
-            model.setAttribute('position', '0 0 0');
+            model.setAttribute('scale', '4 4 4');
+            model.setAttribute('position', '0 -1 0');
             model.setAttribute('rotation', '0 180 0');
             modelContainer.appendChild(model);
             
             // Add ground plane
             const ground = document.createElement('a-plane');
-            ground.setAttribute('position', '0 -0.1 0');
+            ground.setAttribute('position', '0 -0.5 0');
             ground.setAttribute('rotation', '-90 0 0');
-            ground.setAttribute('width', '20');
-            ground.setAttribute('height', '20');
-            ground.setAttribute('color', '#8B4513');
-            ground.setAttribute('roughness', '0.8');
-            ground.setAttribute('metalness', '0.1');
+            ground.setAttribute('width', '4');
+            ground.setAttribute('height', '4');
             ground.setAttribute('shadow', 'receive: true');
+            ground.setAttribute('material', 'color: #8B4513; roughness: 0.8; metalness: 0.1');
             modelContainer.appendChild(ground);
             
             // Add text label
@@ -148,8 +114,8 @@
             text.setAttribute('value', 'Christmas Tree');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
-            text.setAttribute('position', '0 2.5 0');
-            text.setAttribute('scale', '0.5 0.5 0.5');
+            text.setAttribute('position', '0 5 0');
+            text.setAttribute('scale', '3.5 3.5 3.5');
             modelContainer.appendChild(text);
             
             marker.appendChild(modelContainer);
@@ -170,17 +136,9 @@
             dirLight.setAttribute('shadow', 'cast: true');
             scene.appendChild(dirLight);
             
-            // Add back button
-            const backButton = document.createElement('button');
-            backButton.className = 'back-button';
-            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Gallery';
-            backButton.onclick = () => window.location.href = 'index.html#ar-experiences';
-            
-            // Add elements to the page
+            // Add scene to body and handle loading
             document.body.appendChild(scene);
-            document.body.appendChild(backButton);
             
-            // Handle scene loaded
             scene.addEventListener('loaded', function() {
                 console.log('Scene loaded');
                 document.querySelector('.arjs-loader').style.display = 'none';
@@ -197,14 +155,39 @@
                     });
             });
             
-            // Debug events
             marker.addEventListener('markerFound', () => console.log('Marker found'));
             marker.addEventListener('markerLost', () => console.log('Marker lost'));
         });
     </script>
     
     <div class="info-panel">
-        Point your camera at the marker to view the Christmas Tree
+        <div>Point your camera at the Hiro marker to view the Christmas Tree</div>
+        <button id="downloadBtn" class="download-btn">Download Model</button>
     </div>
+    
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = './models/christmas/christmas_tree.glb';
+            link.download = 'christmas_tree.glb';
+            
+            // Append to body, trigger click and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Optional: Show a message
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Downloading...';
+            setTimeout(() => {
+                btn.textContent = 'Download Complete!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }, 500);
+        });
+    </script>
 </body>
 </html>

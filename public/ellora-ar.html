@@ -37,7 +37,24 @@
             font-size: 14px;
             z-index: 100;
             text-align: center;
-            max-width: 80%;
+            max-width: 90%;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #45a049;
         }
     </style>
 </head>
@@ -91,8 +108,8 @@
             // Copy the model to a local directory first
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/ellora/ellora_caves__india.glb)');
-            model.setAttribute('scale', '1 1 1');
-            model.setAttribute('position', '0 0 0');
+            model.setAttribute('scale', '4 4 4');
+            model.setAttribute('position', '0 -1 0');
             model.setAttribute('rotation', '0 180 0');
             modelContainer.appendChild(model);
             
@@ -108,11 +125,11 @@
             
             // Add text label
             const text = document.createElement('a-text');
-            text.setAttribute('value', 'Ellora Caves, India');
+            text.setAttribute('value', 'Ellora Caves');
             text.setAttribute('color', 'white');
             text.setAttribute('align', 'center');
             text.setAttribute('position', '0 5 0');
-            text.setAttribute('scale', '2.5 2.5 2.5');
+            text.setAttribute('scale', '3.5 3.5 3.5');
             modelContainer.appendChild(text);
             
             marker.appendChild(modelContainer);
@@ -158,7 +175,33 @@
     </script>
     
     <div class="info-panel">
-        Point your camera at the Hiro marker to view the Ellora Caves
+        <div>Point your camera at the Hiro marker to view the Ellora Caves</div>
+        <button id="downloadBtn" class="download-btn">Download Model</button>
     </div>
+    
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = './models/ellora/ellora_caves__india.glb';
+            link.download = 'ellora_caves__india.glb';
+            
+            // Append to body, trigger click and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Optional: Show a message
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Downloading...';
+            setTimeout(() => {
+                btn.textContent = 'Download Complete!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }, 500);
+        });
+    </script>
 </body>
 </html>
