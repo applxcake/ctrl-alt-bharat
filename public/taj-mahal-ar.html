@@ -135,35 +135,36 @@
         marker.setAttribute('type', 'pattern');
         marker.setAttribute('url', 'https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/asset/data/hiro.patt');
         
-        // Add raycaster to the scene instead of marker
-        const raycaster = document.createElement('a-entity');
-        raycaster.setAttribute('raycaster', {
-            objects: '[data-raycastable]',
-            far: 100,
-            interval: 1000
-        });
-        scene.appendChild(raycaster);
-        
-        // Add cursor to camera
+        // Add cursor to camera with raycaster
         const cursor = document.createElement('a-entity');
-        cursor.setAttribute('cursor', {
-            rayOrigin: 'mouse',
-            fuse: false
-        });
+        cursor.setAttribute('cursor', 'rayOrigin: mouse');
+        cursor.setAttribute('raycaster', 'objects: [data-raycastable]');
         camera.appendChild(cursor);
         
         // Create model container with raycastable attribute
         const modelContainer = document.createElement('a-entity');
         modelContainer.setAttribute('position', '0 0 0');
         modelContainer.setAttribute('scale', '1 1 1');
-        modelContainer.setAttribute('data-raycastable', 'true');
+        modelContainer.setAttribute('data-raycastable', '');
         
-        // Add 3D model
+        // Add 3D model with error handling
         const model = document.createElement('a-entity');
-        model.setAttribute('gltf-model', 'url(./models/taj_mahal/Box.glb)');
-        model.setAttribute('scale', '0.5 0.5 0.5');
-        model.setAttribute('position', '0 0.5 0');
-        model.setAttribute('rotation', '0 0 0');
+        model.setAttribute('gltf-model', 'url(./models/taj_mahal/scene.gltf)');
+        model.setAttribute('scale', '0.01 0.01 0.01');
+        model.setAttribute('position', '0 0 0');
+        model.setAttribute('rotation', '0 180 0');
+        model.addEventListener('model-loaded', () => {
+            console.log('Taj Mahal model loaded successfully');
+        });
+        model.addEventListener('error', (e) => {
+            console.error('Error loading model:', e.detail);
+            // Fallback to a simple box if model fails to load
+            const box = document.createElement('a-box');
+            box.setAttribute('color', '#4CC3D9');
+            box.setAttribute('position', '0 0.5 0');
+            box.setAttribute('scale', '1 1 1');
+            modelContainer.appendChild(box);
+        });
         modelContainer.appendChild(model);
         
         // Add ground plane
@@ -191,22 +192,21 @@
         // Add scene to body and handle loading
         document.body.appendChild(scene);
         
-        // Wait for both scene and components to be ready
-        Promise.all([
-            new Promise(resolve => scene.addEventListener('loaded', resolve)),
-            new Promise(resolve => {
-                if (AFRAME.components['arjs-camera']) {
-                    resolve();
-                } else {
-                    const check = setInterval(() => {
-                        if (AFRAME.components['arjs-camera']) {
-                            clearInterval(check);
-                            resolve();
-                        }
-                    }, 100);
-                }
-            })
-        ]).then(() => {
+        // Wait for scene to be loaded and AR.js to be ready
+        const initAR = new Promise((resolve) => {
+            scene.addEventListener('loaded', () => {
+                // Wait for AR.js to be fully initialized
+                const checkARJS = setInterval(() => {
+                    if (AFRAME.systems && AFRAME.systems.arjs && 
+                        AFRAME.components['arjs-camera']) {
+                        clearInterval(checkARJS);
+                        resolve();
+                    }
+                }, 100);
+            });
+        });
+        
+        initAR.then(() => {
             console.log('Scene loaded');
             document.querySelector('.arjs-loader').style.display = 'none';
             
