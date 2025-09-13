@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -292,10 +292,13 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-monument"></i> Ctrl+Alt+Bharat
             </a>
+            <button class="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
             <ul class="nav-links">
                 <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
-                <li><a href="team.html"><i class="fas fa-users"></i> Our Team</a></li>
+                <li><a href="#team"><i class="fas fa-users"></i> Our Team</a></li>
                 <li><a href="taj-placeholder-ar.html" class="btn btn-primary">
                     <i class="fas fa-vr-cardboard"></i> Try AR Experience
                 </a></li>
@@ -363,29 +366,83 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team" id="team">
+    <section class="team-section" id="team">
         <div class="container">
             <h2 class="section-title">Our Team</h2>
+            <div class="team-intro">
+                <p>We are a passionate team of developers and designers dedicated to bringing Indian heritage to life through augmented reality technology.</p>
+            </div>
+            
             <div class="team-members">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/300x200" alt="Team Member" class="member-img">
+                    <img src="https://ui-avatars.com/api/?name=Batti+Chandan+Singh&background=3498db&color=fff&size=200" alt="Batti Chandan Singh" class="member-img">
                     <div class="member-info">
-                        <h4>Team Member 1</h4>
-                        <p>Role</p>
+                        <h3 class="member-name">Batti Chandan Singh</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/300x200" alt="Team Member" class="member-img">
+                    <img src="https://ui-avatars.com/api/?name=Mohammed+Sabir&background=3498db&color=fff&size=200" alt="Mohammed Sabir" class="member-img">
                     <div class="member-info">
-                        <h4>Team Member 2</h4>
-                        <p>Role</p>
+                        <h3 class="member-name">Mohammed Sabir</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/300x200" alt="Team Member" class="member-img">
+                    <img src="https://ui-avatars.com/api/?name=Donepalli+Pranitha&background=3498db&color=fff&size=200" alt="Donepalli Pranitha" class="member-img">
                     <div class="member-info">
-                        <h4>Team Member 3</h4>
-                        <p>Role</p>
+                        <h3 class="member-name">Donepalli Pranitha</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Thota+Sai+Teja&background=3498db&color=fff&size=200" alt="Thota Sai Teja" class="member-img">
+                    <div class="member-info">
+                        <h3 class="member-name">Thota Sai Teja</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Safa+Mahveen&background=3498db&color=fff&size=200" alt="Safa Mahveen" class="member-img">
+                    <div class="member-info">
+                        <h3 class="member-name">Safa Mahveen</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Gandra+Bala+Aditya+Reddy&background=3498db&color=fff&size=200" alt="Gandra Bala Aditya Reddy" class="member-img">
+                    <div class="member-info">
+                        <h3 class="member-name">Gandra Bala Aditya Reddy</h3>
+                        <p class="member-role">Team Member</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -450,37 +507,72 @@
 
     <!-- Scripts -->
     <script>
-        // Smooth scrolling for anchor links
+        // Mobile menu toggle functionality
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                menuToggle.setAttribute('aria-expanded', 
+                    menuToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+                );
+                
+                // Toggle between hamburger and close icon
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+                }
+            });
+            
+            // Close menu when clicking on a nav link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-bars';
+                    }
+                });
+            });
+        }
+        
+        // Smooth scrolling for anchor links with offset for fixed header
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    const headerOffset = 80; // Height of your header
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
                         behavior: 'smooth'
                     });
                 }
             });
         });
         
-        // Add active class to nav links on scroll
+        // Update active nav link on scroll with better detection
         function updateActiveNavLink() {
-            let current = '';
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-links a');
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPosition = window.scrollY + 100; // Add offset for better detection
             
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelector(`.nav-links a[href*="${sectionId}"]`)?.classList.add('active');
+                } else {
+                    document.querySelector(`.nav-links a[href*="${sectionId}"]`)?.classList.remove('active');
                 }
             });
         }
@@ -489,11 +581,23 @@
         let isScrolling;
         window.addEventListener('scroll', () => {
             window.clearTimeout(isScrolling);
-            isScrolling = setTimeout(updateActiveNavLink, 100);
-        }, false);
+            isScrolling = setTimeout(updateActiveNavLink, 50);
+        });
         
         // Initial call
         updateActiveNavLink();
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navLinks && menuToggle && !navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-bars';
+                }
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
     </script>
     
     <!-- Main JavaScript -->
