@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaaba AR Experience</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+        }
+        .arjs-loader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            margin-top: 1em;
+        }
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 100;
+            text-align: center;
+            max-width: 80%;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="arjs-loader">
+        <div>Loading AR, please wait...</div>
+    </div>
+
+    <!-- A-Frame and AR.js -->
+    <script>
+        // Clean up any existing A-Frame components
+        if (window.AFRAME) {
+            delete AFRAME.components['arjs-anchor'];
+            delete AFRAME.components['arjs-anchor-marker'];
+            delete AFRAME.components['arjs-anchor-hit-testing'];
+            delete AFRAME.components['arjs-anchor-nft'];
+            delete AFRAME.systems.arjs;
+        }
+    </script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        // Wait for A-Frame to load
+        window.addEventListener('load', function() {
+            // Create a new scene
+            const scene = document.createElement('a-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true; willReadFrequently: true');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('loading-screen', 'enabled: false');
+            
+            // AR.js configuration
+            const arjsConfig = {
+                'arjs': [
+                    'sourceType: webcam',
+                    'sourceWidth: 1280',
+                    'sourceHeight: 720',
+                    'displayWidth: 100%',
+                    'displayHeight: 100%',
+                    'debugUIEnabled: false',
+                    'detectionMode: mono',
+                    'matrixCodeType: 3x3',
+                    'trackingMethod: best',
+                    'maxDetectionRate: 30'
+                ].join('; ')
+            };
+            
+            // Apply AR.js configuration
+            Object.entries(arjsConfig).forEach(([key, value]) => {
+                scene.setAttribute(key, value);
+            });
+            
+            // Add camera with default settings
+            const camera = document.createElement('a-entity');
+            camera.setAttribute('camera', 'fov: 80; near: 0.1; far: 1000');
+            camera.setAttribute('position', '0 1.6 0');
+            scene.appendChild(camera);
+            
+            // Add marker with hiro preset
+            const marker = document.createElement('a-marker');
+            marker.setAttribute('preset', 'hiro');
+            marker.setAttribute('emitevents', 'true');
+            marker.setAttribute('cursor', 'rayOrigin: mouse');
+            marker.setAttribute('raycaster', 'objects: .clickable');
+            
+            // Create model container with scale
+            const modelContainer = document.createElement('a-entity');
+            modelContainer.setAttribute('position', '0 0 0');
+            modelContainer.setAttribute('scale', '0.15 0.15 0.15');
+            
+            // Add the Kaaba model with material overrides
+            const model = document.createElement('a-entity');
+            model.setAttribute('gltf-model', 'url(./models/kaaba/kaaba_in_mecca.glb)');
+            model.setAttribute('position', '0 0 0');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('shadow', 'cast: true; receive: false');
+            
+            // Apply material overrides to fix green line issue
+            model.addEventListener('model-loaded', function() {
+                // Get all mesh objects in the model
+                const meshObjects = model.object3D.children[0].children.filter(
+                    obj => obj.type === 'Mesh' || obj.type === 'Group' || obj.type === 'Object3D'
+                );
+                
+                // Apply material overrides to each mesh
+                const processMesh = (mesh) => {
+                    if (mesh.material) {
+                        // If it's an array of materials
+                        if (Array.isArray(mesh.material)) {
+                            mesh.material.forEach(mat => {
+                                if (mat) {
+                                    mat.color.set(0x1a1a1a); // Dark color for Kaaba
+                                    mat.metalness = 0.1;
+                                    mat.roughness = 0.9;
+                                    mat.emissive.set(0x000000);
+                                    mat.needsUpdate = true;
+                                }
+                            });
+                        } 
+                        // If it's a single material
+                        else if (mesh.material) {
+                            mesh.material.color.set(0x1a1a1a);
+                            mesh.material.metalness = 0.1;
+                            mesh.material.roughness = 0.9;
+                            mesh.material.emissive.set(0x000000);
+                            mesh.material.needsUpdate = true;
+                        }
+                    }
+                    
+                    // Process children recursively
+                    if (mesh.children && mesh.children.length > 0) {
+                        mesh.children.forEach(child => processMesh(child));
+                    }
+                };
+                
+                meshObjects.forEach(processMesh);
+            });
+            
+            modelContainer.appendChild(model);
+            
+            // Add ground plane
+            const ground = document.createElement('a-plane');
+            ground.setAttribute('position', '0 -0.1 0');
+            ground.setAttribute('rotation', '-90 0 0');
+            ground.setAttribute('width', '15');
+            ground.setAttribute('height', '15');
+            ground.setAttribute('color', '#1a1a1a');
+            ground.setAttribute('roughness', '0.8');
+            ground.setAttribute('metalness', '0.3');
+            ground.setAttribute('shadow', 'receive: true');
+            modelContainer.appendChild(ground);
+            
+            // Add text label
+            const text = document.createElement('a-text');
+            text.setAttribute('value', 'Kaaba, Mecca');
+            text.setAttribute('color', '#f0f0f0');
+            text.setAttribute('align', 'center');
+            text.setAttribute('position', '0 3 0');
+            text.setAttribute('scale', '0.8 0.8 0.8');
+            modelContainer.appendChild(text);
+            
+            marker.appendChild(modelContainer);
+            scene.appendChild(marker);
+            
+            // Add lighting
+            const ambientLight = document.createElement('a-light');
+            ambientLight.setAttribute('type', 'ambient');
+            ambientLight.setAttribute('color', '#FFFFFF');
+            ambientLight.setAttribute('intensity', '0.4');
+            scene.appendChild(ambientLight);
+            
+            // Main directional light
+            const dirLight = document.createElement('a-light');
+            dirLight.setAttribute('type', 'directional');
+            dirLight.setAttribute('color', '#FFFAF0');
+            dirLight.setAttribute('intensity', '0.8');
+            dirLight.setAttribute('position', '3 10 5');
+            dirLight.setAttribute('shadow', 'cast: true; shadowBias: -0.001; shadowMapWidth: 2048; shadowMapHeight: 2048');
+            scene.appendChild(dirLight);
+            
+            // Fill light
+            const fillLight = document.createElement('a-light');
+            fillLight.setAttribute('type', 'directional');
+            fillLight.setAttribute('color', '#E6F0FF');
+            fillLight.setAttribute('intensity', '0.4');
+            fillLight.setAttribute('position', '-3 5 5');
+            scene.appendChild(fillLight);
+            
+            // Back light
+            const backLight = document.createElement('a-light');
+            backLight.setAttribute('type', 'directional');
+            backLight.setAttribute('color', '#FFFFFF');
+            backLight.setAttribute('intensity', '0.2');
+            backLight.setAttribute('position', '0 5 -5');
+            scene.appendChild(backLight);
+            
+            // Add back button
+            const backButton = document.createElement('button');
+            backButton.className = 'back-button';
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Gallery';
+            backButton.onclick = () => window.location.href = 'index.html#ar-experiences';
+            
+            // Add elements to the page
+            document.body.appendChild(scene);
+            document.body.appendChild(backButton);
+            
+            // Handle scene loaded
+            scene.addEventListener('loaded', function() {
+                console.log('Scene loaded');
+                document.querySelector('.arjs-loader').style.display = 'none';
+                
+                // Check camera access
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        console.log('Camera access granted');
+                        stream.getTracks().forEach(track => track.stop());
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Camera access is required for AR. Please enable camera permissions and refresh the page.');
+                    });
+            });
+            
+            // Debug events
+            marker.addEventListener('markerFound', () => console.log('Marker found'));
+            marker.addEventListener('markerLost', () => console.log('Marker lost'));
+        });
+    </script>
+    
+    <div class="info-panel">
+        Point your camera at the marker to view the Kaaba
+    </div>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer - Ctrl+Alt+Bharat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #4CAF50;
+            --accent-color: #2196F3;
+            --danger-color: #f44336;
+            --text-color: #2c3e50;
+            --text-light: #666;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        
+        .logo i {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+        }
+        
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+        
+        .back-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        .back-btn:hover {
+            background-color: #0b7dda;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        /* Model Container */
+        .model-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin: 2rem 0;
+            transition: var(--transition);
+        }
+        
+        .model-container:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .model-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .model-title {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .model-subtitle {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .model-description {
+            color: var(--text-light);
+            margin: 1.5rem 0;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        
+        /* Model Info Section */
+        .model-info {
+            padding: 1.5rem 2rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-card h4 i {
+            color: var(--accent-color);
+            width: 24px;
+            text-align: center;
+        }
+        
+        .info-card p, .info-card ul {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .info-card ul {
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .info-card li:before {
+            content: '•';
+            color: var(--accent-color);
+            font-weight: bold;
+            position: absolute;
+            left: -1.2rem;
+        }
+        
+        /* Model Viewer */
+        .model-viewer-section {
+            padding: 0;
+            position: relative;
+            background: #f0f2f5;
+        }
+        
+        .model-viewer {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        
+        .model-viewer iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Model Actions */
+        .model-actions {
+            display: flex;
+            gap: 15px;
+            padding: 1.5rem 2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .ar-btn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .ar-btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        
+        .download-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .model-title {
+                font-size: 1.8rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .model-header {
+                padding: 1.5rem 1.5rem 1rem;
+            }
+            
+            .model-title {
+                font-size: 1.6rem;
+            }
+            
+            .model-actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .model-title {
+                font-size: 1.4rem;
+            }
+            
+            .model-description {
+                font-size: 1rem;
+            }
+            
+            .info-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <i class="fas fa-landmark"></i>
+                    <span>Ctrl+Alt+Bharat</span>
+                </a>
+                <a href="/" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div id="model-viewer">
+            <!-- Content will be loaded by JavaScript -->
+        </div>
+        
+        <!-- Related Models Section -->
+        <section class="related-models" style="margin: 4rem 0;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--primary-color);">Explore More Models</h2>
+            <div class="features" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                <!-- Related models will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div style="margin-bottom: 1.5rem;">
+                <a href="index.html" class="logo" style="font-size: 1.8rem; margin-bottom: 1rem; display: inline-block;">
+                    <i class="fas fa-landmark"></i>
+                    <span>Ctrl+Alt+Bharat</span>
+                </a>
+                <p style="max-width: 600px; margin: 0 auto;">Bringing Indian heritage and culture to life through augmented reality and 3D technology.</p>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <a href="index.html" style="color: var(--text-light); text-decoration: none; transition: var(--transition);">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" style="color: var(--text-light); text-decoration: none; transition: var(--transition);">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a href="#" style="color: var(--text-light); text-decoration: none; transition: var(--transition);">
+                    <i class="fas fa-envelope"></i> Contact
+                </a>
+                <a href="#" style="color: var(--text-light); text-decoration: none; transition: var(--transition);">
+                    <i class="fas fa-shield-alt"></i> Privacy Policy
+                </a>
+            </div>
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <p>&copy; ${new Date().getFullYear()} Ctrl+Alt+Bharat. All rights reserved.</p>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center;">
+                    <a href="#" style="color: var(--text-light); font-size: 1.2rem; transition: var(--transition);">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" style="color: var(--text-light); font-size: 1.2rem; transition: var(--transition);">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" style="color: var(--text-light); font-size: 1.2rem; transition: var(--transition);">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Get model ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get('id');
+        
+        // Model data with detailed information
+        const models = {
+            'taj-mahal': {
+                title: 'Taj Mahal',
+                subtitle: 'The Epitome of Love',
+                description: 'The Taj Mahal is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan to house the tomb of his favorite wife, Mumtaz Mahal.',
+                embedUrl: 'https://sketchfab.com/models/ikI3rGTwIf9xdRrcEgxTxEywGH3/embed',
+                arUrl: 'taj-mahal-ar.html',
+                downloadUrl: 'models/taj-mahal/taj_mahal_3d_model.glb',
+                facts: [
+                    'Built between 1632 and 1653',
+                    'Made of white marble from Makrana, Rajasthan',
+                    'Combines Islamic, Persian, and Indian architectural styles',
+                    'Designated as a UNESCO World Heritage Site in 1983',
+                    'One of the New Seven Wonders of the World'
+                ],
+                location: 'Agra, Uttar Pradesh, India',
+                period: 'Mughal Era (17th Century)',
+                architect: 'Ustad Ahmad Lahori',
+                image: 'https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            },
+            'ellora': {
+                title: 'Ellora Caves',
+                subtitle: 'Architectural Marvel of Ancient India',
+                description: 'The Ellora Caves are a UNESCO World Heritage Site in Maharashtra, India. These 34 monasteries and temples, extending over more than 2 km, were dug side by side in the wall of a high basalt cliff, not far from Aurangabad.',
+                embedUrl: 'https://sketchfab.com/models/13c8ef0613564a92b43ee974c1182f56/embed',
+                arUrl: 'ellora-ar.html',
+                downloadUrl: 'models/ellora/ellora_caves__india.glb',
+                facts: [
+                    'Built between the 6th and 10th centuries',
+                    'Features Hindu, Buddhist, and Jain monuments',
+                    'Kailasa Temple is the largest monolithic structure in the world',
+                    'Designated as a UNESCO World Heritage Site in 1983',
+                    'Contains over 100 caves, though only 34 are open to the public'
+                ],
+                location: 'Aurangabad, Maharashtra, India',
+                period: '6th to 10th Century CE',
+                architect: 'Rashtrakuta dynasty (Kailasa Temple)',
+                image: 'https://plus.unsplash.com/premium_photo-1697729588485-6c238cf3ab2f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            },
+            'kaaba': {
+                title: 'Kaaba in Mecca',
+                subtitle: 'The Holiest Site in Islam',
+                description: 'The Kaaba, also known as the Sacred House, is a building at the center of Islam\'s most important mosque, the Masjid al-Haram in Mecca, Saudi Arabia. It is the most sacred site in Islam and the qibla (direction of prayer) for Muslims worldwide.',
+                embedUrl: 'https://sketchfab.com/models/45d4b0b4404a4ad7b3f7235f7a10382c/embed',
+                arUrl: 'kaaba-ar.html',
+                downloadUrl: 'models/kaaba/kaaba_in_mecca.glb',
+                facts: [
+                    'Believed to have been built by Prophet Ibrahim and his son Ismail',
+                    'The Black Stone (Hajar al-Aswad) is set in the eastern corner',
+                    'Covered with a black silk cloth (Kiswah) that is replaced annually',
+                    'The focal point of the annual Hajj pilgrimage',
+                    'Muslims around the world face the Kaaba during daily prayers'
+                ],
+                location: 'Mecca, Saudi Arabia',
+                period: 'Ancient (reconstructed multiple times)',
+                significance: 'Qibla for Muslim prayer',
+                image: 'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+            },
+            'christmas': {
+                title: 'Christmas Tree',
+                subtitle: 'Symbol of Joy and Celebration',
+                description: 'The Christmas tree is a decorated tree, usually an evergreen conifer, such as a fir, spruce, or pine, or an artificial tree of similar appearance, associated with the celebration of Christmas. The custom was developed in medieval Livonia and in early modern Germany where German Protestant Christians brought decorated trees into their homes.',
+                embedUrl: 'https://sketchfab.com/models/07b56edde5504e6bb9c65a56623335c0/embed',
+                arUrl: 'christmas-ar.html',
+                downloadUrl: 'models/christmas/christmas_tree_set.glb',
+                facts: [
+                    'Originated in 16th century Germany',
+                    'Queen Victoria popularized the tradition in England',
+                    'The first recorded Christmas tree in the US was in the 1830s',
+                    'The Rockefeller Center tree tradition began in 1931',
+                    'The tallest cut Christmas tree was 67.36m (221 ft) tall'
+                ],
+                origin: 'Germany',
+                significance: 'Christian celebration of Christmas',
+                image: 'https://images.unsplash.com/photo-1513297887119-d46091b24bfa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            },
+            'sankranti': {
+                title: 'Sankranti Cow',
+                subtitle: 'Makar Sankranti Celebrations',
+                description: 'Makar Sankranti is a festival day in the Hindu calendar, dedicated to the deity Surya (sun god). It is observed each year in January and marks the first day of the sun\'s transit into the Makara (Capricorn) zodiac sign. In South India, particularly in Tamil Nadu, the festival is celebrated as Pongal, where cows are decorated and worshipped for their role in agriculture.',
+                embedUrl: 'https://sketchfab.com/models/a169ebf07a5944b9bd08d46b3ef9e049/embed',
+                arUrl: 'sankranti-ar.html',
+                downloadUrl: 'models/sankranti/sankranti_cow.glb',
+                facts: [
+                    'Celebrated on January 14th or 15th every year',
+                    'Marks the end of winter solstice',
+                    'Known by different names across India',
+                    'Associated with kite flying and bonfires',
+                    'Special sweets like tilgul and pongal are prepared'
+                ],
+                celebration: 'Harvest Festival',
+                significance: 'Sun\'s transition into Capricorn',
+                image: 'https://images.unsplash.com/photo-1579275542618-a1dfed1f3c72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            },
+            'sanchi': {
+                title: 'Sanchi Stupa',
+                subtitle: 'Ancient Buddhist Monument',
+                description: 'The Great Stupa at Sanchi is one of the oldest stone structures in India, and an important monument of Indian Architecture. It was originally commissioned by the Mauryan emperor Ashoka in the 3rd century BCE. The nucleus was a simple hemispherical brick structure built over the relics of the Buddha.',
+                embedUrl: 'https://sketchfab.com/models/2fd62cd6ee804455bda1ad0a324080cb/embed',
+                arUrl: 'sanchi-ar.html',
+                downloadUrl: 'models/sanchi/great_stupa_in_sanchi.glb',
+                facts: [
+                    'Commissioned by Emperor Ashoka in the 3rd century BCE',
+                    'Oldest stone structure in India',
+                    'Designated as a UNESCO World Heritage Site in 1989',
+                    'Features elaborate stone carvings and toranas (gateways)',
+                    'Represents the architectural achievements of the Mauryan Empire'
+                ],
+                location: 'Sanchi, Madhya Pradesh, India',
+                period: '3rd Century BCE',
+                architect: 'Commissioned by Emperor Ashoka',
+                image: 'https://images.unsplash.com/photo-1600207438283-a5de6f390147?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            }
+        };
+        
+        // Load model data
+        function loadModel() {
+            const modelViewer = document.getElementById('model-viewer');
+            const relatedModels = document.querySelector('.features');
+            
+            if (!modelId || !models[modelId]) {
+                modelViewer.innerHTML = `
+                    <div class="model-container">
+                        <div class="model-header">
+                            <h1 class="model-title">Model Not Found</h1>
+                            <p>The requested model could not be found. Please return to the home page.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const model = models[modelId];
+            
+            // Generate info cards HTML
+            const infoCards = [];
+            
+            if (model.location) {
+                infoCards.push(`
+                    <div class="info-card">
+                        <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+                        <p>${model.location}</p>
+                    </div>
+                `);
+            }
+            
+            if (model.period) {
+                infoCards.push(`
+                    <div class="info-card">
+                        <h4><i class="fas fa-history"></i> Time Period</h4>
+                        <p>${model.period}</p>
+                    </div>
+                `);
+            }
+            
+            if (model.architect) {
+                infoCards.push(`
+                    <div class="info-card">
+                        <h4><i class="fas fa-drafting-compass"></i> Architect/Builder</h4>
+                        <p>${model.architect}</p>
+                    </div>
+                `);
+            } else if (model.significance) {
+                infoCards.push(`
+                    <div class="info-card">
+                        <h4><i class="fas fa-star"></i> Significance</h4>
+                        <p>${model.significance}</p>
+                    </div>
+                `);
+            }
+            
+            // Generate facts list if available
+            let factsHtml = '';
+            if (model.facts && model.facts.length > 0) {
+                factsHtml = `
+                    <div class="info-card" style="grid-column: 1 / -1;">
+                        <h4><i class="fas fa-lightbulb"></i> Key Facts</h4>
+                        <ul>
+                            ${model.facts.map(fact => `<li>${fact}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Generate related models (exclude current model)
+            const relatedModelsHtml = Object.entries(models)
+                .filter(([id]) => id !== modelId)
+                .slice(0, 3) // Show max 3 related models
+                .map(([id, relatedModel]) => `
+                    <div class="feature" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <div style="height: 180px; overflow: hidden;">
+                            <img src="${relatedModel.image}" alt="${relatedModel.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 1.2rem;">
+                            <h3 style="margin: 0 0 0.5rem 0; color: var(--primary-color); font-size: 1.2rem;">${relatedModel.title}</h3>
+                            <p style="margin-bottom: 1rem; color: var(--text-light); font-size: 0.9rem; min-height: 40px;">${relatedModel.subtitle || ''}</p>
+                            <div style="display: flex; gap: 8px; justify-content: center;">
+                                <a href="/model-viewer.html?id=${id}" class="btn embed-btn" style="padding: 8px 12px; font-size: 0.85rem;">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <a href="${relatedModel.arUrl.startsWith('http') ? relatedModel.arUrl : '/' + relatedModel.arUrl}" class="btn ar-btn" style="padding: 8px 12px; font-size: 0.85rem;">
+                                    <i class="fas fa-vr-cardboard"></i> AR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            
+            // Set the main content
+            modelViewer.innerHTML = `
+                <div class="model-container">
+                    <div class="model-header">
+                        <span class="model-subtitle">
+                            <i class="fas ${modelId === 'christmas' ? 'fa-holly-berry' : (modelId === 'sankranti' ? 'fa-cow' : 'fa-landmark')}"></i>
+                            ${model.subtitle || '3D Model Viewer'}
+                        </span>
+                        <h1 class="model-title">${model.title}</h1>
+                        <p class="model-description">${model.description}</p>
+                    </div>
+                    
+                    ${infoCards.length > 0 || factsHtml ? `
+                    <div class="model-info">
+                        <div class="info-grid">
+                            ${infoCards.join('')}
+                            ${factsHtml}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="model-viewer-section">
+                        <div class="model-viewer">
+                            <iframe 
+                                title="${model.title}" 
+                                src="${model.embedUrl}" 
+                                frameborder="0" 
+                                allowfullscreen 
+                                mozallowfullscreen="true" 
+                                webkitallowfullscreen="true" 
+                                allow="autoplay; fullscreen; xr-spatial-tracking" 
+                                xr-spatial-tracking 
+                                execution-while-out-of-viewport 
+                                execution-while-not-rendered 
+                                web-share>
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="model-actions">
+                        <a href="/${model.arUrl}" class="action-btn ar-btn">
+                            <i class="fas fa-vr-cardboard"></i>
+                            View in AR
+                        </a>
+                        <a href="/${model.downloadUrl}" download class="action-btn download-btn">
+                            <i class="fas fa-file-download"></i>
+                            Download 3D Model
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            // Update related models section
+            if (relatedModels) {
+                relatedModels.innerHTML = relatedModelsHtml;
+            }
+            
+            // Update page title
+            document.title = `${model.title} - 3D Model | Ctrl+Alt+Bharat`;
+            
+            // Add meta description for SEO
+            const metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            metaDescription.content = `Explore the 3D model of ${model.title}. ${model.description.substring(0, 155)}...`;
+            document.head.appendChild(metaDescription);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', loadModel);
+    </script>
+</body>
+</html>

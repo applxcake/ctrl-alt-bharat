@@ -86,17 +86,96 @@
             marker.setAttribute('cursor', 'rayOrigin: mouse');
             marker.setAttribute('raycaster', 'objects: .clickable');
             
-            // Create model container with scale
+            // Create model container with adjusted scale
             const modelContainer = document.createElement('a-entity');
             modelContainer.setAttribute('position', '0 0 0');
-            modelContainer.setAttribute('scale', '0.2 0.2 0.2'); // Increased from 0.1 to 0.2
+            modelContainer.setAttribute('scale', '0.3 0.3 0.3'); // Increased scale
             
-            // Add 3D model
+            // Create the model with adjusted settings
             const model = document.createElement('a-entity');
             model.setAttribute('gltf-model', 'url(./models/kaaba/kaaba_in_mecca.glb)');
-            model.setAttribute('scale', '0.5 0.5 0.5'); // Increased from 0.2 to 0.5
-            model.setAttribute('position', '0 1 0'); // Adjusted position higher
+            model.setAttribute('position', '0 0 0');
             model.setAttribute('rotation', '0 0 0');
+            
+            // Add model-loaded event listener with precise positioning
+            model.addEventListener('model-loaded', () => {
+                console.log('Kaaba model loaded with adjusted settings');
+                
+                // Get model dimensions and center
+                const box = new THREE.Box3().setFromObject(model.object3D);
+                const size = box.getSize(new THREE.Vector3());
+                const center = box.getCenter(new THREE.Vector3());
+                
+                // Position model so its base is at y=0
+                model.object3D.position.x = -center.x;
+                model.object3D.position.y = -box.min.y; // Align base to y=0
+                model.object3D.position.z = -center.z;
+                
+                // Add ambient light for better visibility
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+                scene.object3D.add(ambientLight);
+                
+                // Add directional light for better shadows
+                const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                dirLight.position.set(1, 1, 1);
+                scene.object3D.add(dirLight);
+                
+                // Process all meshes in the model
+                model.object3D.traverse((node) => {
+                    if (node.isMesh) {
+                        // Force material updates
+                        node.material.needsUpdate = true;
+                        
+                        // Ensure textures are properly mapped
+                        if (node.material.map) {
+                            node.material.map.encoding = THREE.sRGBEncoding;
+                            node.material.needsUpdate = true;
+                        }
+                        
+                        // Set material properties
+                        node.material.side = THREE.DoubleSide;
+                        node.material.flatShading = false;
+                        
+                        // Enable shadows
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+                    }
+                });
+                
+                // Adjust scale and position after centering
+                setTimeout(() => {
+                    model.setAttribute('scale', '0.15 0.15 0.15');
+                    model.setAttribute('position', '0 0.3 0');
+                }, 100);
+            });
+            
+            model.addEventListener('error', (e) => {
+                console.error('Error loading Kaaba model:', e.detail);
+                
+                // First try loading a simpler version if available
+                console.log('Attempting to load fallback model...');
+                const fallbackModel = document.createElement('a-entity');
+                fallbackModel.setAttribute('gltf-model', 'url(./models/kaaba/kaaba_simplified.glb)');
+                fallbackModel.setAttribute('scale', '0.2 0.2 0.2');
+                fallbackModel.setAttribute('position', '0 0.5 0');
+                
+                fallbackModel.addEventListener('model-loaded', () => {
+                    console.log('Fallback model loaded successfully');
+                    modelContainer.appendChild(fallbackModel);
+                });
+                
+                fallbackModel.addEventListener('error', (e) => {
+                    console.error('Error loading fallback model, using primitive shape');
+                    // Final fallback to a simple box
+                    const box = document.createElement('a-box');
+                    box.setAttribute('color', '#000000');
+                    box.setAttribute('position', '0 0.5 0');
+                    box.setAttribute('scale', '1 0.5 1'); // Flattened box to better represent Kaaba
+                    box.setAttribute('shadow', 'cast: true; receive: true');
+                    modelContainer.appendChild(box);
+                });
+            });
+            
             modelContainer.appendChild(model);
             
             // Add ground plane
@@ -173,28 +252,33 @@
             window.location.href = `mailto:test@gmail.com?subject=${subject}&body=${body}`;
         });
 
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            // Create a temporary link element
-            const link = document.createElement('a');
-            link.href = './models/kaaba/kaaba_in_mecca.glb';
-            link.download = 'kaaba_in_mecca.glb';
-            
-            // Append to body, trigger click and remove
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Optional: Show a message
-            const btn = document.getElementById('downloadBtn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Downloading...';
-            setTimeout(() => {
-                btn.textContent = 'Download Complete!';
+        // Add download button event listener
+        const downloadBtn = document.getElementById('downloadBtn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function() {
+                // Create a temporary link element
+                const link = document.createElement('a');
+                link.href = './models/kaaba/kaaba_in_mecca.glb';
+                link.download = 'kaaba_in_mecca.glb';
+                
+                // Append to body, trigger click and remove
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Update button text to show download status
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = 'Downloading...';
+                
                 setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            }, 500);
-        });
+                    btn.textContent = 'Download Complete!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                }, 500);
+            });
+        } // Close if statement
     </script>
 </body>
 </html>
